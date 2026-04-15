@@ -1,29 +1,44 @@
-# 1 Access Instructions
+# 1 Models Description
 
-Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+The Thermospheric Density Continuous Learning challenge produced a production-oriented, continual-learning forecasting system built around an extension of the Karman thermospheric density modeling framework, referred to as Karman-CL (Continuous Learning). Rather than introducing a single new model architecture, the project's primary innovation lies in combining multiple ML model types with a continual-learning orchestration layer, enabling adaptive updating as new data arrive.
 
-Listing files is done by e.g.:
-```
-aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/hl-therm/ 
-```
+At its core, Karman-CL supports a model zoo of candidate thermospheric density predictors, including:
+  - Feedforward Neural Networks (FFNNs)
+  - Convolutional Neural Networks (CNNs)
+  - Long Short-Term Memory (LSTM) models
 
-Downloading files is done by e.g. 
-```
-aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
-```
-You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data).
+These models operate on time-series inputs of:
+  - solar and space-weather drivers (e.g., OMNI, SOHO),
+  - historical thermospheric density values derived from precise orbit determination (POD) data.
 
+The system evaluates multiple models in parallel and maintains a top-K set of best-performing models, rather than relying on a single fixed architecture.
 
+The defining feature of the challenge is the continual-learning control system, which wraps around the model zoo and governs:
+  - Data ingestion and preprocessing (live pipeline)
+  - Distribution-shift detection (comparing new data to historical distributions)
+  - Retraining triggers
+  - Model selection and replacement
 
-## 2 Models Description
+The workflow is:
+  - New data arrive via live ingestion
+  - Data are compared to existing training distribution
+  - If no shift → existing models perform inference
+  - If shift detected → candidate models retrained
+  - If new models outperform → they replace models in the top-K set
 
-Two ML models are included: a forecasting model and a nowcasting model. Additionally, some sample data is included for testing purposes. The forecasting model is the main product of this work, and is intended to be used for forecasting the thermospheric density. The nowcasting model is a simple model that is not intended for any use other than for instructional purposes.
+This transforms the system from a static ML model into a self-updating forecasting system. 
 
-### TFT Forecasting Model (4.5 MB)
+## 1.1 Models Access
+
+Two ML models are included here: a forecasting model and a nowcasting model. The forecasting model is the main product of this work, and is intended to be used for forecasting the thermospheric density. The nowcasting model is a simple model that is not intended for any use other than for instructional purposes. The model files are provided below, along with a sample dataset for testing purposes. 
+
+Instructions for accessing the following files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
+
+### Temporal Fusion Transformer (TFT) Forecasting Model (4.5 MB)
 - AWS PATH: `hl-therm/models/karman_tft_forecast_mape_14.936_params_1074865.torch`
 - Usage Instructions: Instructions on how to use the TFT model are given in this [colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-Thermo-CL/blob/main/public/inference_forecast_example.ipynb).
 - Type: Temporal Fusion Transformer — forecasts density using ~7 days of space-weather history
-Architecture: 1,074,865 parameters (LSTMs + multi-head attention + variable selection networks)
+- Architecture: 1,074,865 parameters (LSTMs + multi-head attention + variable selection networks)
 - Accuracy: 14.94% MAPE on validation set
 
 ### Nowcasting Model (0.1 MB)
@@ -49,3 +64,20 @@ Architecture: 1,074,865 parameters (LSTMs + multi-head attention + variable sele
 | `nrlmsise00` | `(N,)` | NRLMSISE-00 baseline density (for comparison) |
 | `dates` | list of N strings | Timestamp for each sample |
 | `normalization_dict` | dict | The scaling parameters (min/max, quantile transforms) used during preprocessing |
+
+
+# 2 Access Instructions
+
+Models are stored on Amazon Web Services (AWS), and access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/hl-therm/ 
+```
+
+Downloading files is done by e.g. 
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
+```
+You will need to replace `<AWS PATH>` with the path to the data sample you want to download and `<LOCAL PATH>` with the path on your local machine where you want to save the data).
+
