@@ -4,7 +4,6 @@ Dataset and model README files for HelioAI projects.
 Currently implemented projects: 
 
 
-
 | GCP Project ID | Project Name | Landing page | Dataset page | Model page |
 |---------------|---------------|---------------|---------------|---------------|
 | hl-geo | Geoeffectiveness Continual Learning | [real](https://helioai.org/dev/project/808c4b96-92e3-414b-9cb4-6c05be0888d3/details), [dev](https://helioai.org/admin/api/project/808c4b96-92e3-414b-9cb4-6c05be0888d3) | [real](https://helioai.org/dev/artifact/64580d59-0822-42c9-bae1-c6026322f25a/details), [dev](https://helioai.org/admin/api/researchartifact/64580d59-0822-42c9-bae1-c6026322f25a/change)| [real](https://helioai.org/dev/artifact/63d4abc3-d29e-4f6b-a585-be4b3f067b18/details), [dev](https://helioai.org/admin/api/researchartifact/63d4abc3-d29e-4f6b-a585-be4b3f067b18/change) |
@@ -18,7 +17,7 @@ Currently implemented projects:
 | hl-flaring-intelligence | Multimodal Flare Prediction | [real](https://helioai.org/dev/project/67ffa383-075e-4264-a2a0-823e3d80ef09/details), [dev](https://helioai.org/admin/api/project/67ffa383-075e-4264-a2a0-823e3d80ef09/change) | --- | --- |
 | hl-dosi |  Forecasting Radiation Exposure for Human Space Flight | [real](https://helioai.org/dev/project/7db0b690-ef12-4414-9f9c-d758e9e4beb4/details), [dev](https://helioai.org/admin/api/project/7db0b690-ef12-4414-9f9c-d758e9e4beb4/change) | --- | --- | 
 | hl-orchestrator | Orchestrator | [real](https://helioai.org/dev/project/f8767e44-14e0-4a5d-8d61-1b5ecf7838f0/details), [dev](https://helioai.org/admin/api/project/f8767e44-14e0-4a5d-8d61-1b5ecf7838f0/change) | [real](https://helioai.org/dev/artifact/72aa23d0-f01d-4f07-b621-df4e48eb1056/details), [dev](https://helioai.org/admin/api/researchartifact/72aa23d0-f01d-4f07-b621-df4e48eb1056/change) | N/A |
-| us-fdlx-termo| Thermospheric Drag: EUV Irradiance and Thermospheric Density | [real](https://helioai.org/dev/project/514b6bc5-d497-48f6-a78b-fac44bd8d853/details), [dev](https://helioai.org/admin/api/project/514b6bc5-d497-48f6-a78b-fac44bd8d853/change) | --- | --- |
+| us-fdlx-termo| Thermospheric Drag: EUV Irradiance and Thermospheric Density | [real](https://helioai.org/dev/project/514b6bc5-d497-48f6-a78b-fac44bd8d853/details), [dev](https://helioai.org/admin/api/project/514b6bc5-d497-48f6-a78b-fac44bd8d853/change) | [real](https://helioai.org/dev/artifact/1991f748-3ee7-4f8d-86a8-3c107970cb54/details), [dev](https://helioai.org/admin/api/researchartifact/1991f748-3ee7-4f8d-86a8-3c107970cb54/change/) | N/A |
 
 Notes:
 - hl-dosi likely difficult, probably dataset-only.
