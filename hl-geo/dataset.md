@@ -72,6 +72,7 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 | station mask gNaN mask | unitless | Missing-data indicator per station / component|
 
 **Notes**
+
   -Stored per minute
   -Aligned to ACE / DSCOVR inputs using mapping files
   -Normalized for model use
@@ -94,6 +95,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 ### SDO embeddings files
 
 **omniweb_back_tracked_ballistic.csv**
+
 | :--- | :--- | :--- |
 | Column | Units / type | Description |
 | omni_time | datetime | Timestamp at L1 (OMNI time) |
