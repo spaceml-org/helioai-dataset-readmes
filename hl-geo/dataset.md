@@ -36,7 +36,7 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 | SDO embeddings       | hl-geo/processed_data/sdoembeddings/                 | 11 MB  | Embedding-based SHEATH inputs and train/val/test splits|
 | SHEATH processed set | hl-geo/processed_data/sheath/                        | 2 GB   | Final training / evaluation inputs for SHEATH          |
 
-###ACE / DSCOVR processed columns
+### ACE / DSCOVR processed columns
 
 | Column             | Units | Description                                   |
 |--------------------|-------|-----------------------------------------------|
@@ -56,13 +56,13 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 **File format**
   - Train and test CSV files are available for both products.
 
-###OMNI processed file
+### OMNI processed file
 
 | File                      | Format | Contents                                      | Role
 |---------------------------|--------|-----------------------------------------------|-----------
 | omniweb_formatted_2000.h5 | HDF5   | Ground-truth solar-wind labels used by SHEATH | Supervised target for solar-wind prediction from SDO-derived inputs 
 
-###SuperMAG processed data
+### SuperMAG processed data
 
 | Field group | Units | Description 
 |-------------|---------|-----
@@ -76,7 +76,7 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
   -Aligned to ACE / DSCOVR inputs using mapping files
   -Normalized for model use
 
-###SDO processed solar features
+### SDO processed solar features
 
 Product | Format | Contents | Role |
 ---------|---|---|---|
@@ -90,6 +90,43 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | active-region pixel count | 1 | pixels | Number of pixels classified as active regions |
 | coronal-hole total emission by channel | 12 | channel-dependent intensity units | Total signal within coronal-hole mask for each SDO channel |
 | active-region total emission by channel | 12 | channel-dependent intensity units | Total signal within active-region mask for each SDO channel |
+
+### SDO embeddings files
+
+**omniweb_back_tracked_ballistic.csv**
+| :--- | :--- | :--- |
+| Column | Units / type | Description |
+| omni_time | datetime | Timestamp at L1 (OMNI time) |
+| sdo_time | datetime | Backtracked solar-observation time used for temporal splitting |
+| latent_index | integer | Index into latent embedding array |
+| speed | km/s | Target solar-wind speed |
+| density | $\mathrm{cm}^{\wedge}-3$ | Target solar-wind proton density |
+| temperature | K | Target solar-wind ion / proton temperature |
+| Bt | nT | Target total IMF magnitude |
+| Bx | nT | Target IMF x -component |
+| By | nT | Target IMF y-component |
+| Bz | nT | Target IMF z-component |
+
+**scaler_targets.json**   
+| Key | Description |
+| :--- | :--- |
+| min, scale, data_min, data_max | MinMaxScaler parameters for inverse-transforming predictions |
+| feature_range | Scaling range used in training |
+| n_features | Number of predicted target variables |
+| feature_names | Names of the target variables |
+
+**split files**
+| File | Purpose |
+| :--- | :--- |
+| sheath_train_set.csv | Training split |
+| sheath_val_set.csv | Validation split |
+| sheath_test_set.csv | Test split with held-out storm periods |
+
+### SHEATH processed set
+| Product | Format | Contents |
+| :--- | :--- | :--- |
+| SHEATH training / evaluation data | tabular files | Prepared feature-target data for the released SHEATH model |
+
 
 ## 1.2 Raw Data
 
