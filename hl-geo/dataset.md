@@ -93,7 +93,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 
 ### SDO embeddings files
 
-| omniweb_back_tracked_ballistic.csv |  |  |
+`omniweb_back_tracked_ballistic.csv`
 | :--- | :--- | :--- |
 | Column | Units / type | Description |
 | omni_time | datetime | Timestamp at L1 (OMNI time) |
@@ -107,7 +107,8 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | By | nT | Target IMF y-component |
 | Bz | nT | Target IMF z-component |
 
-| scaler_targets.json | |   
+
+`scaler_targets.json`
 | Key | Description |
 | :--- | :--- |
 | min, scale, data_min, data_max | MinMaxScaler parameters for inverse-transforming predictions |
@@ -115,7 +116,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | n_features | Number of predicted target variables |
 | feature_names | Names of the target variables |
 
-| split files |  | 
+**split files** 
 | File | Purpose |
 | :--- | :--- |
 | sheath_train_set.csv | Training split |
@@ -144,6 +145,19 @@ The raw data for GEO-CLOAK fall into two main branches corresponding to the two 
 | SDO AIA + HMI | image time series | EUV solar imagery and vector magnetic measurements | SHEATH solar input |
 | GFZ / NOAA indices | variable | Kp, ap, Hp30, ap30, F10.7, sunspot number, related indices | Auxiliary driver features |
 
+### Raw solar-wind / geomagnetic driver columns
+| Field | Units | Description |
+| :--- | :--- | :--- |
+| Bx, By, Bz | nT | IMF components |
+| vx, vy, vz | km/s | Solar-wind velocity components |
+| proton_density | $\mathrm{cm}^{\wedge}-3$ | Proton number density |
+| ion_temperature | K | lon temperature |
+| dynamic_pressure | nPa | Solar-wind dynamic pressure |
+| clock_angle | radians or degrees, depending on implementation | IMF clock angle |
+| Kp | unitless | Planetary geomagnetic activity index |
+| Hp30 , ap30 | index units | 30-minute geomagnetic indices |
+| F10.7 | sfu | 10.7 cm solar radio flux |
+
 # 2 Access Instructions
 
 Data is stored on Amazon Web Services (AWS). Data access is given via the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
@@ -168,5 +182,13 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 # 3 System Requirements
 
 There are two sets of system requirements:
-1. Requirements to *create* the data products. These can be found in the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/).
-2. To use the raw and processed data, any modern computer with enough storage is sufficient.
+1. Requirements to **recreate** the data products from raw inputs. These depend on the full GEO-CLOAK processing pipeline in the [project repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/).
+2. Requirements to **use** the released raw and processed data products. For this, any modern computer with sufficient local storage is generally sufficient.
+
+
+| Component | Recommendation |
+| :--- | :--- |
+| CPU | Multi-core CPU recommended |
+| RAM | 16 GB recommended for comfortable local analysis |
+| GPU | Not required for inspecting released data products |
+| Storage | At least 250 GB free storage recommended if downloading substantial portions of the dataset |   
