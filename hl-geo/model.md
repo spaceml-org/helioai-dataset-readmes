@@ -34,9 +34,7 @@ Together, these models provide an operational “Sun-to-ground” workflow:
 
 ## 1.2 Models Access
 
-The SHEATH and DAGGER-CL model files are provided below, together with example data for testing.
-
-Instructions for accessing the following files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
+The SHEATH and DAGGER-CL model files are provided below, together with example data for testing. Instructions for accessing the files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
 
 ### SHEATH model
 
