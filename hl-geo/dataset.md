@@ -183,7 +183,7 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 
 There are two sets of system requirements:
 1. Requirements to **recreate** the data products from raw inputs. These depend on the full GEO-CLOAK processing pipeline in the [project repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/).
-2. Requirements to **use** the released raw and processed data products. For this, any modern computer with sufficient local storage is generally sufficient.
+2. Requirements to **use** the released processed data products. For this, any modern computer with sufficient local storage is generally sufficient.
 
 
 | Component | Recommendation |
