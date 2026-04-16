@@ -73,9 +73,9 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 
 **Notes**
 
-  -Stored per minute
-  -Aligned to ACE / DSCOVR inputs using mapping files
-  -Normalized for model use
+    -Stored per minute
+    -Aligned to ACE / DSCOVR inputs using mapping files
+    -Normalized for model use
 
 ### SDO processed solar features
 
@@ -108,7 +108,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | By | nT | Target IMF y-component |
 | Bz | nT | Target IMF z-component |
 
-**scaler_targets.json**   
+| scaler_targets.json | |   
 | Key | Description |
 | :--- | :--- |
 | min, scale, data_min, data_max | MinMaxScaler parameters for inverse-transforming predictions |
@@ -116,7 +116,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | n_features | Number of predicted target variables |
 | feature_names | Names of the target variables |
 
-**split files**
+| split files |  | 
 | File | Purpose |
 | :--- | :--- |
 | sheath_train_set.csv | Training split |
