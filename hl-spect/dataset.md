@@ -9,7 +9,7 @@ aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/hl-spect/
 
 Downloading files is done by e.g.
 ```
-aws s3 cp --no-sign-request <AWS PATH> <LOCAL PATH> --recursive
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
 ```
 You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
 
