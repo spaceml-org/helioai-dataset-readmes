@@ -60,12 +60,12 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
   - Train and test CSV files are available for both products.
 
 ###OMNI processed file
-```markdown
+
 | File                      | Format | Contents                                      | Role
-|---------------------------|--------|-----------------------------------------------|
+|---------------------------|--------|-----------------------------------------------|-----------
 | omniweb_formatted_2000.h5 | HDF5   | Ground-truth solar-wind labels used by SHEATH | Supervised target for solar-wind prediction from SDO-derived inputs 
              
-```
+
 
 ## 1.2 Raw Data
 
