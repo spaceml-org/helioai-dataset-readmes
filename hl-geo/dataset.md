@@ -24,10 +24,10 @@ The raw data undergo the following preprocessing steps to create a structured da
 
 Instructions for accessing the following files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
 
-### Data Products
+### Processed Data Products
 
 ```markdown
-| **Data product       | AWS path                                             | Size   | Role in pipeline**                                     | 
+| Data product         | AWS path                                             | Size   | Role in pipeline.                                      | 
 |----------------------|------------------------------------------------------|--------|--------------------------------------------------------|
 | ACE                  | hl-geo/processed_data/ACE/                           | 55 GB  | Historical L1 solar-wind inputs                        |
 | DSCOVR               | hl-geo/processed_data/DSCOVR/                        | 14 GB  | Historical / near-real-time L1 solarwind inputs        |
@@ -38,55 +38,21 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 | SHEATH processed set | hl-geo/processed_data/sheath/                        | 2 GB   | Final training / evaluation inputs for SHEATH          |
 
 
+###ACE / DSCOVR processed columns
+These two products use the same core schema.
 
-### ACE (55 GB): Historical L1 solar-wind inputs
-- AWS PATH: `hl-geo/processed_data/ACE/` 
-- Contents: Formatted time-series with fields: `bt`, `bx_gsm`, `by_gsm`, `bz_gsm`, `proton_speed`, `proton_density`, `proton_temperature`. Historical data available from 2001
-- Train and test set CSV file available.
+```markdown
+| Column             | Units | Physical meaning                              |
+|--------------------|-------|-----------------------------------------------|
+| bt                 | nT    | Total interplanetary magnetic field magnitude |
+| bx_gsm             | nT    | IMF x-component in GSM coordinates            |
+| by_gsm             | nT    | IMF y-component in GSM coordinates            |
+| bz_gsm             | nT    | IMF z-component in GSM coordinates            |
+| proton_speed       | km/s  | Bulk solar-wind proton speed                  |
+| proton_density     | cm^-3 | Solar-wind proton number density              |
+| proton_temperature | K     | Solar-wind proton temperature                 |
 
-### DSCOVR (14 GB): Historical / near-real-time L1 solar-wind inputs
-- AWS PATH: `hl-geo/processed_data/DSCOVR/`
-- Content: formatted time-series with fields: `bt`, `bx_gsm`, `by_gsm`, `bz_gsm`, `proton_speed`, `proton_density`, `proton_temperature`. Historical data
-  available from 2016-07-26.
-- Train and test set CSV file available.
 
-### OMNI (0.5 MB): Solar-wind labels used for SHEATH training
-- AWS PATH: `hl-geo/processed_data/OMNI/omniweb_formatted_2000.h5`
-- Content: ground-truth solar wind labels that SHEATH learns to predict from SDO imagery. 
-
-### SuperMAG (40 GB): Ground magnetic perturbation targets
-- AWS PATH: `hl-geo/processed_data/SuperMAG/`
-- Content: 535 stations x 3 components (dBe, dBn, dBz) of ground magnetic perturbations in nT, stored per-minute, with NaN masks for missing stations,
-  StandardScaler-normalized, and time-aligned to ACE/DSCOVR inputs via mapping files. magnetic field components.
-
-### SDO (2 GB): Per-timestamp solar feature tables for SHEATH
-- AWS PATH: `hl-geo/processed_data/sdo/`
-- per-timestamp CSV of 26 features extracted from raw SDO data (from 10 AIA and 3 HMI channels)
-
-### SDO Embeddings (11 MB): Embedding-based SHEATH inputs and train/val/test splits
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/omniweb_back_tracked_ballistic.csv`
-    -   The full pre-split dataset mapping SDO embeddings to OMNI solar wind targets. Each row is one timestamp. Columns:
-        - Col 0: OMNI time (datetime at L1)
-        - Col 1: SDO time (datetime after ballistic backtracking — used for temporal splitting)
-        - Col 2: H5 latent index (integer index into sdo_latent_dataset_21504.h5["latent"] to fetch the 21,504-d embedding)
-        - Cols 3–9: The 7 OMNI target variables — Speed, Density, Temperature, Bt, Bx, By, Bz
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/scaler_targets.json`
-    -   A serialized MinMaxScaler fitted on the 7 target columns during training. Keys: min, scale, data_min, data_max, feature_range, n_features (7), feature_names. Used to inverse-transform
-  predictions back to physical units.
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_train_set.csv`
-    -   Training split — same columns as above. Everything not in the test intervals or validation years.
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_val_set.csv`
-    -   Validation split — rows where SDO time falls in years 2014 or 2017 (excluding test storm intervals).
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_test_set.csv`
-    -   Test split — rows from four specific geomagnetic storm periods:
-        - 2011-08-04 to 2011-08-08
-        - 2017-09-26 to 2017-09-29
-        - 2018-08-13 to 2018-08-17
-        - 2019-08-29 to 2019-09-01
-
-### SHEATH (2 GB): Final training / evaluation inputs for SHEATH
-- AWS Path: `hl-geo/processed_data/sheath/`
-- Training and test data for the SHEATH model.
 
 
 
