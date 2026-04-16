@@ -94,8 +94,8 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 ### SDO embeddings files
 
 `omniweb_back_tracked_ballistic.csv`
-| :--- | :--- | :--- |
 | Column | Units / type | Description |
+| :--- | :--- | :--- |
 | omni_time | datetime | Timestamp at L1 (OMNI time) |
 | sdo_time | datetime | Backtracked solar-observation time used for temporal splitting |
 | latent_index | integer | Index into latent embedding array |
