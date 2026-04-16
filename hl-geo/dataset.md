@@ -26,17 +26,14 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 
 ### Data Products
 
-\begin{tabular}{|l|l|l|l|}
-\hline Data product & AWS path & Approx. size & Role in pipeline \\
-\hline ACE & hl-geo/processed_data/ACE/ & 55 GB & Historical L1 solar-wind inputs \\
-\hline DSCOVR & hl-geo/processed_data/DSCOVR/ & 14 GB & Historical / near-real-time L1 solarwind inputs \\
-\hline OMNI & hl-geo/processed_data/OMNI/ omniweb_formatted_2000.h5 & 0.5 MB & Solar-wind labels used for SHEATH training \\
-\hline SuperMAG & hl-geo/processed_data/ SuperMAG/ & 40 GB & Ground magnetic perturbation targets \\
-\hline SDO features & hl-geo/processed_data/sdo/ & 2 GB & Per-timestamp solar feature tables for SHEATH \\
-\hline SDO embeddings & hl-geo/processed_data/ sdoembeddings/ & 11 MB & Embedding-based SHEATH inputs and train/val/test splits \\
-\hline SHEATH processed set & hl-geo/processed_data/sheath/ & 2 GB & Final training / evaluation inputs for SHEATH \\
-\hline
-\end{tabular}
+| **Data product | AWS path | Approx. size | Role in pipeline** | 
+|ACE | `hl-geo/processed_data/ACE/` | 55 GB | Historical L1 solar-wind inputs |
+DSCOVR | `hl-geo/processed_data/DSCOVR/` | 14 GB | Historical / near-real-time L1 solarwind inputs |
+| OMNI | `hl-geo/processed_data/OMNI/omniweb_formatted_2000.h5` | 0.5 MB | Solar-wind labels used for SHEATH training |
+| SuperMAG | `hl-geo/processed_data/SuperMAG/` | 40 GB | Ground magnetic perturbation targets |
+| SDO features | `hl-geo/processed_data/sdo/` | 2 GB | Per-timestamp solar feature tables for SHEATH |
+| SDO embeddings | `hl-geo/processed_data/sdoembeddings/` | 11 MB | Embedding-based SHEATH inputs and train/val/test splits |
+| SHEATH processed set | `hl-geo/processed_data/sheath/` | 2 GB | Final training / evaluation inputs for SHEATH |
 
 
 ## 1.2 Raw Data
