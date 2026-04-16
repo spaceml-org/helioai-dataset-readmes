@@ -27,6 +27,8 @@ The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a two-sta
 Together, these models provide an operational “Sun-to-ground” workflow:
 **SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps**.
 
+![GEO-CLOAK workflow](https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-geo/geocloak_workflow.png?raw=true)
+
 ## 1.1 Models Summary
 
 | Model | Purpose | Main input | Main output | Typical lead time |
