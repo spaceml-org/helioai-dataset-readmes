@@ -112,7 +112,35 @@ Notes
 
 Post-processing
 - station predictions are passed to a Gaussian-process interpolation module to produce global geomagnetic maps.
-- 
+
+
+### DAGGER-CL input / output details
+
+***Inputs**
+| Input field group | Units | Description |
+| :--- | :--- | :--- |
+| Bx, By, Bz | nT | IMF components |
+| solar-wind speed | km/s | Upstream solar-wind speed |
+| ion temperature | K | Solar-wind ion temperature |
+| geomagnetic indices | mixed | Kp, Hp30, ap30, related geomagnetic context |
+| context window | 90 minutes | Historical sequence used by GRU |
+
+***Outputs**
+| Output field | Units | Description |
+| :--- | :--- | :--- |
+| dBe | nT | Predicted eastward ground magnetic perturbation |
+| dBn | nT | Predicted northward ground magnetic perturbation |
+| dBz | nT | Predicted vertical ground magnetic perturbation |
+| ensemble mean | nT | Mean prediction across ensemble members |
+| ensemble variance | $\mathrm{nT}^2$ | Predictive variance used as uncertainty estimate |
+
+### 1.3 Combined Model Pipeline
+| Stage | Input | Output | Used by next stage? |
+| :--- | :--- | :--- | :--- |
+| SHEATH | SDO-derived solar features | Forecast solar-wind parameters at L1 | Yes |
+| DAGGER-CL | Real-time or forecast L1 solar wind + indices | Station perturbations | Yes |
+| GP interpolation | Station perturbations + station geometry | Global geomagnetic field estimate | Final product |
+
 # 2 Access Instructions 
 
 Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
@@ -130,5 +158,33 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 
 # 3 System Requirements
 
-1. To use the SHEATH model, any modern computer will do (no GPU necessary)
-2. The DAGGER-CL model is part of a more complex pipeline, so the requirements depend on how you want to use it. See the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/) for details. 
+**SHEATH**
+- any modern laptop or workstation should be sufficient for simple inference
+- no GPU is required for basic testing
+- Python $3.9+$ recommended
+
+**DAGGER-CL**
+The DAGGER-CL model is part of a more complex pipeline, so the requirements depend on how you want to use it. See the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/) for details. 
+  - local inference is lighter-weight than full continual-learning retraining
+  - the full continual-learning / near-real-time stack requires more infrastructure, including data ingestion, model registry, and operational orchestration
+
+| Component | Recommendation |
+| :--- | :--- |
+| CPU | 4+ core CPU |
+| RAM | 16 GB recommended |
+| GPU | Not required for simple checkpoint inference; useful for training / retraining |
+| Storage | Enough storage for checkpoints, processed data subsets, and logs |
+
+# 4 Notes on operational deployment
+
+The full operational GEO-CLOAK framework includes:
+
+- near-real-time inference
+- periodic continual-learning retraining
+- model registry / storage
+- web application serving
+- global interpolation of station predictions
+
+These operational components are part of the broader project framework and are more complex than simple local checkpoint inference.
+
+
