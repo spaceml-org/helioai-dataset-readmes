@@ -12,67 +12,32 @@ In addition to the high-level summary of this dataset presented below, a detaile
 
 The processed dataset for GEO-CLOAK is a two-stage operational forecasting data product. In the long-horizon branch, solar observations are transformed into forecast solar-wind time series via SHEATH. In the short-horizon branch, those predictions are then refined or superseded by in-situ L1 measurements and used by DAGGER-CL to generate global ground geomagnetic perturbation forecasts.
 
-The raw data undergoes the following processing steps to create a structured dataset suitable for training machine learning models. This involves cleaning, filtering, applying quality standards and transforming the raw measurements into a format that can be used for model training. 
+The raw data undergo the following preprocessing steps to create a structured dataset suitable for training and inference:
 
-  - Cleaning: Replace sentinel fill-values with NaN; rename columns to a common schema across ACE/DSCOVR/OMNI
-  - Resampling: 1-hour for SHEATH, 1-minute for DAGGER-CL
-  - Merging: Temporally align solar wind data with geomagnetic indices using backward-looking asof join
-  - Derived features: Compute clock angle, trig combinations, dynamic pressure, electric field proxy, dipole tilt (~26 total solar wind features)
-  - SDO processing (SHEATH only): Backtrack L1 time to Sun-observation time; segment AIA 193Å into coronal holes / active regions via GMM; extract mean
-  intensities per region across all 12 channels (~26 SDO features)
-  - Windowing (DAGGER-CL only): Slice 90-minute lookback windows as input; target is SuperMAG dB components at a future timestamp
-  - Scaling: Yeo-Johnson power transform + z-score (DAGGER-CL) or z-score only (SHEATH); scalers fitted on training set and saved for inference
+  - **Cleaning:** Replace sentinel fill-values with NaN; rename columns to a common schema across ACE/DSCOVR/OMNI
+  - **Resampling:** 1-hour cadence for SHEATH, 1-minute cadence for DAGGER-CL
+  - **Merging:** Temporally align solar wind data with geomagnetic indices using backward-looking `asof` joins
+  - **Derived features:** Compute clock angle, trigonometric combinations, dynamic pressure, electric field proxy, dipole tilt (~26 total solar wind features)
+  - **SDO processing (SHEATH only):** Backtrack L1 time to solar-observation time; segment AIA 193Å imagery into coronal holes, active regions via GMM; extract mean intensities per region across all 12 channels (~26 SDO features)
+  - **Windowing (DAGGER-CL only):** Slice 90-minute lookback windows as input; target is SuperMAG dB components at a future timestamp
+  - **Scaling:** Yeo-Johnson power transform + z-score (DAGGER-CL) or z-score only (SHEATH); scalers fitted on training set and saved for inference
 
 Instructions for accessing the following files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
 
-### ACE (55 GB)
-- AWS PATH: `hl-geo/processed_data/ACE/` 
-- Contents: Formatted time-series with fields: `bt`, `bx_gsm`, `by_gsm`, `bz_gsm`, `proton_speed`, `proton_density`, `proton_temperature`. Historical data available from 2001
-- Train and test set CSV file available.
+### Data Products
 
-### DSCOVR (14 GB)
-- AWS PATH: `hl-geo/processed_data/DSCOVR/`
-- Content: formatted time-series with fields: `bt`, `bx_gsm`, `by_gsm`, `bz_gsm`, `proton_speed`, `proton_density`, `proton_temperature`. Historical data
-  available from 2016-07-26.
-- Train and test set CSV file available.
+\begin{tabular}{|l|l|l|l|}
+\hline Data product & AWS path & Approx. size & Role in pipeline \\
+\hline ACE & hl-geo/processed_data/ACE/ & 55 GB & Historical L1 solar-wind inputs \\
+\hline DSCOVR & hl-geo/processed_data/DSCOVR/ & 14 GB & Historical / near-real-time L1 solarwind inputs \\
+\hline OMNI & hl-geo/processed_data/OMNI/ omniweb_formatted_2000.h5 & 0.5 MB & Solar-wind labels used for SHEATH training \\
+\hline SuperMAG & hl-geo/processed_data/ SuperMAG/ & 40 GB & Ground magnetic perturbation targets \\
+\hline SDO features & hl-geo/processed_data/sdo/ & 2 GB & Per-timestamp solar feature tables for SHEATH \\
+\hline SDO embeddings & hl-geo/processed_data/ sdoembeddings/ & 11 MB & Embedding-based SHEATH inputs and train/val/test splits \\
+\hline SHEATH processed set & hl-geo/processed_data/sheath/ & 2 GB & Final training / evaluation inputs for SHEATH \\
+\hline
+\end{tabular}
 
-### OMNI (0.5 MB)
-- AWS PATH: `hl-geo/processed_data/OMNI/omniweb_formatted_2000.h5`
-- Content: ground-truth solar wind labels that SHEATH learns to predict from SDO imagery. 
-
-### SuperMAG (40 GB)
-- AWS PATH: `hl-geo/processed_data/SuperMAG/`
-- Content: 535 stations x 3 components (dBe, dBn, dBz) of ground magnetic perturbations in nT, stored per-minute, with NaN masks for missing stations,
-  StandardScaler-normalized, and time-aligned to ACE/DSCOVR inputs via mapping files. magnetic field components.
-
-### SDO (2 GB)
-- AWS PATH: `hl-geo/processed_data/sdo/`
-- per-timestamp CSV of 26 features extracted from raw SDO data (from 10 AIA and 3 HMI channels)
-
-### SDO Embeddings (11 MB)
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/omniweb_back_tracked_ballistic.csv`
-    -   The full pre-split dataset mapping SDO embeddings to OMNI solar wind targets. Each row is one timestamp. Columns:
-        - Col 0: OMNI time (datetime at L1)
-        - Col 1: SDO time (datetime after ballistic backtracking — used for temporal splitting)
-        - Col 2: H5 latent index (integer index into sdo_latent_dataset_21504.h5["latent"] to fetch the 21,504-d embedding)
-        - Cols 3–9: The 7 OMNI target variables — Speed, Density, Temperature, Bt, Bx, By, Bz
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/scaler_targets.json`
-    -   A serialized MinMaxScaler fitted on the 7 target columns during training. Keys: min, scale, data_min, data_max, feature_range, n_features (7), feature_names. Used to inverse-transform
-  predictions back to physical units.
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_train_set.csv`
-    -   Training split — same columns as above. Everything not in the test intervals or validation years.
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_val_set.csv`
-    -   Validation split — rows where SDO time falls in years 2014 or 2017 (excluding test storm intervals).
-- AWS PATH: `hl-geo/processed_data/sdoembeddings/sheath_test_set.csv`
-    -   Test split — rows from four specific geomagnetic storm periods:
-        - 2011-08-04 to 2011-08-08
-        - 2017-09-26 to 2017-09-29
-        - 2018-08-13 to 2018-08-17
-        - 2019-08-29 to 2019-09-01
-
-### SHEATH (2 GB)
-- AWS Path: `hl-geo/processed_data/sheath/`
-- Training and test data for the SHEATH model.
 
 ## 1.2 Raw Data
 
