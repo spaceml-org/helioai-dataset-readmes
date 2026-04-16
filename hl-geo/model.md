@@ -88,6 +88,7 @@ Notes
 - Dynamic pressure and clock angle are derived downstream from the predicted quantities.
 
 ### DAGGER-CL model
+
 | Item | AWS path | Approx. size | Description |
 | :--- | :--- | :--- | :--- |
 | trained models / checkpoints | hl-geo/models/ DAGGER_CL/ | 120 MB | Trained DAGGER-CL weights and related artifacts |
@@ -115,7 +116,7 @@ Notes
 
 ### DAGGER-CL input / output details
 
-***Inputs**
+**Inputs**
 | Input field group | Units | Description |
 | :--- | :--- | :--- |
 | Bx, By, Bz | nT | IMF components |
@@ -124,7 +125,7 @@ Notes
 | geomagnetic indices | mixed | Kp, Hp30, ap30, related geomagnetic context |
 | context window | 90 minutes | Historical sequence used by GRU |
 
-***Outputs**
+**Outputs**
 | Output field | Units | Description |
 | :--- | :--- | :--- |
 | dBe | nT | Predicted eastward ground magnetic perturbation |
@@ -163,6 +164,7 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 - Python $3.9+$ recommended
 
 **DAGGER-CL**
+
 The DAGGER-CL model is part of a more complex pipeline, so the requirements depend on how you want to use it. See the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/) for details. 
   - local inference is lighter-weight than full continual-learning retraining
   - the full continual-learning / near-real-time stack requires more infrastructure, including data ingestion, model registry, and operational orchestration
