@@ -19,35 +19,100 @@ Together they form a two-stage forecasting pipeline: SHEATH offers early situati
 
 ## 1 Models Description
 
-The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a multi-stage, continual-learning geoeffectiveness forecasting system, extending the earlier Multiscale Geoeffectiveness (SHEATH + DAGGER++) architecture into a fully adaptive, operational ML pipeline.
+The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a two-stage forecasting system for geomagnetic perturbations. The pipeline combines:
 
-Rather than introducing a single new standalone model, GEO-CLOAK integrates the following model components to forecast geomagnetic perturbations at ground stations worldwide: 
+1. **SHEATH** — predicts solar-wind conditions at L1 from solar-disk observations, giving multi-day lead time
+2. **DAGGER-CL** — predicts ground magnetic perturbations from in-situ solar-wind conditions with shorter lead time but higher local fidelity
 
-1. SHEATH (solar-wind forecasting model):  An MLP that translates solar disk imagery (SDO) into solar wind parameter predictions at L1, providing multi-day advance warning of incoming conditions.
-2. DAGGER-CL (continual-learning geomagnetic perturbation model): A GRU that takes real-time solar wind measurements (ACE/DSCOVR) and predicts magnetic field perturbations (dBe, dBn) at ~535 ground stations with ~30-minute lead time.
+Together, these models provide an operational “Sun-to-ground” workflow:
+**SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps**.
 
-Together, they form a two-stage forecasting pipeline, with SHEATH offering early situational awareness from the Sun itself, and DAGGER-CL providing high-fidelity, station-level nowcasts once the solar wind is measured in situ. 
+| Model | Purpose | Main input | Main output | Typical lead time |
+| :--- | :--- | :--- | :--- | :--- |
+| SHEATH | Forecast solar-wind parameters from solar observations | SDO-derived 26-feature vector | Bx, By, Bz, Vx, density, temperature, plus predictive mean and standard deviation | Multi-day |
+| DAGGER-CL | Forecast ground magnetic perturbations | L1 solar wind + geomagnetic indices + lookback window | Station-level dBe, dBn, dBz | ~30 minutes |
 
+## 1.2 Models Access
 
-## 1.1 Models Access
-
-The SHEATH and DAGGER-CL model files are provided below, along with a sample dataset for testing purposes. 
+The SHEATH and DAGGER-CL model files are provided below, together with example data for testing.
 
 Instructions for accessing the following files on Amazon Web Services (AWS) are provided in [Section 2](#2-access-instructions).
 
-### SHEATH model (300 KB)
-- AWS PATH: `hl-geo/models/sheath_latest.pth`
-- Usage instructions are given in this [colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-GeoCL/blob/main/public/sheath_inference_quickstart.ipynb).
-- Type: 3-layer MLP 
+### SHEATH model
 
-### SHEATH example data (30 KB)
-- AWS Path: `hl-geo/models/examples/`
-- A sub-sample example data ready for usage with SHEATH. Example given in the SHEATH colab notebook linked above.
+| Item | AWS path | Approx. size | Description |
+| :--- | :--- | :--- | :--- |
+| model weights | hl-geo/models/ | 300 KB | Trained SHEATH checkpoint |
+|  | sheath_latest.pth |  |  |
+| example data | hl-geo/models/examples/ | 30 KB | Sample inputs for testing SHEATH |
 
-### DAGGER-CL (120 MB)
-- AWS Path: `hl-geo/models/DAGGER_CL/`
-- Contents: Trained models and checkpoints of the DAGGER-CL pipeline. As this is a continuuous learning pipeline this requires some infrastructure to set up, details can be found in the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/).
+**Model type**
+- multi-layer perceptron (MLP) regression model
 
+**Input**
+- 26 engineered solar features derived from 12 SDO channels
+
+**Output**
+- 7 solar-wind target variables at L1:
+  - `Bx`
+  - `By`
+  - `Bz`
+  - `Vx`
+  - `density`
+  - `temperature`
+  - predictive uncertainty summary
+
+
+### SHEATH input / output details
+
+**Inputs**
+| Input feature group | Count | Units | Description |
+| :--- | :--- | :--- | :--- |
+| coronal-hole pixel count | 1 | pixels | Count of coronal-hole pixels near central meridian |
+| active-region pixel count | 1 | pixels | Count of active-region pixels near central meridian |
+| coronal-hole emission by channel | 12 | channel-dependent intensity units | Total signal in coronal-hole mask for each channel |
+| active-region emission by channel | 12 | channel-dependent intensity units | Total signal in active-region mask for each channel |
+
+**Outputs**
+| Output field | Units | Description |
+| :--- | :--- | :--- |
+| Bx | nT | IMF x-component |
+| By | nT | IMF y -component |
+| Bz | nT | IMF z-component |
+| vx | km/s | Solar-wind radial speed |
+| density | $\mathrm{cm}^{\wedge}-3$ | Proton density |
+| temperature | K | Ion / proton temperature |
+| mean / std | same units as target | Predictive mean and standard deviation used for uncertainty-aware downstream use |
+
+Notes
+- `Vy` and `Vz` are assumed to be zero in the operational coupling used here.
+- Dynamic pressure and clock angle are derived downstream from the predicted quantities.
+
+### DAGGER-CL model
+| Item | AWS path | Approx. size | Description |
+| :--- | :--- | :--- | :--- |
+| trained models / checkpoints | hl-geo/models/ DAGGER_CL/ | 120 MB | Trained DAGGER-CL weights and related artifacts |
+
+**Model type**
+- GRU-based recurrent model with linear output layers
+- continual-learning extensions include replay / resampling and EWC-based regularization
+- uncertainty is estimated using deep ensembles
+
+**Input**
+- solar-wind measurements at L1
+- geomagnetic indices
+- 90-minute lookback context
+- disturbed-time-focused training windows
+
+**Output**
+- station-level ground magnetic perturbations:
+  - `dBe`
+  - `dBn`
+  - `dBz`
+
+Post-processing
+- station predictions are passed to a Gaussian-process interpolation module to produce global geomagnetic maps.
+- 
 # 2 Access Instructions 
 
 Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
