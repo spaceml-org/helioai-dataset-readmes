@@ -1,22 +1,3 @@
-
-<!-- # 2 Dataset Description
-
-
-There are three levels of description available for this dataset:
-- A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description (see the [Technical Memorandum](https://helioai.org/dev/artifact/89d1911b-7803-44e7-b792-076edb2dc5ed/details)).
-- The full source code used to process the data and create the models (see the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/)).
-
-## Project summary
-
-This project forecasts geomagnetic perturbations at ground stations worldwide using two complementary ML models:
-
-- SHEATH: An MLP that translates solar disk imagery (SDO) into solar wind parameter predictions at L1, providing multi-day advance warning of incoming conditions
-- DAGGER-CL: A GRU that takes real-time solar wind measurements (ACE/DSCOVR) and predicts magnetic field perturbations (dBe, dBn) at ~535 ground stations with ~30-minute lead time
-
-Together they form a two-stage forecasting pipeline: SHEATH offers early situational awareness from the Sun itself, while DAGGER-CL provides high-fidelity, station-level nowcasts once the solar wind is measured in situ. The dataset includes the raw inputs, processed training data, and trained model weights for both components. -->
-
-
 # 1. Models Description
 
 The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a two-stage forecasting system for geomagnetic perturbations. The pipeline combines:
