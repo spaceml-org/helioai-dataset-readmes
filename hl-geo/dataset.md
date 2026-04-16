@@ -27,7 +27,7 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 ### Processed Data Products
 
 ```markdown
-| Data product         | AWS path                                             | Size   | Role in pipeline.                                      | 
+| Data product         | AWS path                                             | Size   | Role in pipeline                                       | 
 |----------------------|------------------------------------------------------|--------|--------------------------------------------------------|
 | ACE                  | hl-geo/processed_data/ACE/                           | 55 GB  | Historical L1 solar-wind inputs                        |
 | DSCOVR               | hl-geo/processed_data/DSCOVR/                        | 14 GB  | Historical / near-real-time L1 solarwind inputs        |
@@ -39,10 +39,9 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 ```
 
 ###ACE / DSCOVR processed columns
-These two products use the same core schema.
 
 ```markdown
-| Column             | Units | Physical meaning                              |
+| Column             | Units | Description                                   |
 |--------------------|-------|-----------------------------------------------|
 | bt                 | nT    | Total interplanetary magnetic field magnitude |
 | bx_gsm             | nT    | IMF x-component in GSM coordinates            |
@@ -51,10 +50,21 @@ These two products use the same core schema.
 | proton_speed       | km/s  | Bulk solar-wind proton speed                  |
 | proton_density     | cm^-3 | Solar-wind proton number density              |
 | proton_temperature | K     | Solar-wind proton temperature                 |
-
 ```
 
+**Temporal coverage**
+  - ACE: historical coverage beginning in 2001
+  - DSCOVR: historical coverage beginning 2016-07-26
 
+**File format**
+  - Train and test CSV files are available for both products.
+
+###OMNI processed file
+```markdown
+| File                      | Format | Contents |                                    | Role 
+| omniweb_formatted_2000.h5 | HDF5   | Ground-truth solar-wind labels used by SHEATH | Supervised target for solar-wind prediction from SDO-derived inputs 
+             
+```
 
 ## 1.2 Raw Data
 
