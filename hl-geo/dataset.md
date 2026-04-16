@@ -36,7 +36,7 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 | SDO features         | hl-geo/processed_data/sdo/                           | 2 GB   |  Per-timestamp solar feature tables for SHEATH         |
 | SDO embeddings       | hl-geo/processed_data/sdoembeddings/                 | 11 MB  | Embedding-based SHEATH inputs and train/val/test splits|
 | SHEATH processed set | hl-geo/processed_data/sheath/                        | 2 GB   | Final training / evaluation inputs for SHEATH          |
-
+```
 
 ###ACE / DSCOVR processed columns
 These two products use the same core schema.
@@ -52,7 +52,7 @@ These two products use the same core schema.
 | proton_density     | cm^-3 | Solar-wind proton number density              |
 | proton_temperature | K     | Solar-wind proton temperature                 |
 
-
+```
 
 
 
