@@ -45,6 +45,8 @@ The SHEATH and DAGGER-CL model files are provided below, together with example d
 | model weights | hl-geo/models/sheath_latest.pth | 300 KB | Trained SHEATH checkpoint |
 | example data | hl-geo/models/examples/ | 30 KB | Sample inputs for testing SHEATH |
 
+Usage instructions are given in this [colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-GeoCL/blob/main/public/sheath_inference_quickstart.ipynb).
+
 **Model type**
 - multi-layer perceptron (MLP) regression model
 
