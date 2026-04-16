@@ -153,7 +153,7 @@ The raw data for GEO-CLOAK fall into two main branches corresponding to the two 
 - **GFZ Geomagnetic Indices**: Derived geophysical indices from the GFZ Potsdam observatory network: Kp/ap (global geomagnetic activity), Hp30/ap30 (30-min high-latitude activity), F10.7 solar radio flux, and sunspot number. Used as additional features characterising solar and geomagnetic conditions.
 
 
-### Raw solar-wind / geomagnetic driver columns
+### Raw solar-wind / geomagnetic driver columns (physical variables used by the associated model)
 | Field | Units | Description |
 | :--- | :--- | :--- |
 | Bx, By, Bz | nT | IMF components |
