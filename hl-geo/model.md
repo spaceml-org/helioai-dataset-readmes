@@ -40,8 +40,7 @@ The SHEATH and DAGGER-CL model files are provided below, together with example d
 
 | Item | AWS path | Approx. size | Description |
 | :--- | :--- | :--- | :--- |
-| model weights | hl-geo/models/ | 300 KB | Trained SHEATH checkpoint |
-|  | sheath_latest.pth |  |  |
+| model weights | hl-geo/models/sheath_latest.pth | 300 KB | Trained SHEATH checkpoint |
 | example data | hl-geo/models/examples/ | 30 KB | Sample inputs for testing SHEATH |
 
 **Model type**
