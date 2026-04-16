@@ -94,8 +94,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 
 ### SDO embeddings files
 
-**omniweb_back_tracked_ballistic.csv**
-
+| omniweb_back_tracked_ballistic.csv |  |  |
 | :--- | :--- | :--- |
 | Column | Units / type | Description |
 | omni_time | datetime | Timestamp at L1 (OMNI time) |
@@ -105,7 +104,7 @@ The 26 SHEATH features are constructed from segmentation of the AIA 193 Å chann
 | density | $\mathrm{cm}^{\wedge}-3$ | Target solar-wind proton density |
 | temperature | K | Target solar-wind ion / proton temperature |
 | Bt | nT | Target total IMF magnitude |
-| Bx | nT | Target IMF x -component |
+| Bx | nT | Target IMF x-component |
 | By | nT | Target IMF y-component |
 | Bz | nT | Target IMF z-component |
 
