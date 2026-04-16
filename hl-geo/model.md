@@ -17,7 +17,7 @@ This project forecasts geomagnetic perturbations at ground stations worldwide us
 Together they form a two-stage forecasting pipeline: SHEATH offers early situational awareness from the Sun itself, while DAGGER-CL provides high-fidelity, station-level nowcasts once the solar wind is measured in situ. The dataset includes the raw inputs, processed training data, and trained model weights for both components. -->
 
 
-## 1 Models Description
+# 1 Models Description
 
 The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a two-stage forecasting system for geomagnetic perturbations. The pipeline combines:
 
@@ -26,6 +26,8 @@ The Geoeffectiveness Continual Learning challenge (GEO-CLOAK) produced a two-sta
 
 Together, these models provide an operational “Sun-to-ground” workflow:
 **SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps**.
+
+## 1.1 Models Summary
 
 | Model | Purpose | Main input | Main output | Typical lead time |
 | :--- | :--- | :--- | :--- | :--- |
@@ -107,7 +109,7 @@ Notes
   - `dBn`
   - `dBz`
 
-Post-processing
+**Post-processing**
 - station predictions are passed to a Gaussian-process interpolation module to produce global geomagnetic maps.
 
 
