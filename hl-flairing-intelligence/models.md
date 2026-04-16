@@ -1,0 +1,1 @@
+The model for this project is available at https://huggingface.co/spaces/griffingoodwin04/FOXES-model 
