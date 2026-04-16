@@ -61,8 +61,35 @@ Instructions for accessing the following files on Amazon Web Services (AWS) are 
 | File                      | Format | Contents                                      | Role
 |---------------------------|--------|-----------------------------------------------|-----------
 | omniweb_formatted_2000.h5 | HDF5   | Ground-truth solar-wind labels used by SHEATH | Supervised target for solar-wind prediction from SDO-derived inputs 
-             
 
+###SuperMAG processed data
+
+| Field group | Units | Description 
+|-------------|---------|-----
+| dBe | nT | Eastward ground magnetic perturbation
+| dBn | nT | Northward ground magnetic perturbation 
+| dBz | nT | Vertical ground magnetic perturbation 
+| station mask gNaN mask | unitless | Missing-data indicator per station / component|
+
+**Notes**
+  -Stored per minute
+  -Aligned to ACE / DSCOVR inputs using mapping files
+  -Normalized for model use
+
+###SDO processed solar features
+
+Product | Format | Contents | Role |
+---------|---|---|---|
+per-timestamp SDO feature CSVs | CSV | 26 engineered solar features from raw SDO data | Input features for SHEATH
+
+The 26 SHEATH features are constructed from segmentation of the AIA 193 Å channel into coronal holes, active regions, and quiet regions, followed by aggregation over the central-meridian region of interest:
+
+| Feature group | Count | Units | Description |
+| :--- | :--- | :--- | :--- |
+| coronal-hole pixel count | 1 | pixels | Number of pixels classified as coronal holes |
+| active-region pixel count | 1 | pixels | Number of pixels classified as active regions |
+| coronal-hole total emission by channel | 12 | channel-dependent intensity units | Total signal within coronal-hole mask for each SDO channel |
+| active-region total emission by channel | 12 | channel-dependent intensity units | Total signal within active-region mask for each SDO channel |
 
 ## 1.2 Raw Data
 
