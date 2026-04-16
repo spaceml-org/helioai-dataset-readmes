@@ -145,6 +145,22 @@ The raw data for GEO-CLOAK fall into two main branches corresponding to the two 
 | SDO AIA + HMI | image time series | EUV solar imagery and vector magnetic measurements | SHEATH solar input |
 | GFZ / NOAA indices | variable | Kp, ap, Hp30, ap30, F10.7, sunspot number, related indices | Auxiliary driver features |
 
+- ACE & DSCOVR: In-situ solar wind measurements from spacecraft at the L1 Lagrange point (~1.5M km sunward of Earth). They measure the speed, density, and
+temperature of the solar wind plasma, plus the interplanetary magnetic field (IMF) vector. DSCOVR replaced ACE as the primary real-time monitor in 2016; the
+project uses both for historical coverage.
+- OMNI: A NASA-curated compilation of solar wind data from multiple L1 spacecraft (including ACE and DSCOVR), time-shifted to the Earth's bow shock nose and
+cross-calibrated. Serves as a clean, gap-filled historical baseline.
+- NOAA SWPC RTSW: A real-time JSON feed that blends whichever L1 spacecraft (ACE or DSCOVR) is currently operational. Used for the near-real-time (NRT)
+inference pipeline.
+- SuperMAG: Ground-truth magnetometer data from ~175+ stations worldwide. Provides geomagnetic perturbation measurements (N/E/Z components) and derived indices
+(SME, SML, SMU). This is what the model is ultimately trying to predict.
+- SDO (AIA + HMI): Remote-sensing solar disk observations from NASA's Solar Dynamics Observatory. AIA provides EUV images across 10 wavelength channels
+(capturing coronal structure); HMI provides vector magnetograms (photospheric magnetic field maps). Consumed via the SDOML Zarr archive and used as input to the
+SHEATH model.
+- GFZ Geomagnetic Indices: Derived geophysical indices from the GFZ Potsdam observatory network: Kp/ap (global geomagnetic activity), Hp30/ap30 (30-min
+high-latitude activity), F10.7 solar radio flux, and sunspot number. Used as additional features characterising solar and geomagnetic conditions.
+
+
 ### Raw solar-wind / geomagnetic driver columns
 | Field | Units | Description |
 | :--- | :--- | :--- |
