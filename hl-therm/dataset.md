@@ -54,7 +54,7 @@ The raw data (described below) are processed into a ML-ready, structured dataset
 
 The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**, where each row represents a **single timestamp**, where all input variables (solar, geomagnetic, and orbital) are aligned to that time, and the target corresponds to the thermospheric density at that same time.
 
-#1.2 Processed data products
+## Processed data products
 
 
 | Data Product | AWS Path | Size | Format | Role |
@@ -68,7 +68,7 @@ The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**,
 
 ---
 
-# 1.3 Processed Data Contents
+## Processed Data Contents
 
 ## OMNIWEB
 
@@ -138,7 +138,7 @@ The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**,
 
 ---
 
-# 1.4 Time Alignment
+## Time Alignment
 
 | Source | Original Cadence |
 |--------|----------------|
@@ -154,7 +154,7 @@ After processing:
 - temporal relationships are learned by the model  
 
 
-## 1.2 Raw Data 
+# 1.2 Raw Data 
 
 The raw data for this challenge consists of two main source families: thermospheric density targets derived from precise orbit determination (POD) data, and space weather driver data describing the solar and geomagnetic forcing of the upper atmosphere. Karman-CL uses density measurements derived from satellites' POD data as the ground-truth target, because those measurements provide a direct indication of the thermospheric state experienced by spacecraft in low Earth orbit. This makes the target physically meaningful for orbital drag applications rather than a purely modeled proxy. The space weather driver data includes a mixture of upstream space weather inputs from SOHO and OMNIWeb.
 
@@ -233,7 +233,7 @@ There are two sets of system requirements:
 
 | Component | Minimum |
 |-----------|---------|
-| **CPU** | Multi-core|
-| **RAM** | 16 GB |
+| **CPU** | 2-4 cores|
+| **RAM** | 8 GB (small data subset), 16 GB (full dataset processing) |
 | **GPU** | None — inference runs on CPU |
-| **Storage** | ~10 MB for the model weights + storage for inference data ~= 50-200 GB|
+| **Storage** | ~70 GB (raw + processed data) | 100+ GB (including intermediate files, model outputs, and working space) |
