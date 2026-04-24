@@ -209,4 +209,4 @@ There are two sets of system requirements:
 | **CPU** | 2-4 cores|
 | **RAM** | 8 GB (small data subset), 16 GB (full dataset processing) |
 | **GPU** | None — inference runs on CPU |
-| **Storage** | ~70 GB (raw + processed data) | 100+ GB (including intermediate files, model outputs, and working space) |
+| **Storage** | ~70 GB (raw + processed data), 100+ GB (including intermediate files, model outputs, and working space) |
