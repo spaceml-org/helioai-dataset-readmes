@@ -32,7 +32,7 @@ This transforms the system from a static ML model into a self-updating forecasti
 ## 1.1 Model Workflow
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/edit/main/hl-therm/thermocl_workflow.png" width="500">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/edit/main/hl-therm/thermocl_workflow.png?raw=true" " width="600">
 </p>
 
 The Thermo-CL workflow can be summarized as:
