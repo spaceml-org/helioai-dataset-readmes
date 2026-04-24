@@ -166,41 +166,14 @@ Thermospheric density measurements and solar weather information are drawn from 
 - SOHO Solar Irradiance: Solar EUV irradiance at 30 nm and 25 nm from the SOHO spacecraft's SEM instrument at 15-second resolution
 Space Weather Indices & Proxies: Daily-cadence solar and geomagnetic indices including F10.7, S10.7, M10.7, Y10.7 (solar radio flux and UV/EUV proxies), the Ap geomagnetic index, and dDst/dT (rate of change of the disturbance storm-time index).
 
-## Overview
 
-| Source | Cadence | Contents | Role |
-|-------|--------|---------|------|
-| Solar wind | minute | IMF + plasma | External forcing |
-| Geomagnetic indices | hourly | Kp, Dst, ap | Magnetic response |
-| EUV irradiance | seconds | Solar heating | Driver |
-| Satellite density | orbit | Density measurements | Target |
-| Orbit data | variable | Position | Context |
-
----
-
-## Representative Fields
-
-### Solar Wind
-
-| Field | Units | Description |
-|------|------|-------------|
-| Bx, By, Bz | nT | IMF |
-| solar_wind_speed | km/s | Velocity |
-| proton_density | cm⁻³ | Density |
-
-### Geomagnetic
-
-| Field | Units | Description |
-|------|------|-------------|
-| Kp | index | Activity |
-| Dst | nT | Ring current |
-
-### EUV
-
-| Field | Units | Description |
-|------|------|-------------|
-| irradiance | W/m² | Solar EUV |
-
+| Source | Cadence | Key Fields | Units | Description | Role |
+|-------|--------|------------|-------|-------------|------|
+| TU Delft Satellite Density (CHAMP, GOCE, GRACE A/B/C, SWARM A/B/C) | Orbit-dependent | density, altitude, latitude, longitude | kg/m³, km, deg | In-situ thermospheric density derived from precise orbit determination | Target |
+| GOES EUV Irradiance | 1-minute | irradiance (7 wavelengths: 25.6–140.5 nm) | W/m²/nm | Solar EUV irradiance across multiple wavelengths | Solar heating driver |
+| OMNIWeb Solar Wind & Geomagnetic | 1-minute | Bx, By, Bz, solar_wind_speed, proton_density, AE, AL, AU, SYM/H | nT, km/s, cm⁻³ | Solar wind plasma and magnetic field plus geomagnetic indices | External forcing |
+| SOHO SEM Irradiance | 15-second | irradiance_25nm, irradiance_30nm | W/m²/nm | High-cadence EUV irradiance measurements | Solar heating driver |
+| Space Weather Indices & Proxies | Daily | F10.7, S10.7, M10.7, Y10.7, Ap, dDst/dt | sfu, nT | Solar flux and geomagnetic proxy indices | Long-timescale drivers |
 
 # 2 Access Instructions
 
