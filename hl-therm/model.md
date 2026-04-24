@@ -29,7 +29,7 @@ The workflow is:
 
 This transforms the system from a static ML model into a self-updating forecasting system. 
 
-## 1.1 Model Workflow
+<!--## 1.1 Model Workflow
 
 <p align="center">
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/edit/main/hl-therm/thermocl_workflow.png?raw=true" width="600">
@@ -37,9 +37,9 @@ This transforms the system from a static ML model into a self-updating forecasti
 
 The Thermo-CL workflow can be summarized as:
 
-**Solar drivers + geomagnetic drivers + satellite density data → processed Thermo-CL dataset → TFT forecast model / nowcasting model → thermospheric density prediction → continual-learning update loop**
+**Solar drivers + geomagnetic drivers + satellite density data → processed Thermo-CL dataset → TFT forecast model / nowcasting model → thermospheric density prediction → continual-learning update loop** -->
 
-## 1.2 Model Summary
+## 1.1 Model Summary
 
 | Model | Purpose | Main input | Main output | Role |
 | :--- | :--- | :--- | :--- | :--- |
@@ -47,7 +47,7 @@ The Thermo-CL workflow can be summarized as:
 | Nowcasting MLP | Estimate current thermospheric density | Instantaneous features only, no time-series history | Current thermospheric density | Instructional / lightweight example model |
 | Karman-CL orchestration layer | Manage continual-learning workflow | New observations, model performance metrics, distribution-shift signals | Updated model selection / retraining decisions | Operational control layer |
 
-## 1.3 Model Access
+## 1.2 Model Access
 
 Two ML models are included here: a forecasting model and a nowcasting model. The forecasting model is the main product of this challenge, and is intended to be used for forecasting the thermospheric density. The nowcasting model is a simple model that is not intended for any use other than for instructional purposes. The model files are provided below, along with a sample dataset for testing purposes. 
 
@@ -146,7 +146,7 @@ The `log_exp_residual` approach means the model predicts a correction, or residu
 - AWS PATH: `hl-therm/models/sample_inputs_tft.pt`
 - Description: This file is a PyTorch dictionary containing a sample of everything needed to run TFT inference, shown in the table below. The first three keys (rows) are the direct **model inputs**. The rest is **metadata** for evaluation and denormalization. All values are already preprocessed (scaled/normalized) and ready to feed directly into the TFT. `N` is the number of samples, in this case `N=100`. -->
 
-# 1.4 Example TFT Inference Data
+# 1.3 Example TFT Inference Data
 
 The file `sample_inputs_tft.pt` provides a ready-to-run example input package for the TFT forecasting model.
 
@@ -172,7 +172,7 @@ This file is a PyTorch dictionary containing a sample of everything needed to ru
 | `dates` | list of N strings | Timestamp for each sample |
 | `normalization_dict` | dict | The scaling parameters (min/max, quantile transforms) used during preprocessing |
 
-# 1.5 How the Processed Data Feed the Models
+# 1.4 How the Processed Data Feed the Models
 
 | Stage | Input | Output | Used by |
 | :--- | :--- | :--- | :--- |
