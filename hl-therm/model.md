@@ -197,3 +197,15 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 ```
 Replace `<AWS PATH>` with the path to the model or sample input file you want to download, and replace `<LOCAL PATH>` with the path on your local machine where you want to save the file.
 
+# 3 Notes on Operational Deployment
+
+The full Thermo-CL operational framework includes:
+  - data ingestion,
+  - preprocessing and time alignment,
+  - model inference,
+  - performance monitoring,
+  - distribution-shift checks,
+  - retraining triggers,
+  - and model replacement.
+
+These operational components are part of the broader Karman-CL framework and are more complex than simple local checkpoint inference.
