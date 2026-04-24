@@ -51,11 +51,11 @@ The raw data (described below) are processed into a ML-ready, structured dataset
   - Features are normalized (z-score or similar)
   - Scaling parameters are stored for reproducibility
 
-
 The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**, where each row represents a **single timestamp**, where all input variables (solar, geomagnetic, and orbital) are aligned to that time, and the target corresponds to the thermospheric density at that same time.
 
 ## Processed data products
 
+Instructions for accessing the following list of processed datasets on Amazon Web Services (AWS) are provided in Section 2.
 
 | Data Product | AWS Path | Size | Format | Role |
 |-------------|---------|------|--------|------|
