@@ -6,7 +6,7 @@ The Thermo-CL dataset is the backbone for Karman-CL -- a continual-learning vers
  - [Raw data](#12-raw-data): observational solar, geomagnetic, and orbital inputs
  - [Processed data](#11-processed-data):  time-aligned, machine-learning-ready datasets used for training and inference
 
-In addition to the high-level summary of this dataset presented below, a detailed description may be found in the project [Technical Memorandum](https://helioai.org/dev/artifact/04b6c417-c722-484c-a668-9426bbbb0cd7/details); and the full source code used to process the data in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-hl-thermo-cl).
+**Project Resources**: In addition to the high-level summary of this dataset presented below, a detailed description may be found in the project [Technical Memorandum](https://helioai.org/dev/artifact/04b6c417-c722-484c-a668-9426bbbb0cd7/details); and the full source code used to process the data in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-hl-thermo-cl).
 
 # 1.1 Processed Data
 
