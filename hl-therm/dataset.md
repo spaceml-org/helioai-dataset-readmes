@@ -54,43 +54,104 @@ The raw data (described below) are processed into a ML-ready, structured dataset
 
 The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**, where each row represents a **single timestamp**, where all input variables (solar, geomagnetic, and orbital) are aligned to that time, and the target corresponds to the thermospheric density at that same time.
 
-Instructions for accessing the following list of processed datasets on Amazon Web Services (AWS) are provided in Section 2.
-
-### OMNIWEB data (3.1 GB)
-- AWS PATH: `hl-therm/processed_data/physical-drivers-processed/OMNIWEB/{YYYY}/{SUBSET}_omni_{YYYY}_{MM}.parquet`
-- Format: tabular (pandas dataframe)
-- Available Years: 2000-2025
-- Available subsets: `indices`, `magnetic_field`, `solar_wind_velocity`
-
-### SOHO data (0.5GB)
-- AWS PATH: `hl-therm/processed_data/physical-drivers-processed/SOHO/{YYYY}/{YY}_{MM}_{DD}_v4.00.parquet`
-- Format: tabular (pandas dataframe)
-- Available Years: 2000-2025
-
-### NRLMSISE-00 data (4.6 GB)
-- AWS PATH: `hl-therm/processed_data/physical-drivers-processed/nrlmsise00_time_series.csv`
-- Format: tabular (pandas dataframe)
-
-### GOES data (0.7 GB)
-- AWS PATH: `hl-therm/processed_data/satellite-data-processed/GOES/{YYYY}/goes_irradiance_{YYYY}_{WAVELENGTH}nm.parquet`
-- Format: tabular (pandas dataframe)
-- Available wavelengths: 256, 284, 304, 1175, 1216, 1335, 1405
-- Available Years: 2010-2024
-
-### Tudelft data (11 GB)
-- AWS PATH: `hl-therm/processed_data/satellite-data-processed/tudelft/version_0{VERSION}/{SATELLITE}_data/`
-- Format: tabular (pandas dataframe)
-- Available satellites: 
-    - `GOCE` (version 1), years 2009-2013
-    - `Swarm`(version 1), years 2013-2025
-    - `CHAMP`(version 2), years 2000-2010
-    - `GRACE-FO` (version 2), years 2018-2025 
-    - `GRACE`(version 2), years 2002-2017
+#1.2 Processed data products
 
 
-### Space Weather Indices & Proxies data (0.2 MB)
-- AWS PATH: `hl-therm/processed_data/sw-indices/combined_incides.parquet`
-- Format: tabular (pandas dataframe)
+| Data Product | AWS Path | Size | Format | Role |
+|-------------|---------|------|--------|------|
+| OMNIWEB | `physical-drivers-processed/OMNIWEB/` | 3.1 GB | Parquet | Solar wind + geomagnetic drivers |
+| SOHO | `physical-drivers-processed/SOHO/` | 0.5 GB | Parquet | Solar EUV irradiance |
+| NRLMSISE-00 | `nrlmsise00_time_series.csv` | 4.6 GB | CSV | Atmospheric model baseline |
+| GOES | `satellite-data-processed/GOES/` | 0.7 GB | Parquet | EUV irradiance observations |
+| TU Delft | `satellite-data-processed/tudelft/` | 11 GB | Tabular | Thermospheric density targets |
+| SW Indices | `sw-indices/combined_indices.parquet` | 0.2 MB | Parquet | Solar/geomagnetic proxy inputs |
+
+---
+
+# 1.3 Processed Data Contents
+
+## OMNIWEB
+
+| Field | Units | Description |
+|------|------|-------------|
+| Bx, By, Bz | nT | IMF components |
+| solar_wind_speed | km/s | Solar wind velocity |
+| proton_density | cm⁻³ | Plasma density |
+| proton_temperature | K | Plasma temperature |
+| AE, AL, AU | nT | Auroral electrojet indices |
+| SYM/H | nT | Ring current index |
+| time | datetime | Timestamp |
+
+---
+
+## SOHO
+
+| Field | Units | Description |
+|------|------|-------------|
+| irradiance_30nm | W/m²/nm | EUV irradiance |
+| irradiance_25nm | W/m²/nm | EUV irradiance |
+| time | datetime | Timestamp |
+
+---
+
+## GOES
+
+| Field | Units | Description |
+|------|------|-------------|
+| irradiance_{wavelength} | mission units | EUV irradiance |
+| wavelength | nm | Channel |
+| time | datetime | Timestamp |
+
+---
+
+## TU Delft Density
+
+| Field | Units | Description |
+|------|------|-------------|
+| density | kg/m³ | Thermospheric density |
+| altitude | km | Satellite altitude |
+| latitude | deg | Latitude |
+| longitude | deg | Longitude |
+| satellite | string | Satellite ID |
+| time | datetime | Timestamp |
+
+---
+
+## Space Weather Indices
+
+| Field | Units | Description |
+|------|------|-------------|
+| F10.7 | sfu | Solar EUV proxy |
+| Kp | index | Geomagnetic activity |
+| ap | nT | Linearized geomagnetic index |
+| Dst | nT | Ring current intensity |
+| time | datetime | Timestamp |
+
+---
+
+## NRLMSISE-00
+
+| Field | Units | Description |
+|------|------|-------------|
+| density_model | kg/m³ | Model density |
+| time | datetime | Timestamp |
+
+---
+
+# 1.4 Time Alignment
+
+| Source | Original Cadence |
+|--------|----------------|
+| OMNIWEB | 1-minute |
+| SOHO | seconds–minutes |
+| GOES | seconds–minutes |
+| Indices | hourly/daily |
+| TU Delft | orbit-dependent |
+
+After processing:
+- all datasets are aligned to a common time grid  
+- interpolation fills gaps  
+- temporal relationships are learned by the model  
 
 
 ## 1.2 Raw Data 
@@ -104,6 +165,41 @@ Thermospheric density measurements and solar weather information are drawn from 
 - OMNIWeb Solar Wind & Geomagnetic Data: Interplanetary magnetic field components (Bx, By, Bz), solar wind velocity and plasma properties, and geomagnetic activity indices (AE, AL, AU, SYM/H, etc.) at 1-minute resolution from 2000 onward. 
 - SOHO Solar Irradiance: Solar EUV irradiance at 30 nm and 25 nm from the SOHO spacecraft's SEM instrument at 15-second resolution
 Space Weather Indices & Proxies: Daily-cadence solar and geomagnetic indices including F10.7, S10.7, M10.7, Y10.7 (solar radio flux and UV/EUV proxies), the Ap geomagnetic index, and dDst/dT (rate of change of the disturbance storm-time index).
+
+## Overview
+
+| Source | Cadence | Contents | Role |
+|-------|--------|---------|------|
+| Solar wind | minute | IMF + plasma | External forcing |
+| Geomagnetic indices | hourly | Kp, Dst, ap | Magnetic response |
+| EUV irradiance | seconds | Solar heating | Driver |
+| Satellite density | orbit | Density measurements | Target |
+| Orbit data | variable | Position | Context |
+
+---
+
+## Representative Fields
+
+### Solar Wind
+
+| Field | Units | Description |
+|------|------|-------------|
+| Bx, By, Bz | nT | IMF |
+| solar_wind_speed | km/s | Velocity |
+| proton_density | cm⁻³ | Density |
+
+### Geomagnetic
+
+| Field | Units | Description |
+|------|------|-------------|
+| Kp | index | Activity |
+| Dst | nT | Ring current |
+
+### EUV
+
+| Field | Units | Description |
+|------|------|-------------|
+| irradiance | W/m² | Solar EUV |
 
 
 # 2 Access Instructions
@@ -137,7 +233,7 @@ There are two sets of system requirements:
 
 | Component | Minimum |
 |-----------|---------|
-| **CPU** | Any modern CPU (even 2 cores is fine) |
-| **RAM** | 8 GB |
+| **CPU** | Multi-core|
+| **RAM** | 16 GB |
 | **GPU** | None — inference runs on CPU |
-| **Storage** | ~10 MB for the model weights + storage for inference data|
+| **Storage** | ~10 MB for the model weights + storage for inference data ~= 50-200 GB|
