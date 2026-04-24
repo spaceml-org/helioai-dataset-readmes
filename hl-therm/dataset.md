@@ -68,8 +68,6 @@ Instructions for accessing the following list of processed datasets on Amazon We
 
 ---
 
-## Processed Data Contents
-
 ## OMNIWEB
 
 | Field | Units | Description |
