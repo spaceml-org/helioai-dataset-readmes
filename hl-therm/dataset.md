@@ -1,40 +1,60 @@
 # 1 Dataset Description
 
-The Thermospheric Density Continuous Learning challenge was designed to push thermospheric density forecasting from a strong, static ML benchmark toward an operational, adaptive forecasting system. The motivation was the rapid growth of satellites and debris in low Earth orbit, where uncertainty in thermospheric density translates directly into uncertainty in drag, orbit prediction, conjunction assessment, and reentry timing. Earlier FDL Karman work had already shown that data-driven models can outperform traditional empirical density models, but this challenge focuses on the next step: continuously updating the forecasting system as new space weather and density data arrive, while preserving historical skill and enabling near-real-time use.
+The Frontier Development Lab FDL-X Heliolab 2024 **Thermospheric Density Continuous Learning (Thermo-CL)** challenge was designed to push thermospheric density forecasting from a strong, static ML benchmark toward an operational, adaptive forecasting system. The motivation was the rapid growth of satellites and debris in low Earth orbit, where uncertainty in thermospheric density translates directly into uncertainty in drag, orbit prediction, conjunction assessment, and reentry timing. Earlier FDL Karman work had already shown that data-driven models can outperform traditional empirical density models, but this challenge focuses on the next step: continuously updating the forecasting system as new space weather and density data arrive, while preserving historical skill and enabling near-real-time use.
 
-The dataset used is the backbone for Karman-CL -- a continual-learning version of the Karman framework that combines live data ingestion, cloud storage, and transformer-based forecasting models -- and is therefore designed both for scientific understanding of thermospheric response and for operational ML deployment. It consists of two main components: [raw data](#12-raw-data) and [processed data](#11-processed-data).
-
-<!-- This dataset corresponds to Thermospheric Density Continual Learning challenge. It is what was used to create the 2024 iteration of KARMAN. There are two main components: raw data and processed data.-->
+The Thermo-CL dataset is the backbone for Karman-CL -- a continual-learning version of the Karman framework that combines live data ingestion, cloud storage, and transformer-based forecasting models -- and is therefore designed for scientific understanding of thermospheric response, as well as for operational ML deployment. It is a **time-series, physics-informed dataset** that captures the relationship between solar forcing, geomagnetic activity, and thermospheric response, consisting of two main components:
+ - [Raw data](#12-raw-data): observational solar, geomagnetic, and orbital inputs
+ - [Processed data](#11-processed-data):  time-aligned, machine-learning-ready datasets used for training and inference
 
 In addition to the high-level summary of this dataset presented below, a detailed description may be found in the project [Technical Memorandum](https://helioai.org/dev/artifact/04b6c417-c722-484c-a668-9426bbbb0cd7/details); and the full source code used to process the data in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-hl-thermo-cl).
 
-## 1.1 Processed Data
+# 1.1 Processed Data
 
 The processed dataset is a machine-learning-ready, operationally updated forecasting table/tensor stream that aligns thermospheric density targets with live-ingested space weather drivers over long historical windows. Unlike a static benchmark dataset, the processed data are explicitly part of the Karman-CL operational loop: new data are ingested, compared against the existing data distribution, and either passed directly to the current model for live inference or used to trigger model retraining if the distribution has shifted. This means the processed data product is both a forecasting dataset and a data-assimilation/continual-learning substrate.
 
-The raw data (see below) are processed into a ML-ready, structured dataset according to the following recipe, involving cleaning, filtering, applying quality standards, and transforming the raw measurements into a format that can be used for model training.
+The raw data (described below) are processed into a ML-ready, structured dataset according to the following recipe, involving cleaning, filtering, applying quality standards, and transforming the raw measurements into a format that can be used for model training.
+ 
+## Processing pipeline:
 
-Processing steps:
-
- - Ingest new space weather driver data through a live ingestion data pipeline.
-
+<!-- - Ingest new space weather driver data through a live ingestion data pipeline.
  - Preprocess and store those data in a cloud environment for ML readiness.
 
  - Align them with precise orbit determination (POD)-derived thermospheric density targets.
-
  - Construct model-ready forecasting samples using a historical window and a chosen lead-time/forecast window. 
       - historical window: ~60,000 minutes
  	  - forecast window: 100 minutes.
-
  - Run the continual-learning trigger:
   	- if the incoming distribution matches the historical one, do live inference,
   	- otherwise retrain candidate models in the ML model zoo and replace underperforming top-K models if warranted.
-
- - Validate on held-out intervals and major storm cases such as the May 2024 Gannon superstorm.
-
+ - Validate on held-out intervals and major storm cases such as the May 2024 Gannon superstorm.-->
 
 
-Instructions for accessing the following datasets on Amazon Web Services (AWS) are provided in Section 2.
+- **Cleaning**
+  - Replace missing or fill values with NaN
+  - Remove corrupted or invalid records
+
+- **Resampling**
+  All input data streams are resampled to a **common cadence (5–60 minutes depending on source)** to ensure all variables are defined on a consistent time grid.
+
+- **Time alignment**
+  - All datasets are aligned to a **single reference timestamp**
+  - Solar and geomagnetic inputs are synchronized using interpolation or nearest-neighbor matching
+  - No explicit propagation delay is applied; instead, **the model learns physical lag relationships**
+
+- **Feature engineering**
+  - Derived features include:
+    - geomagnetic indices (Kp, ap, Dst)
+    - solar flux proxies (F10.7)
+    - temporal variables (local time, day-of-year)
+
+- **Scaling**
+  - Features are normalized (z-score or similar)
+  - Scaling parameters are stored for reproducibility
+
+
+The resulting processed Thermo-CL dataset is a **time-aligned tabular dataset**, where each row represents a **single timestamp**, where all input variables (solar, geomagnetic, and orbital) are aligned to that time, and the target corresponds to the thermospheric density at that same time.
+
+Instructions for accessing the following list of processed datasets on Amazon Web Services (AWS) are provided in Section 2.
 
 ### OMNIWEB data (3.1 GB)
 - AWS PATH: `hl-therm/processed_data/physical-drivers-processed/OMNIWEB/{YYYY}/{SUBSET}_omni_{YYYY}_{MM}.parquet`
