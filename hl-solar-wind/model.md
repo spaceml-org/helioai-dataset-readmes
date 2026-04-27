@@ -18,9 +18,8 @@ The embeddings are precomputed, enabling efficient inference without running the
 
 Instructions on how to run inference with the models are provided in this [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2025-HL-Solar-Wind/blob/main/public/inference_demo.ipynb).
 
----
 
-## Model Pipeline (End-to-End)
+## Model Pipeline 
 
 | Stage | Input | Output | Role |
 |------|------|--------|------|
@@ -29,7 +28,7 @@ Instructions on how to run inference with the models are provided in this [Colab
 
 ---
 
-# 2.1 Solar Wind Classifier — Full Checkpoint
+# 1.1 Solar Wind Classifier — Full Checkpoint
 
 | Property | Value |
 |--------|------|
@@ -43,7 +42,6 @@ Instructions on how to run inference with the models are provided in this [Colab
 - End-to-end inference from raw SDO images  
 - Fine-tuning backbone on new tasks  
 
----
 
 ## Model Inputs (Full Checkpoint)
 
@@ -51,7 +49,6 @@ Instructions on how to run inference with the models are provided in this [Colab
 |------|------|-------------|
 | SDO HMI images | 512×512×3 | Magnetic field (Bx, By, Bz) |
 
----
 
 ## Model Outputs
 
@@ -59,9 +56,8 @@ Instructions on how to run inference with the models are provided in this [Colab
 |-------|------|-------------|
 | Class label | integer (0–3) | Solar wind regime |
 
----
 
-# 2.2 Solar Wind Classifier — Head Weights Only
+# 1.2 Solar Wind Classifier — Head Weights Only
 
 | Property | Value |
 |--------|------|
@@ -76,7 +72,6 @@ Instructions on how to run inference with the models are provided in this [Colab
 - 1024 hidden units  
 - Skip connection at layer 4  
 
----
 
 ## Model Inputs (Head Only)
 
@@ -104,7 +99,7 @@ Instructions on how to run inference with the models are provided in this [Colab
 
 ---
 
-# 2.3 Pretrained MAE Backbone
+# 1.3 Pretrained MAE Backbone
 
 | Property | Value |
 |--------|------|
@@ -112,7 +107,6 @@ Instructions on how to run inference with the models are provided in this [Colab
 | Size | 1.2 GB |
 | Type | PyTorch Lightning checkpoint |
 
----
 
 ## Architecture
 
@@ -125,7 +119,6 @@ Instructions on how to run inference with the models are provided in this [Colab
 | Heads | 12 |
 | Training | 128 epochs |
 
----
 
 ## Inputs / Outputs
 
@@ -133,16 +126,14 @@ Instructions on how to run inference with the models are provided in this [Colab
 |------|--------|
 | SDO images | latent embeddings |
 
----
 
 ## Use Case
 
 - Fine-tuning for new downstream tasks  
 - Recomputing embeddings if needed  
 
----
 
-# 2.4 NVAE Embeddings Model
+# 1.4 NVAE Embeddings Model
 
 | Property | Value |
 |--------|------|
@@ -150,22 +141,19 @@ Instructions on how to run inference with the models are provided in this [Colab
 | Size | 381 MB |
 | Type | PyTorch tensor file |
 
----
 
 ## Description
 
 Alternative embedding representation using NVAE model.
 
----
 
-# 2.5 Demo Data Subset
+# 1.5 Demo Data Subset
 
 | Property | Value |
 |--------|------|
 | AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/data_subset/` |
 | Size | 502 MB |
 
----
 
 ## Contents
 
@@ -175,7 +163,6 @@ Alternative embedding representation using NVAE model.
 | metadata_subset.parquet | 39 KB | Labels, positions, timestamps |
 | normalization_stats.json | <1 KB | Radial distance normalization |
 
----
 
 ## Example Inference Schema
 
@@ -187,25 +174,15 @@ Alternative embedding representation using NVAE model.
 | radial distance | normalized input |
 | timestamp | observation time |
 
----
 
-# 2.6 Model Workflow
+# 1.6 Model Workflow
 
-SDO Images → MAE Backbone → Embeddings
-Embeddings + PSP position → SkipLinear Head → Solar Wind Class
-
-
+<p align="center">
+  <img src="https://quickchart.io/graphviz?graph=digraph%20G%20%7B%0Arankdir%3DTB%3B%0Anode%20%5Bshape%3Dbox%2C%20style%3Dfilled%2C%20color%3Dlightgray%2C%20fontname%3DHelvetica%5D%3B%0A%0ASDO%20%5Blabel%3D%22SDO%20Images%5Cn(HMI%20Bx%2FBy%2FBz)%22%5D%3B%0AMAE%20%5Blabel%3D%22MAE%20Backbone%5Cn(Vision%20Transformer)%22%5D%3B%0AEMB%20%5Blabel%3D%22Embeddings%5Cn(513%20tokens%20x%20512%20dims)%22%5D%3B%0APSP%20%5Blabel%3D%22PSP%20Position%20Features%5Cn(lat%2C%20lon%2C%20r)%22%5D%3B%0AHEAD%20%5Blabel%3D%22SkipLinear%20Classifier%20Head%5Cn(MLP%20with%20skip)%22%5D%3B%0AOUT%20%5Blabel%3D%22Solar%20Wind%20Class%5Cn(Ejecta%20%7C%20CH%20%7C%20SR%20%7C%20SB)%22%5D%3B%0A%0ASDO%20-%3E%20MAE%3B%0AMAE%20-%3E%20EMB%3B%0AEMB%20-%3E%20HEAD%3B%0APSP%20-%3E%20HEAD%3B%0AHEAD%20-%3E%20OUT%3B%0A%7D" width="500">
+</p>
 
 
-
-
-
-
-
-
-
-<!-- # 1 Access Instructions
-
+# 2. Access Instructions
 
 Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
@@ -221,7 +198,21 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
 
 
-# 2 Model Description
+# 3 System Requirements
+
+There are two sets of requirements:
+
+1. To create/train the models → see GitHub repository  
+2. To use the models → below  
+
+| Component | Minimum | Recommended |
+|-----------|--------|------------|
+| CPU | Multi-core | 8+ cores |
+| RAM | 8 GB (head only) / 16 GB (full model) | 32 GB |
+| GPU | Not required (embeddings) | Required for MAE training |
+| Storage | 3 GB (head + demo) / 11 GB (full models) | 20+ GB |
+
+<!--# 2 Model Description
 
 
 There are three levels of description available for this model:
