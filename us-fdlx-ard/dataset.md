@@ -1,6 +1,4 @@
-# **SDOMLv2a Dataset Documentation**
-
-**Overview**
+# 1. Data Description
 
 The **SDOMLv2a** dataset is a comprehensive, machine-learning-ready collection of solar observation data produced by the Frontier Development Lab (FDL). Derived from the Solar Dynamics Observatory (SDO) mission, this dataset serves as a cornerstone for advanced solar research and irradiance prediction.
 
@@ -8,11 +6,11 @@ The raw SDO archive spans approximately 20 petabytes. To address computational a
 
 ---
 
-** 1. Data Composition**
+## 1.1 Data Composition
 
 The dataset is multifaceted, incorporating multi-channel and multi-instrument sources. It provides a standardized temporal alignment and spatial resolution across three primary instruments:
 
-** 1.1 AIA (Atmospheric Imaging Assembly)**
+## AIA (Atmospheric Imaging Assembly)
 
 <!-- **Channels:** 9 spectral channels (94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å). The 4500 Å channel is excluded.  
 **Resolution:** Downsampled to **512x512** pixels.  
@@ -42,7 +40,7 @@ The dataset is multifaceted, incorporating multi-channel and multi-instrument so
 | 1600 | Upper photosphere / transition region |
 | 1700 | Photosphere |
 
-** 1.2 HMI (Helioseismic and Magnetic Imager)**
+## HMI (Helioseismic and Magnetic Imager)
 
 <!-- **Components:** 3 vector magnetic field components (*Bx, By, Bz*) derived from line-of-sight data.  
 **Resolution:** **512x512** pixels.  
@@ -57,7 +55,7 @@ The dataset is multifaceted, incorporating multi-channel and multi-instrument so
 | Cadence | 12 minutes |
 | Alignment | Spatially aligned with AIA images (same solar disk size and location) |
 
-** 1.3 EVE (EUV Variability Experiment)**
+## EVE (EUV Variability Experiment)
 
 <!-- **Data:** 39 ion intensity profiles.  
 **Historical Data (2010–2014):** Real measurements (excluding Fe XVI-2 due to sensor defects).  Included in EVE_legacy.zarr folder.  
@@ -71,16 +69,13 @@ The dataset is multifaceted, incorporating multi-channel and multi-instrument so
 | Format | `.zarr` |
 | Location | `EVE_legacy.zarr` folder | 
 
-> Note:
-    - **Pre-2014:** real measured spectra  
-    - **Post-2014:** not included ("Virtual EVE" spectra generated via ML inference to account for the MEGS-A instrument failure) 
----
+> Note: **Pre-2014**: real measured spectra; **Post-2014**: not included ("Virtual EVE" spectra generated via ML inference to account for the MEGS-A instrument failure) 
 
-** 2. Data Processing Pipeline**
+## 1.2 Data Processing Pipeline
 
 The generation of SDOMLv2a utilizes the **SDO Scientific Computing Platform**, a Google Cloud Platform (GCP) infrastructure designed for massive parallelization and continuous ingestion.
 
-** 2.1 Ingestion Sources**
+### Ingestion Sources
 Data is ingested via a "Trigger Batching" system from three distinct sources, each requiring specific handling:  
 
 <!-- **HelioCloud:** 5000x5000 images (Level 1.5).  
@@ -95,7 +90,7 @@ Data is ingested via a "Trigger Batching" system from three distinct sources, ea
 
 Legacy data was downloaded via massively parallelized cloud functions, while new data can be maintained via cron jobs (daily for HMI, every 5 minutes for AIA).
 
-** 2.2 Calibration Standards **
+### Calibration Standards 
 
 Regardless of the source quality, all data in SDOMLv2a is processed to achieve a uniform **Level 1.5 calibration**.
 
@@ -112,7 +107,7 @@ HMI vectors are not natively available and are derived from four raw .fits files
 
 ---
 
-** 3. Technical Specifications & Dataset Structure**
+# 2. Technical Specifications & Dataset Structure
 
 | Feature | Specification |
 | :----- | :--- |
