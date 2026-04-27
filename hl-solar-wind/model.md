@@ -200,17 +200,18 @@ You will need to replace `<AWS PATH>` with the path to the file or directory you
 
 # 3 System Requirements
 
-There are two sets of requirements:
+There are two sets of system requirements:
+1. Requirements to *create* the model. These can be found in the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Solar-Wind).
+2. Requirements for *using* the model:
 
-1. To create/train the models → see GitHub repository  
-2. To use the models → below  
 
-| Component | Minimum | Recommended |
-|-----------|--------|------------|
-| CPU | Multi-core | 8+ cores |
-| RAM | 8 GB (head only) / 16 GB (full model) | 32 GB |
-| GPU | Not required (embeddings) | Required for MAE training |
-| Storage | 3 GB (head + demo) / 11 GB (full models) | 20+ GB |
+| Component | Minimum |
+|-----------|---------|
+| **CPU** | Modern multi-core CPU |
+| **RAM** | 8 GB (for inference with head weights + demo subset); 16 GB (for full checkpoint) |
+| **GPU** | Not required for inference from pre-computed embeddings; required for training or running the MAE backbone |
+| **Storage** | 3 GB (head weights + demo subset); 11 GB (all model files + demo subset) | 
+
 
 <!--# 2 Model Description
 
