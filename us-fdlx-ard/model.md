@@ -1,11 +1,162 @@
 # 1 Model Description
 
-<!--There are three levels of description available for this model:
-- A high-level summary (this document) for users to quickly become familiar with the model.
-- A detailed description (see the [Technical Memorandum](https://helioai.org)).
-- The full source code used to process the data and train the model (see the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE)).
+NASA's Solar Dynamics Observatory (SDO) carries the EVE (EUV Variability Experiment) instrument, which measures solar spectral irradiance. In 2014, a capacitor failure destroyed the MEGS-A module, eliminating measurements of 14 key extreme ultraviolet (EUV) spectral lines.
 
-## Project Summary-->
+**Virtual EVE** restores this lost measurement capability using deep learning. By training on four years of overlapping SDO/AIA imagery and EVE measurements (2010–2014), the model learns to predict what MEGS-A *would* have measured — effectively virtualizing the broken instrument without any hardware repair.
+
+In the ARD-EUV challenge, the Virtual EVE functionality was extended into a more production-ready, deep-learning pipeline trained in supervised fashion using Huber loss, with PyTorch and PyTorch Lightning used for model development and training. The model takes analysis-ready AIA/HMI image products as input and produces inferred irradiance-related outputs.
+
+A detailed description of the model may be found in the project [Technical Memorandum](https://drive.google.com/file/d/1WXEELZ1SLRS7wFgTGafXlC8RVgwCCqd9/view).
+
+Instructions on how to use the model are provided in this [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb).
+
+---
+
+## 1.2 Model Pipeline
+
+The model learns the mapping: SDO AIA images → EUV spectral irradiance (EVE). This enables reconstruction of missing irradiance measurements after the 2014 EVE MEGS-A failure.
+
+| Stage | Input | Output | Description |
+|------|------|--------|-------------|
+| Linear branch | AIA summary statistics | Irradiance estimate | Captures global intensity relationships |
+| CNN branch | Full AIA images (512×512×9) | Irradiance estimate | Captures spatial structure |
+| Hybrid combination | Linear + CNN outputs | Final irradiance prediction | Weighted sum with learnable parameter |
+
+
+# 1.3 Model Inputs
+
+| Input | Shape | Units | Description |
+|------|------|------|-------------|
+| AIA images | 512×512×9 | intensity (DN/s normalized) | Multi-channel solar images |
+| AIA statistics | 18 features | normalized | Per-channel mean + std |
+| (Optional) HMI | 512×512×3 | Gauss | Magnetic field input (if used in extensions) |
+
+
+# 1.4 Model Outputs
+
+| Output | Dimension | Units | Description |
+|-------|----------|------|-------------|
+| EVE spectral lines | 38 values | W/m²/nm | Solar EUV irradiance at specific ion wavelengths |
+
+Each output corresponds to irradiance at a specific wavelength / ion emission line.
+
+## EVE Output Interpretation
+
+| Quantity | Meaning |
+|--------|--------|
+| Spectral irradiance | Energy flux received at Earth |
+| Units | W/m²/nm |
+| Physical origin | Emission from solar corona / transition region |
+
+
+# 1.5 Virtual EVE Hybrid Model (42 MB)
+
+  - **AWS PATH:** `us-fdlx-ard/virtual-eve/AIA_MEGS_20_30_epochs_36min.ckpt`
+  - **Usage Instructions:** See [colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb)
+  - **Type:** Hybrid Linear + CNN - predicts solar EUV irradiance from AIA imagery
+
+
+## Architecture
+
+A two-component hybrid model combining a linear and a CNN model. The **linear model** is a single, fully-connected layer that maps per-channel mean and standard deviation statistics (18 features from 9 AIA channels) to irradiance predictions. The **CNN model** is an EfficientNet-B5 backbone (~30M parameters) that extracts spatial features from the full 512×512 pixel images.
+
+- **Linear model**
+  - Fully connected layer
+  - Input: 18 statistical features
+  - Output: irradiance
+
+- **CNN model**
+  - EfficientNet-B5 (~30M parameters)
+  - Input: full-resolution images
+  - Output: irradiance
+
+The outputs are combined as O_total = O_linear + λ * O_CNN, where λ is a learnable blending parameter.
+
+---
+
+## Training
+The linear model is trained first (20 epochs), then the CNN is activated while the linear weights are frozen (30 epochs), ensuring stable convergence. 
+
+  - Two-phase training:
+    1. Linear model (20 epochs)
+    2. CNN added (30 epochs)
+  - Linear weights frozen during phase 2
+  - Loss function: **Huber Loss**
+
+---
+
+## Model Inputs
+
+| Component | Description |
+|----------|-------------|
+| AIA channels | 94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å |
+| Resolution | 512×512 |
+| Feature engineering | mean + std per channel |
+
+---
+
+## Model Outputs 
+
+| Output Type | Description |
+|------------|-------------|
+| 38 EVE ion spectral lines | Includes MEGS-A and MEGS-B wavelengths |
+| Target | reconstructed irradiance spectrum |
+
+---
+
+## 1.6 Model Checkpoint Contents
+
+The model checkpoint file, containing a snapshot of model weights and parameters during training, is a PyTorch dictionary containing:
+
+| Key | Description |
+|-----|-------------|
+| `model` | The trained `HybridIrradianceModel` instance (ready for inference) |
+| `normalizations` | Per-channel AIA normalization statistics (`mean`, `std`) used during training |
+| `sci_parameters` | Scientific metadata: `aia_wavelengths` (list of 9 input channels) and `eve_ions` (list of 38 output spectral lines) |
+
+
+## 1.7 Training Data
+
+The model is trained on the [SDOML v2 dataset](https://sdoml.org), which is publicly available on the same S3 bucket:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/us-fdlx-ard/sdomlv2a/
+```
+
+# 2 Access Instructions
+
+Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/us-fdlx-ard/virtual-eve/
+```
+
+Downloading files is done by e.g.
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/us-fdlx-ard/virtual-eve/AIA_MEGS_20_30_epochs_36min.ckpt <LOCAL PATH>
+```
+You will need to replace `<LOCAL PATH>` with the path on your local machine where you want to save the model checkpoint.
+
+# 3 System Requirements
+
+There are two sets of system requirements:
+1. Requirements to *create* the model. These can be found in the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE).
+2. Requirements for *using* the model (inference only).
+
+| Component | Minimum |
+|-----------|---------|
+| **CPU** | Any modern CPU (inference runs on CPU) |
+| **RAM** | 4 GB |
+| **GPU** | Not required (CPU-only inference supported) |
+| **Storage** | ~50 MB for model checkpoint |
+
+The model can also be run for free on [Google Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb).
+
+
+
+
+
+<!--# 1 Model Description
 
 NASA's Solar Dynamics Observatory (SDO) carries the EVE (EUV Variability Experiment) instrument, which measures solar spectral irradiance. In 2014, a capacitor failure destroyed the MEGS-A module, eliminating measurements of 14 key extreme ultraviolet (EUV) spectral lines.
 
@@ -73,7 +224,7 @@ There are two sets of system requirements:
 | **GPU** | Not required (CPU-only inference supported) |
 | **Storage** | ~50 MB for model checkpoint |
 
-The model can also be run for free on [Google Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb).
+The model can also be run for free on [Google Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb). -->
 
 
 # 4 Reference
