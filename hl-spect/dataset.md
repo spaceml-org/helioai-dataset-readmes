@@ -1,34 +1,22 @@
-# 1 Access Instructions
-
-Data is stored on Amazon Web Services (AWS). Data access is given via the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-
-Listing files is done by e.g.:
-```
-aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/hl-spect/
-```
-
-Downloading files is done by e.g.
-```
-aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
-```
-You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
-
-| Data Product | AWS Path | Size | Download time (@100 Mbps) |
-|-------------|----------|------|---------------------------|
-| Processed | `s3://nasa-radiant-data/helioai-datasets/hl-spect/processed_data/` | ~14 GB | ~20 minutes |
-
-
-# 2 Dataset Description
+# 1. Dataset Description
 
 This dataset corresponds to the **Spectral Irradiance of the 3D Sun on Mars (SPI3S)** challenge from Heliolab 2024. It supports estimation of solar EUV spectral irradiance at arbitrary heliospheric viewpoints — including Mars — by combining a SuNeRF-based 3D reconstruction of the solar corona with the MEGS-AI deep-learning model that maps solar images to EUV spectra.
 
-There are three levels of description available for this dataset:
-- A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description (see the [Technical Memorandum](https://helioai.org/dev/artifact/f467e243-a299-43b9-871e-8c5c519663a5/details)).
-- The full source code used to process the data and create the models (see the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/)).
+## What a Data Sample Represents
+
+A single sample corresponds to:
+
+| Component | Description |
+|----------|-------------|
+| AIA stack | Multi-channel solar image (7–9 wavelengths) |
+| EVE target | Spectral irradiance (Earth view) |
+| Mars render | Synthetic solar view from Mars |
+| Validation | MAVEN EUVM or FISM-P reference |
+
+In addition to the high-level summary of this dataset provided below, a detailed description may be found in the project [Technical Memorandum](https://helioai.org/dev/artifact/f467e243-a299-43b9-871e-8c5c519663a5/details); and the full source code used to process the data and create the models in the associated [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/).
 
 
-## 2.1 Processed Data
+## 1.1 Processed Data
 
 The raw data undergoes processing to create structured, ML-ready datasets. The processing pipeline includes:
 
@@ -37,6 +25,15 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
 - **Normalization:** per-line mean/std statistics are provided so users can unnormalize model outputs back to physical units.
 - **Mars-view rendering:** Pre-rendered AIA views of the Sun from Mars' orbital position have been generated offline with SuNeRF-DT for selected 2023 dates, one FITS per (date, wavelength).
 - **Validation data:** MAVEN/EUVM daily spectra and the FISM-P Mars reference spectrum are included to ground-truth the Mars-side predictions.
+
+## Processed Dataset Schema (Core Training Data)
+
+| Data Type | Shape | Units | Description |
+|----------|------|------|-------------|
+| AIA stacks | 256×256×9 | normalized intensity | Multi-channel solar images |
+| EVE labels | (14,) | normalized | Spectral irradiance lines |
+| Normalization | (2×14) | mean/std | Used to recover physical units |
+| Wavelength names | (14,) | string | Ion emission line labels |
 
 
 ### MEGS-AI training bundle (~14 GB)
@@ -67,7 +64,7 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
     - `fism_p_spectrum_mars_l2v01_r00_l3v01_r00_prelim.nc`: FISM-P (Flare Irradiance Spectral Model — Preliminary) Mars-location daily spectra. Used as an independent reference for Mars-view MEGS-AI predictions.
 
 
-## 2.2 Raw Data
+## 1.2 Raw Data
 
 Raw data is not included in this release as it is publicly available from NASA archives:
 
@@ -77,6 +74,25 @@ Raw data is not included in this release as it is publicly available from NASA a
 - **MAVEN/EUVM:** Mars Atmosphere and Volatile EvolutioN mission Extreme Ultraviolet Monitor. Available from [LASP MAVEN](https://lasp.colorado.edu/maven/sdc/public/data/).
 - **PSI MHD simulations:** Synthetic density/temperature cubes from Predictive Science Inc. Available from [predsci.com](https://www.predsci.com/hmi/data_access.php) (not included in this release).
 
+
+# 2 Access Instructions
+
+Data is stored on Amazon Web Services (AWS). Data access is given via the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/hl-spect/
+```
+
+Downloading files is done by e.g.
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
+```
+You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
+
+| Data Product | AWS Path | Size | Download time (@100 Mbps) |
+|-------------|----------|------|---------------------------|
+| Processed | `s3://nasa-radiant-data/helioai-datasets/hl-spect/processed_data/` | ~14 GB | ~20 minutes |
 
 # 3 System Requirements
 
