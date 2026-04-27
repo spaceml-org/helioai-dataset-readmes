@@ -94,12 +94,14 @@ Legacy data was downloaded via massively parallelized cloud functions, while new
 
 Regardless of the source quality, all data in SDOMLv2a is processed to achieve a uniform **Level 1.5 calibration**.
 
-** AIA Calibration**  
+**AIA Calibration**  
+
 **Routine:** Python SDO/AIA calibration (Barnes et al 2020).  
 **Steps:** Pointing correction, registration, and degradation correction.  
 **Standardization:** Exposure time normalization and solar disk size standardization are applied before downsampling to 512x512.
 
-** HMI Calibration**
+**HMI Calibration**
+
 HMI vectors are not natively available and are derived from four raw .fits files: *azimuth, disambig, field,* and *inclination*.  
 **Routine:** Custom Python implementation of IDL routines (Gary & Hagyard 1990).  
 **Steps:** Azimuth disambiguation → Coordinate transformation (Native to Spherical CCD) → Registration/Rotation.  
@@ -107,7 +109,7 @@ HMI vectors are not natively available and are derived from four raw .fits files
 
 ---
 
-# 2. Technical Specifications & Dataset Structure
+## 1.3 Technical Specifications & Dataset Structure
 
 | Feature | Specification |
 | :----- | :--- |
@@ -158,7 +160,7 @@ To read more about .zarr file and how to use them, see the [Zarr user guide](htt
 
 ---
 
-** 4. Derived Data Products**
+## 1.4 Derived Data Products
 
 To aid in computational efficiency, the project repository includes code to generate:  
 
@@ -172,7 +174,7 @@ To aid in computational efficiency, the project repository includes code to gene
 
 ---
 
-** 5. SPASE Input Dataset Links:**
+## 1.5 SPASE Input Dataset Links:
 
 [AIA 94 Å](https://spase-metadata.org/NASA/NumericalData/SDO/AIA/EUV094/PT12S.html)  
 [AIA 131 Å](https://spase-metadata.org/NASA/NumericalData/SDO/AIA/EUV131/PT12S.html)  
@@ -186,8 +188,17 @@ To aid in computational efficiency, the project repository includes code to gene
 [HMI](https://spase-metadata.org/NASA/NumericalData/SDO/HMI/LOS_Magnetogram/PT720S.html)  
 [EVE](https://spase-metadata.org/NASA/NumericalData/SDO/EVE/Level1/Version8/PT0.25S.html)
 
+# 2. Access Instructions
 
-# 4 Citation
+Data is stored on Amazon Web Services (AWS). Data access is given via the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+`aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/us-fdlx-ard/`
+
+Downloading files is done by e.g.
+`aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive`
+
+# 3. Citation
 
 If you use this dataset in your research, please cite the accompanying paper:
 
