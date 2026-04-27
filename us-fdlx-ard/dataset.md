@@ -14,24 +14,66 @@ The dataset is multifaceted, incorporating multi-channel and multi-instrument so
 
 ** 1.1 AIA (Atmospheric Imaging Assembly)**
 
-**Channels:** 9 spectral channels (94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å). The 4500 Å channel is excluded.  
+<!-- **Channels:** 9 spectral channels (94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å). The 4500 Å channel is excluded.  
 **Resolution:** Downsampled to **512x512** pixels.  
 **Cadence:** 6 minutes.  
-**Format:** Converted from Flexible Image Transport System (.fits) to **.zarr** arrays.  
+**Format:** Converted from Flexible Image Transport System (.fits) to **.zarr** arrays.  -->
+
+| Property | Value |
+|--------|------|
+| Channels | 94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å |
+| Resolution | 512 × 512 pixels |
+| Cadence | 6 minutes |
+| Format | Converted from Flexible Image Transport System (.fits) to **.zarr** arrays|
+
+> Note: The 4500 Å channel is excluded.  
+
+### AIA Channels (Physical Meaning)
+
+| Wavelength (Å) | Physical Interpretation |
+|---------------|------------------------|
+| 94 | Hot flare plasma (~6 MK) |
+| 131 | Flares + hot corona |
+| 171 | Quiet corona (~0.6 MK) |
+| 193 | Corona + coronal holes |
+| 211 | Active region corona |
+| 304 | Chromosphere / transition region |
+| 335 | Active region loops |
+| 1600 | Upper photosphere / transition region |
+| 1700 | Photosphere |
 
 ** 1.2 HMI (Helioseismic and Magnetic Imager)**
 
-**Components:** 3 vector magnetic field components (*Bx, By, Bz*) derived from line-of-sight data.  
+<!-- **Components:** 3 vector magnetic field components (*Bx, By, Bz*) derived from line-of-sight data.  
 **Resolution:** **512x512** pixels.  
 **Cadence:** 12 minutes.  
-**Alignment:** Spatially aligned with AIA images (same solar disk size and location).  
+**Alignment:** Spatially aligned with AIA images (same solar disk size and location).  --> 
+
+| Property | Value |
+|--------|------|
+| Components | Bx, By, Bz (3-vector magnetic field components derived from line-of-sight data)|
+| Units | Guass |
+| Resolution | 512 × 512 |
+| Cadence | 12 minutes |
+| Alignment | Spatially aligned with AIA images (same solar disk size and location) |
 
 ** 1.3 EVE (EUV Variability Experiment)**
 
-**Data:** 39 ion intensity profiles.  
+<!-- **Data:** 39 ion intensity profiles.  
 **Historical Data (2010–2014):** Real measurements (excluding Fe XVI-2 due to sensor defects).  Included in EVE_legacy.zarr folder.  
-**Post-2014 (not-included):** "Virtual EVE" spectra generated via ML inference to account for the MEGS-A instrument failure.  
+**Post-2014 (not-included):** "Virtual EVE" spectra generated via ML inference to account for the MEGS-A instrument failure.  -->
 
+| Property | Value | 
+|--------|------|
+| Data | 39 spectral lines (ion intensity profiles) |
+| Units | W/m²/nm |
+| Time range | 2010–2014 (real measurements, excluding Fe XVI-2 due to sensor defects) |
+| Format | `.zarr` |
+| Location | `EVE_legacy.zarr` folder | 
+
+> Note:
+    - **Pre-2014:** real measured spectra  
+    - **Post-2014:** not included ("Virtual EVE" spectra generated via ML inference to account for the MEGS-A instrument failure) 
 ---
 
 ** 2. Data Processing Pipeline**
@@ -40,9 +82,16 @@ The generation of SDOMLv2a utilizes the **SDO Scientific Computing Platform**, a
 
 ** 2.1 Ingestion Sources**
 Data is ingested via a "Trigger Batching" system from three distinct sources, each requiring specific handling:  
- **HelioCloud:** 5000x5000 images (Level 1.5).  
+
+<!-- **HelioCloud:** 5000x5000 images (Level 1.5).  
  **JSOC (Raw):** 4096x4096 images (Level 1).  
- **JSOC (Synoptic):** 1024x1024 images (Level 1.5).  
+ **JSOC (Synoptic):** 1024x1024 images (Level 1.5).  -->
+
+| Source | Resolution | Notes |
+|------|-----------|------|
+| HelioCloud | 5000×5000 | Level 1.5 |
+| JSOC Raw | 4096×4096 | Level 1 |
+| JSOC Synoptic | 1024×1024 | Level 1.5 |
 
 Legacy data was downloaded via massively parallelized cloud functions, while new data can be maintained via cron jobs (daily for HMI, every 5 minutes for AIA).
 
@@ -69,6 +118,7 @@ HMI vectors are not natively available and are derived from four raw .fits files
 | :----- | :--- |
 | **File Format** | .zarr (append-only) |
 | **Image Resolution** | 512 x 512 |
+| Time Alignment | Multi-instrument synchronized |
 
 
 ```text
@@ -116,8 +166,14 @@ To read more about .zarr file and how to use them, see the [Zarr user guide](htt
 ** 4. Derived Data Products**
 
 To aid in computational efficiency, the project repository includes code to generate:  
-**Embeddings:** Lower-dimensional representations of the image data.  
-**Virtual EVE:** Predicted irradiance values for dates following the 2014 MEGS-A failure.
+
+<!-- **Embeddings:** Lower-dimensional representations of the image data.  
+**Virtual EVE:** Predicted irradiance values for dates following the 2014 MEGS-A failure.-->
+
+| Product     | Description                                     |
+| ----------- | ----------------------------------------------- |
+| Embeddings  | Lower-dimensional representations of image data |
+| Virtual EVE | ML-predicted irradiance values for dates following the 2014 MEGS-A failure|
 
 ---
 
