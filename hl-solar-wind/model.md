@@ -1,5 +1,198 @@
+# 1. Model Description
 
+This project classifies solar wind into four physical regimes using a two-stage ML pipeline:
 
+1. **SDO Foundation Model (MAE)**  
+   Encodes SDO HMI magnetic field images (512×512, 3 channels) into embeddings  
+   → output: 513 tokens × 512 dimensions  
+
+2. **SkipLinear Classifier Head**  
+   Takes embeddings + spacecraft information and predicts solar wind class:
+
+    - Ejecta  
+    - Coronal Hole  
+    - Sector Reversal  
+    - Streamer Belt  
+
+The embeddings are precomputed, enabling efficient inference without running the full MAE backbone.
+
+Instructions on how to run inference with the models are provided in this [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2025-HL-Solar-Wind/blob/main/public/inference_demo.ipynb).
+
+---
+
+## Model Pipeline (End-to-End)
+
+| Stage | Input | Output | Role |
+|------|------|--------|------|
+| MAE Backbone | SDO HMI images (Bx, By, Bz) | Embeddings (513×512) | Feature extraction |
+| SkipLinear Head | Embeddings + position features | Solar wind class | Classification |
+
+---
+
+# 2.1 Solar Wind Classifier — Full Checkpoint
+
+| Property | Value |
+|--------|------|
+| AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/models/mae_skip_linear_best.ckpt` |
+| Size | 7.1 GB |
+| Type | PyTorch Lightning checkpoint |
+| Components | MAE backbone + SkipLinear head |
+| Validation Performance | val_loss = 0.06, val_f1 = 0.31 |
+
+### Use Case
+- End-to-end inference from raw SDO images  
+- Fine-tuning backbone on new tasks  
+
+---
+
+## Model Inputs (Full Checkpoint)
+
+| Input | Shape | Description |
+|------|------|-------------|
+| SDO HMI images | 512×512×3 | Magnetic field (Bx, By, Bz) |
+
+---
+
+## Model Outputs
+
+| Output | Type | Description |
+|-------|------|-------------|
+| Class label | integer (0–3) | Solar wind regime |
+
+---
+
+# 2.2 Solar Wind Classifier — Head Weights Only
+
+| Property | Value |
+|--------|------|
+| AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/models/head_weights.pt` |
+| Size | 2.1 GB |
+| Type | PyTorch state dict |
+| Parameters | 545.8 million |
+
+### Architecture
+
+- 8-layer MLP  
+- 1024 hidden units  
+- Skip connection at layer 4  
+
+---
+
+## Model Inputs (Head Only)
+
+| Input | Shape | Description |
+|------|------|-------------|
+| MAE embedding | 262,656 dims (flattened) | Precomputed SDO features |
+| Position encoding | 264 dims | Sinusoidal encoding of spacecraft location |
+| Radial distance | 1 dim | Normalized PSP distance |
+
+---
+
+## Model Outputs
+
+| Output | Type | Description |
+|-------|------|-------------|
+| Class probabilities | vector (4) | Probability of each solar wind type |
+| Class label | integer | Predicted class |
+
+---
+
+## Use Case
+
+- Lightweight inference using precomputed embeddings  
+- Primary method used in demo notebook  
+
+---
+
+# 2.3 Pretrained MAE Backbone
+
+| Property | Value |
+|--------|------|
+| AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/models/pretrained_mae_e128.ckpt` |
+| Size | 1.2 GB |
+| Type | PyTorch Lightning checkpoint |
+
+---
+
+## Architecture
+
+| Parameter | Value |
+|----------|------|
+| Model type | Vision Transformer (ViT) |
+| Patch size | 16 |
+| Embedding dim | 768 |
+| Depth | 12 |
+| Heads | 12 |
+| Training | 128 epochs |
+
+---
+
+## Inputs / Outputs
+
+| Input | Output |
+|------|--------|
+| SDO images | latent embeddings |
+
+---
+
+## Use Case
+
+- Fine-tuning for new downstream tasks  
+- Recomputing embeddings if needed  
+
+---
+
+# 2.4 NVAE Embeddings Model
+
+| Property | Value |
+|--------|------|
+| AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/models/sdofm_nvae_embeddings.pt` |
+| Size | 381 MB |
+| Type | PyTorch tensor file |
+
+---
+
+## Description
+
+Alternative embedding representation using NVAE model.
+
+---
+
+# 2.5 Demo Data Subset
+
+| Property | Value |
+|--------|------|
+| AWS Path | `s3://nasa-radiant-data/helioai-datasets/hl-solar-wind/models/data_subset/` |
+| Size | 502 MB |
+
+---
+
+## Contents
+
+| File | Size | Description |
+|-----|-----|-------------|
+| embeddings_subset.npy | 501 MB | 500 MAE embeddings (125 per class) |
+| metadata_subset.parquet | 39 KB | Labels, positions, timestamps |
+| normalization_stats.json | <1 KB | Radial distance normalization |
+
+---
+
+## Example Inference Schema
+
+| Field | Description |
+|------|-------------|
+| embedding | MAE feature vector |
+| label | true solar wind class |
+| position | spacecraft location |
+| radial distance | normalized input |
+| timestamp | observation time |
+
+---
+
+# 2.6 Model Workflow
+
+SDO Images → MAE Backbone → Embeddings
+Embeddings + PSP position → SkipLinear Head → Solar Wind Class
 
 
 
