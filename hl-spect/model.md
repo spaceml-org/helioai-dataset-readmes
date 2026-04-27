@@ -1,11 +1,9 @@
 # 1 Model Description
 
-There are three levels of description available for this model:
+<!--There are three levels of description available for this model:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
 - A detailed description (see the [Technical Memorandum](https://helioai.org/dev/artifact/f467e243-a299-43b9-871e-8c5c519663a5/details)).
-- The full source code used to process the data and create the models (see the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/)).
-
-## Project Summary
+- The full source code used to process the data and create the models (see the [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/)).-->
 
 SPI3S delivers a coupled, two-stage modeling system that estimates the Sun's full EUV spectral irradiance at arbitrary heliospheric viewpoints — motivated by the question *"what would MEGS-A measure from Mars?"*
 
@@ -16,37 +14,37 @@ End-to-end: multi-viewpoint solar images → SuNeRF-DT → 3D Sun → virtual Ma
 
 
 ## 1.1 MEGS-AI — KANDEM-Spectrum (MEGS-B, 50 MB)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/KANDEM_baseline_MEGSB.ckpt`
-- Type: PyTorch Lightning checkpoint. KANDEM-Spectrum architecture (Kolmogorov-Arnold-Network DEM + spectrum head).
-- Input: stack of 7 AIA EUV images `[94, 131, 171, 193, 211, 304, 335]` at 256×256 resolution, z-score normalized with the UV statistics bundled in the checkpoint.
-- Output: 3663-bin full MEGS-B spectral irradiance (W m⁻² nm⁻¹).
-- Use this as the flagship predictor for the MEGS-B spectrum. The inference demo notebook uses this checkpoint.
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/KANDEM_baseline_MEGSB.ckpt`
+- **Type**: PyTorch Lightning checkpoint. KANDEM-Spectrum architecture (Kolmogorov-Arnold-Network DEM + spectrum head).
+- **Input**: stack of 7 AIA EUV images `[94, 131, 171, 193, 211, 304, 335]` at 256×256 resolution, z-score normalized with the UV statistics bundled in the checkpoint.
+- **Output**: 3663-bin full MEGS-B spectral irradiance (W m⁻² nm⁻¹).
+- Use this as the flagship predictor for the MEGS-B spectrum. The inference demo notebook linked in Section 1.8 uses this checkpoint.
 
 ## 1.2 MEGS-AI — KANDEM-Spectrum (MEGS-A, 24 MB)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/kandem_noRadius_MEGSA.ckpt`
-- Type: same architecture as §2.1, trained to output the 1377-bin MEGS-A spectrum.
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/kandem_noRadius_MEGSA.ckpt`
+- **Type**: same architecture as §2.1, trained to output the 1377-bin MEGS-A spectrum.
 
 ## 1.3 MEGS-AI baselines (< 1 MB combined)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/{kan_baseline_mean.ckpt, linear_baseline_7wl_nostd.ckpt}`
-- Type: lightweight baselines used for comparison during development.
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/megs_ai/{kan_baseline_mean.ckpt, linear_baseline_7wl_nostd.ckpt}`
+- **Type**: lightweight baselines used for comparison during development.
     - `kan_baseline_mean.ckpt` (473 KB): KAN baseline predicting the disk-integrated mean spectrum.
     - `linear_baseline_7wl_nostd.ckpt` (63 KB): linear regression from 7 AIA channels to spectral output.
 
 ## 1.4 SuNeRF-DT — PSI checkpoint (144 MB)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/sunerf/PSI/aia_iti_512_log_psi_tnorm/`
-- Type: PyTorch Lightning checkpoint for SuNeRF-DT trained on Predictive Science Inc. MHD synthetic images. Validates the radiative-transfer-aware architecture against known ground-truth density/temperature.
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/sunerf/PSI/aia_iti_512_log_psi_tnorm/`
+- **Type**: PyTorch Lightning checkpoint for SuNeRF-DT trained on Predictive Science Inc. MHD synthetic images. Validates the radiative-transfer-aware architecture against known ground-truth density/temperature.
 - **No inference notebook is provided for SuNeRF in this release.** SuNeRF renders Mars views offline; the pre-rendered FITS are included in the companion dataset bucket under `processed_data/mars_views/`. To retrain or render novel viewpoints, see the [SuNeRF repo](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S-SuNeRF).
 
 ## 1.5 SuNeRF-DT — AIA+STEREO Nov-2012 checkpoint (1.7 GB)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/sunerf/aia_stereo_iti_2012-11_checkpoint/`
-- Type: SuNeRF-DT trained on real multi-viewpoint AIA + STEREO-A/B observations for a November 2012 time window. This is the checkpoint used to generate the Mars-view pre-renders in `processed_data/mars_views/`.
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/sunerf/aia_stereo_iti_2012-11_checkpoint/`
+- **Type**: SuNeRF-DT trained on real multi-viewpoint AIA + STEREO-A/B observations for a November 2012 time window. This is the checkpoint used to generate the Mars-view pre-renders in `processed_data/mars_views/`.
 
 ## 1.6 Training configurations
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/configs/`
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/configs/`
 - Full training YAML configurations for both MEGS-AI (`megs_ai_2024_config.yaml`, `dem_2024_config.yaml`) and SuNeRF (`DT_2012_11.yaml`, `psi_193.yaml`, `emission_2012_08-193.yaml`, `render_mhd.yaml`, `sunerfs_simple_star.yaml`, `sunerfs_simple_star_2.yaml`).
 
 ## 1.7 Demo data subset (~200 MB)
-- AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/data_subset/`
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-spect/models/data_subset/`
 - A small, self-contained subset for running the inference demo notebook on Colab:
     - `earthside_stacks_7ch.npy` (175 MB): 100 pre-processed 7-channel AIA stacks, evenly sampled over 2010-05 to 2014-05.
     - `earthside_eve_14lines.npy` (5 KB): matching 14-line irradiance targets for reference.
