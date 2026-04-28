@@ -1,4 +1,4 @@
-# 1 Model Description
+# 1. Model Description
 
 NASA's Solar Dynamics Observatory (SDO) carries the EVE (EUV Variability Experiment) instrument, which measures solar spectral irradiance. In 2014, a capacitor failure destroyed the MEGS-A module, eliminating measurements of 14 key extreme ultraviolet (EUV) spectral lines.
 
@@ -12,7 +12,7 @@ Instructions on how to use the model are provided in this [Colab notebook](https
 
 ---
 
-## 1.2 Model Pipeline
+## 1.1 Model Pipeline
 
 The model learns the mapping: SDO AIA images → EUV spectral irradiance (EVE). This enables reconstruction of missing irradiance measurements after the 2014 EVE MEGS-A failure.
 
@@ -23,7 +23,7 @@ The model learns the mapping: SDO AIA images → EUV spectral irradiance (EVE). 
 | Hybrid combination | Linear + CNN outputs | Final irradiance prediction | Weighted sum with learnable parameter |
 
 
-# 1.3 Model Inputs
+## 1.2 Model Inputs
 
 | Input | Shape | Units | Description |
 |------|------|------|-------------|
@@ -32,33 +32,31 @@ The model learns the mapping: SDO AIA images → EUV spectral irradiance (EVE). 
 | (Optional) HMI | 512×512×3 | Gauss | Magnetic field input (if used in extensions) |
 
 
-# 1.4 Model Outputs
+## 1.3 Model Outputs
 
 | Output | Dimension | Units | Description |
 |-------|----------|------|-------------|
 | EVE spectral lines | 38 values | W/m²/nm | Solar EUV irradiance at specific ion wavelengths |
 
-Each output corresponds to irradiance at a specific wavelength / ion emission line.
 
-## EVE Output Interpretation
-
-| Quantity | Meaning |
-|--------|--------|
-| Spectral irradiance | Energy flux received at Earth |
-| Units | W/m²/nm |
-| Physical origin | Emission from solar corona / transition region |
-
-
-# 1.5 Virtual EVE Hybrid Model (42 MB)
+## 1.4 Virtual EVE Hybrid Model Checkpoint File (42 MB)
 
   - **AWS PATH:** `us-fdlx-ard/virtual-eve/AIA_MEGS_20_30_epochs_36min.ckpt`
   - **Usage Instructions:** See [colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2023-FDL-X-ARD-EVE/blob/main/public/virtual_eve_tutorial.ipynb)
   - **Type:** Hybrid Linear + CNN - predicts solar EUV irradiance from AIA imagery
 
+The model checkpoint file, containing a snapshot of model weights and parameters during training, is a PyTorch dictionary containing:
 
-## Architecture
+| Key | Description |
+|-----|-------------|
+| `model` | The trained `HybridIrradianceModel` instance (ready for inference) |
+| `normalizations` | Per-channel AIA normalization statistics (`mean`, `std`) used during training |
+| `sci_parameters` | Scientific metadata: `aia_wavelengths` (list of 9 input channels) and `eve_ions` (list of 38 output spectral lines) |
 
-A two-component hybrid model combining a linear and a CNN model. The **linear model** is a single, fully-connected layer that maps per-channel mean and standard deviation statistics (18 features from 9 AIA channels) to irradiance predictions. The **CNN model** is an EfficientNet-B5 backbone (~30M parameters) that extracts spatial features from the full 512×512 pixel images.
+
+### Architecture
+
+The model contained in this checkpoint is a two-component hybrid model combining a linear and a CNN model. The **linear model** is a single, fully-connected layer that maps per-channel mean and standard deviation statistics (18 features from 9 AIA channels) to irradiance predictions. The **CNN model** is an EfficientNet-B5 backbone (~30M parameters) that extracts spatial features from the full 512×512 pixel images.
 
 - **Linear model**
   - Fully connected layer
@@ -70,11 +68,11 @@ A two-component hybrid model combining a linear and a CNN model. The **linear mo
   - Input: full-resolution images
   - Output: irradiance
 
-The outputs are combined as O_total = O_linear + λ * O_CNN, where λ is a learnable blending parameter.
+The outputs are combined as `O_total = O_linear + λ * O_CNN`, where λ is a learnable blending parameter.
 
 ---
 
-## Training
+### Training
 The linear model is trained first (20 epochs), then the CNN is activated while the linear weights are frozen (30 epochs), ensuring stable convergence. 
 
   - Two-phase training:
@@ -82,40 +80,6 @@ The linear model is trained first (20 epochs), then the CNN is activated while t
     2. CNN added (30 epochs)
   - Linear weights frozen during phase 2
   - Loss function: **Huber Loss**
-
----
-
-## Model Inputs
-
-| Component | Description |
-|----------|-------------|
-| AIA channels | 94, 131, 171, 193, 211, 304, 335, 1600, 1700 Å |
-| Resolution | 512×512 |
-| Feature engineering | mean + std per channel |
-
----
-
-## Model Outputs 
-
-| Output Type | Description |
-|------------|-------------|
-| 38 EVE ion spectral lines | Includes MEGS-A and MEGS-B wavelengths |
-| Target | reconstructed irradiance spectrum |
-
----
-
-## 1.6 Model Checkpoint Contents
-
-The model checkpoint file, containing a snapshot of model weights and parameters during training, is a PyTorch dictionary containing:
-
-| Key | Description |
-|-----|-------------|
-| `model` | The trained `HybridIrradianceModel` instance (ready for inference) |
-| `normalizations` | Per-channel AIA normalization statistics (`mean`, `std`) used during training |
-| `sci_parameters` | Scientific metadata: `aia_wavelengths` (list of 9 input channels) and `eve_ions` (list of 38 output spectral lines) |
-
-
-## 1.7 Training Data
 
 The model is trained on the [SDOML v2 dataset](https://sdoml.org), which is publicly available on the same S3 bucket:
 ```
