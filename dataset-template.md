@@ -1,4 +1,25 @@
-# 1 Access Instructions
+# 1. Dataset Description
+
+<!-- Add a brief description of the dataset and the challenge it addresses -->
+
+There are three levels of description available for this dataset:
+- A high-level summary (this document) for users to quickly become familiar with the dataset.
+- A detailed description (see the [Technical Memorandum](<LINK_TO_TECHNICAL_MEMORANDUM>)).
+- The full source code used to process the data and create the models (see the [GitHub Repository](<LINK_TO_GITHUB_REPO>)).
+
+## 1.1 Processed Data
+
+<!-- Briefly Describe the processing pipeline applied to the raw data. Include:
+     - What transformations are applied (cleaning, filtering, standardization, etc.)
+     - What the final training examples look like (input/output pairs)
+     - How the different raw sources are combined 
+     - If approproate, this section will point to the train/test/validation sets -->
+
+## 1.2 Raw Data
+
+<!-- Appropriate description -->
+
+# 2. Access Instructions
 
 Data is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
@@ -25,33 +46,6 @@ Different models may have different train/test/validation sets, this can be expl
 | Results | `<DATASET_NAME>/results/` | | |
 | Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |
 
-
-
-# 2 Dataset Description
-
-<!-- Add a brief description of the dataset and the challenge it addresses -->
-
-There are three levels of description available for this dataset:
-- A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description (see the [Technical Memorandum](<LINK_TO_TECHNICAL_MEMORANDUM>)).
-- The full source code used to process the data and create the models (see the [GitHub Repository](<LINK_TO_GITHUB_REPO>)).
-
-
-
-
-
-
-## 2.1 Processed Data
-
-<!-- Briefly Describe the processing pipeline applied to the raw data. Include:
-     - What transformations are applied (cleaning, filtering, standardization, etc.)
-     - What the final training examples look like (input/output pairs)
-     - How the different raw sources are combined 
-     - If approproate, this section will point to the train/test/validation sets -->
-
-## 2.2 Raw Data
-
-<!-- Appropriate description -->
 
 
 # 3. System Requirements
