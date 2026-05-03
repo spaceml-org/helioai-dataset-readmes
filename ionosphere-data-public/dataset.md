@@ -1,4 +1,100 @@
-# 1 Access Instructions
+# 1. Dataset Description
+
+<!-- Add a brief description of the dataset and the challenge it addresses -->
+
+The lonosphere-Thermosphere Twin project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
+
+The dataset spans 2010-2024, combining dense global TEC maps, sparse GNSS-derived measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates.
+
+This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionosphere-thermosphere system. 
+
+In addition to the high-level summary of this dataset presented below, a detailed description may be found in the [Technical Memorandum](https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view); and the full source code used to process the data and create the models in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). 
+
+
+## 1.1 Processed Data
+
+<!-- Briefly Describe the processing pipeline applied to the raw data. Include:
+     - What transformations are applied (cleaning, filtering, standardization, etc.)
+     - What the final training examples look like (input/output pairs)
+     - How the different raw sources are combined 
+     - If approproate, this section will point to the train/test/validation sets -->
+
+
+The processed dataset is a fully aligned, ML-ready data cube indexed by time, where all input features and targets are:
+- temporally synchronized (common cadence ~15 minutes),
+- spatially aligned on a global latitude-longitude grid,
+- cleaned, normalized, and gap-filled,
+- structured for efficient querying and model ingestion.
+
+Key preprocessing steps include:
+- Standardizing missing values (NaNs across all sources)
+- Temporal resampling and forward-filling with gap thresholds
+- Removal of highly sparse or unreliable features
+- Feature normalization and transformation (e.g., log-scaling for TEC)
+- Alignment of heterogeneous cadences into a unified timeline
+
+A key innovation is the introduction of a storm-aware data split, where geomagnetic events are identified using a physics-based classification (Kp-based "Mestici scale") and entire storm intervals are excluded from training, ensuring robust out-of-sample evaluation.
+
+The alignment, processing, and feature generation are handled in a publicly released codebase, provided in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). The key data sources, their features, and temporal resolutions are summarized in Table 1. The aligned data product may also be visualized in Figure 1.
+
+
+Table 1 and Figure 1
+
+### Data pre-processing
+A key technical challenge in constructing the dataset lies in the presence of missing values and the inconsistent temporal cadences across the underlying data streams, which complicates temporal alignment. Different sources also adopt non-standard conventions for encoding missing values; for example, the OMNI dataset marks data gaps with unique sentinel values that vary across different channels, making detection non-uniform. To standardize the entire corpus, all missing values are globlly represented as standard Not-a-Number (NaN) values. Furthermore, any feature columns containing multi-year gaps or demonstrating excessive sparsity were removed entirely from the product. This is the case for the AE index, where the entire 2020 year is missing.
+
+To deal with the remaining, shorter data holes and to align all features to a unified cadence, a straightforward forward-filling approach was employed. The last available sample is used to fill NaN values only when the gap is shorter than a specified maximum rewind time unique to each data stream. If the gap exceeds this threshold, the timestamp associated with the hole is skipped entirely to prevent inaccurate, long-term persistence of stale data. This same forward-filling logic is also utilized as a simple interpolation strategy to resample all features to a required temporal cadence. Ultimately, all data streams are aligned by indexing the combined dataset strictly by timestamp, ensuring temporal coherence despite the presence of gaps.
+
+## 1.2 Raw Data
+
+<!-- Appropriate description -->
+
+The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
+
+- Ionospheric targets:
+- JPL Global lonospheric Maps (dense TEC, 15-min cadence, netCDF)
+- Madrigal GNSS TEC measurements (sparse, 5-min cadence)
+- Solar and heliospheric drivers:
+- OMNI solar wind and IMF data (1-min cadence)
+- Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
+- SDO-FM EUV embeddings ( 15 -second cadence)
+- Geomagnetic indices:
+- Kp, Ap (global)
+- AE, AU, AL (auroral)
+- SYM-H, ASY-D (mid/low latitude)
+- Auxiliary features:
+- Orbital geometry (Sun/Moon position, zenith angles)
+- Quasi-dipole magnetic coordinates
+
+These datasets are originally distributed across multiple archives (e.g., OMNIWeb, JPL, Madrigal) and require substantial preprocessing before use.
+
+### Ionospheric Target Data
+
+The primary target variable for the novel TEC forecasting model introduced in this project is the global vTEC as represented in Global Ionospheric Maps (GIMs). The following resources were utilized: 
+
+**JPLD GIMs**:The JPLD product provides dense global maps of vTEC with a high temporal cadence of 15 minutes and a spatial resolution of 1°x1°. These maps are generated using an adaptable Kalman filter and a multi-shell model approach based on daily operational GIM processing for the Deep Space Network (DSN) (Mannucci et al. (1999). This multi-shell method distinguishes JPLD from other JPL GIMs and has benefited from a growing network of ground-based GNSS receivers (increasing from 98 to over 300). The GIM processing has also adapted to the evolving GNSS landscape, initially using GPS and GLONASS constellations and later incorporating Galileo. The data are provided in netCDF4 format and include a quality flag for quality assurance.
+
+**Madrigal Sparse GIMs**: We also include the previously mentioned sparse vTEC measurements collected from the Madrigal database. These observations offer a high-cadence reference at 5-minute cadence, derived directly from GNSS receivers hosted by MIT Haystack Observatory, albeit with sparse spatial coverage.
+
+### Geophysical Data Driver
+The input features incorporate a rich selection of drivers that shape the complex ionosphere-magnetosphere coupling:
+
+**Solar Irradiance proxies**: These indices are foundational for ionospheric modeling, serving as a proxy for the EUV radiation, the primary source of ionization. They include various solar flux proxies (F10.7, S10.7, M10.7, Y10.7) [ref] and, uniquely EUV irradiance embeddings from the SDO-FM, which reduce full solar disk images into low-dimensional representations for ML applications [ref]. We also include the JB08 dSt/dt  derived parameter, which specifies the thermospheric heating rate [ref]. The temporal cadence of the solar flux proxies is daily while the one of the SDO-FM embeddings is of 15 seconds. 
+
+**Solar magnetic drivers**: These parameters describe the properties of solar wind (Vxyz) plasma and the interplanetary magnetic field (IMF) strength/orientation (Bxyz). [ref] These indices are downloaded as a high resolution product from the OmniWeb dataset with a temporal resolution of 1 minute.
+
+**Geomagnetic indices**: These indices capture the impact of the solar wind on the Earth’s magnetosphere and are thus a proxy of how the Earth’s magnetic field is disturbed. They are divided in global, high-latitudes and mid-low latitudes indices. The global indices are the Kp and Ap, which describe the general response of the Earth’s geomagnetic field to external drivers, and are characterized by a 3 hour time resolution. The auroral indices AE, AU and AL instead focus on the geomagnetic field response at high latitudes, while SYM-D, SYM-H, ASY-D capture mid and low latitude effects. 
+
+### Auxiliary Spatial Features
+To provide direct physical information on the geometric and magnetic context of the Sun-Earth system, we also include auxiliary spatial features:
+
+**Orbital Mechanics**: Features derived from solar and lunar ephemerides (e.g., subsolar/sublunar points, zenith angles, and Earth–Sun/Moon distances) [ref], computed with the same temporal resolution as the input features.
+
+**Quasi-Dipole Coordinates**: Yearly maps of latitude and longitude in the quasi-dipole magnetic reference frame [ref], which better represent the physical control of the magnetic field on plasma dynamics than simple geographic coordinates.
+
+
+
+# 2. Access Instructions
 
 Data is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
@@ -24,70 +120,6 @@ Different models may have different train/test/validation sets, this can be expl
 | Raw | `<DATASET_NAME>/raw_data/` | | |
 | Results | `<DATASET_NAME>/results/` | | |
 | Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |
-
-
-# 2 Dataset Description
-
-<!-- Add a brief description of the dataset and the challenge it addresses -->
-
-There are three levels of description available for this dataset:
-- A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description (see the [Technical Memorandum](<https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view>)).
-- The full source code used to process the data and create the models (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>)).
-
-The lonosphere-Thermosphere Twin project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
-
-The dataset spans 2010-2024, combining dense global TEC maps, sparse GNSS-derived measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates.
-
-This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionospherethermosphere system.
-
-
-## 2.1 Processed Data
-
-<!-- Briefly Describe the processing pipeline applied to the raw data. Include:
-     - What transformations are applied (cleaning, filtering, standardization, etc.)
-     - What the final training examples look like (input/output pairs)
-     - How the different raw sources are combined 
-     - If approproate, this section will point to the train/test/validation sets -->
-
-The processed dataset is a fully aligned, ML-ready data cube indexed by time, where all input features and targets are:
-- temporally synchronized (common cadence ~15 minutes),
-- spatially aligned on a global latitude-longitude grid,
-- cleaned, normalized, and gap-filled,
-- structured for efficient querying and model ingestion.
-
-Key preprocessing steps include:
-- Standardizing missing values (NaNs across all sources)
-- Temporal resampling and forward-filling with gap thresholds
-- Removal of highly sparse or unreliable features
-- Feature normalization and transformation (e.g., log-scaling for TEC)
-- Alignment of heterogeneous cadences into a unified timeline
-
-A key innovation is the introduction of a storm-aware data split, where geomagnetic events are identified using a physics-based classification (Kp-based "Mestici scale") and entire storm intervals are excluded from training, ensuring robust out-of-sample evaluation.
-
-
-## 2.2 Raw Data
-
-<!-- Appropriate description -->
-
-The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
-- Ionospheric targets:
-- JPL Global lonospheric Maps (dense TEC, 15-min cadence, netCDF)
-- Madrigal GNSS TEC measurements (sparse, 5-min cadence)
-- Solar and heliospheric drivers:
-- OMNI solar wind and IMF data (1-min cadence)
-- Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
-- SDO-FM EUV embeddings ( 15 -second cadence)
-- Geomagnetic indices:
-- Kp, Ap (global)
-- AE, AU, AL (auroral)
-- SYM-H, ASY-D (mid/low latitude)
-- Auxiliary features:
-- Orbital geometry (Sun/Moon position, zenith angles)
-- Quasi-dipole magnetic coordinates
-
-These datasets are originally distributed across multiple archives (e.g., OMNIWeb, JPL, Madrigal) and require substantial preprocessing before use.
-
 
 # 3. System Requirements
 
