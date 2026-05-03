@@ -51,6 +51,7 @@ The alignment, processing, and feature generation are handled in a publicly rele
 <p align="center">
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
 </p>
+
 **Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
 
 <!-- ### Data pre-processing
