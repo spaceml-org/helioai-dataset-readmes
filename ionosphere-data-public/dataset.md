@@ -62,20 +62,20 @@ To deal with the remaining, shorter data holes and to align all features to a un
 
 The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
 
-- Ionospheric targets:
-- JPL Global lonospheric Maps (dense TEC, 15-min cadence, netCDF)
-- Madrigal GNSS TEC measurements (sparse, 5-min cadence)
-- Solar and heliospheric drivers:
-- OMNI solar wind and IMF data (1-min cadence)
-- Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
-- SDO-FM EUV embeddings ( 15 -second cadence)
-- Geomagnetic indices:
-- Kp, Ap (global)
-- AE, AU, AL (auroral)
-- SYM-H, ASY-D (mid/low latitude)
-- Auxiliary features:
-- Orbital geometry (Sun/Moon position, zenith angles)
-- Quasi-dipole magnetic coordinates
+Ionospheric targets:
+     - JPL Global lonospheric Maps (dense TEC, 15-min cadence, netCDF)
+     - Madrigal GNSS TEC measurements (sparse, 5-min cadence)
+Solar and heliospheric drivers:
+     - OMNI solar wind and IMF data (1-min cadence)
+     - Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
+     - SDO-FM EUV embeddings ( 15 -second cadence)
+Geomagnetic indices:
+     - Kp, Ap (global)
+     - AE, AU, AL (auroral)
+     - SYM-H, ASY-D (mid/low latitude)
+Auxiliary features:
+     - Orbital geometry (Sun/Moon position, zenith angles)
+     - Quasi-dipole magnetic coordinates
 
 These datasets are originally distributed across multiple archives (e.g., OMNIWeb, JPL, Madrigal) and require substantial preprocessing before use.
 
@@ -90,19 +90,19 @@ The primary target variable for the novel TEC forecasting model introduced in th
 ### Geophysical Data Driver
 The input features incorporate a rich selection of drivers that shape the complex ionosphere-magnetosphere coupling:
 
-**Solar Irradiance proxies**: These indices are foundational for ionospheric modeling, serving as a proxy for the EUV radiation, the primary source of ionization. They include various solar flux proxies (F10.7, S10.7, M10.7, Y10.7) [ref] and, uniquely EUV irradiance embeddings from the SDO-FM, which reduce full solar disk images into low-dimensional representations for ML applications [ref]. We also include the JB08 dSt/dt  derived parameter, which specifies the thermospheric heating rate [ref]. The temporal cadence of the solar flux proxies is daily while the one of the SDO-FM embeddings is of 15 seconds. 
+**Solar Irradiance proxies**: These indices are foundational for ionospheric modeling, serving as a proxy for the EUV radiation, the primary source of ionization. They include various solar flux proxies (F10.7, S10.7, M10.7, Y10.7) [ref] and, uniquely EUV irradiance embeddings from the SDO-FM, which reduce full solar disk images into low-dimensional representations for ML applications. We also include the JB08 dSt/dt  derived parameter, which specifies the thermospheric heating rate. The temporal cadence of the solar flux proxies is daily while the one of the SDO-FM embeddings is of 15 seconds. 
 
-**Solar magnetic drivers**: These parameters describe the properties of solar wind (Vxyz) plasma and the interplanetary magnetic field (IMF) strength/orientation (Bxyz). [ref] These indices are downloaded as a high resolution product from the OmniWeb dataset with a temporal resolution of 1 minute.
+**Solar magnetic drivers**: These parameters describe the properties of solar wind (Vxyz) plasma and the interplanetary magnetic field (IMF) strength/orientation (Bxyz). These indices are downloaded as a high resolution product from the OmniWeb dataset with a temporal resolution of 1 minute.
 
 **Geomagnetic indices**: These indices capture the impact of the solar wind on the Earth’s magnetosphere and are thus a proxy of how the Earth’s magnetic field is disturbed. They are divided in global, high-latitudes and mid-low latitudes indices. The global indices are the Kp and Ap, which describe the general response of the Earth’s geomagnetic field to external drivers, and are characterized by a 3 hour time resolution. The auroral indices AE, AU and AL instead focus on the geomagnetic field response at high latitudes, while SYM-D, SYM-H, ASY-D capture mid and low latitude effects. 
 
 ### Auxiliary Spatial Features
+
 To provide direct physical information on the geometric and magnetic context of the Sun-Earth system, we also include auxiliary spatial features:
 
 **Orbital Mechanics**: Features derived from solar and lunar ephemerides (e.g., subsolar/sublunar points, zenith angles, and Earth–Sun/Moon distances) [ref], computed with the same temporal resolution as the input features.
 
 **Quasi-Dipole Coordinates**: Yearly maps of latitude and longitude in the quasi-dipole magnetic reference frame [ref], which better represent the physical control of the magnetic field on plasma dynamics than simple geographic coordinates.
-
 
 
 # 2. Access Instructions
