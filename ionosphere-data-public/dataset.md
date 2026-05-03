@@ -51,6 +51,7 @@ The alignment, processing, and feature generation are handled in a publicly rele
 <p align="center">
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
 </p>
+**Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
 
 <!-- ### Data pre-processing
 A key technical challenge in constructing the dataset lies in the presence of missing values and the inconsistent temporal cadences across the underlying data streams, which complicates temporal alignment. Different sources also adopt non-standard conventions for encoding missing values; for example, the OMNI dataset marks data gaps with unique sentinel values that vary across different channels, making detection non-uniform. To standardize the entire corpus, all missing values are globlly represented as standard Not-a-Number (NaN) values. Furthermore, any feature columns containing multi-year gaps or demonstrating excessive sparsity were removed entirely from the product. This is the case for the AE index, where the entire 2020 year is missing.
