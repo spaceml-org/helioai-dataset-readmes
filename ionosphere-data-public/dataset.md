@@ -33,8 +33,6 @@ Key preprocessing steps include:
 - Feature normalization and transformation (e.g., log-scaling for TEC)
 - Alignment of heterogeneous cadences into a unified timeline
 
-A key innovation is the introduction of a storm-aware data split, where geomagnetic events are identified using a physics-based classification (Kp-based "Mestici scale") and entire storm intervals are excluded from training, ensuring robust out-of-sample evaluation.
-
 The alignment, processing, and feature generation are handled in a publicly released codebase, provided in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). The key data sources, their features, and temporal resolutions are summarized in Table 1. The aligned data product may also be visualized in Figure 1.
 
 | Source | Features | Cadence | Date Range | Description |
