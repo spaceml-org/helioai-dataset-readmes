@@ -60,21 +60,21 @@ To deal with the remaining, shorter data holes and to align all features to a un
 
 The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
 
-Ionospheric targets:
+**Ionospheric targets**:
      - JPL Global lonospheric Maps (dense TEC, 15-min cadence, netCDF)
      - Madrigal GNSS TEC measurements (sparse, 5-min cadence)
 
-Solar and heliospheric drivers:
+**Solar and heliospheric drivers**:
      - OMNI solar wind and IMF data (1-min cadence)
      - Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
      - SDO-FM EUV embeddings ( 15 -second cadence)
      
-Geomagnetic indices:
+**Geomagnetic indices**:
      - Kp, Ap (global)
      - AE, AU, AL (auroral)
      - SYM-H, ASY-D (mid/low latitude)
      
-Auxiliary features:
+**Auxiliary features**:
      - Orbital geometry (Sun/Moon position, zenith angles)
      - Quasi-dipole magnetic coordinates
 
