@@ -171,9 +171,7 @@ The ARCADE model produces multiple outputs, reflecting both physical state predi
   - prediction and target
   - prediction and input
 
-  Used to:
-  - quantify forecast error
-- identify spatial structure in model failures
+  These are used to quantify forecast error and identify spatial structure in model failures.
         
 3. Pixel-wise uncertainty maps
       - Standard deviation estimates per pixel
