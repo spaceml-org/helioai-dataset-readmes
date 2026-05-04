@@ -1,7 +1,5 @@
 # 1. Model Description
 
-# 1 Model Description
-
 The Heliolab 2025 ARCADE system is a physics-informed, hybrid machine learning model designed to forecast the short-term evolution of the solar surface magnetic field, with a primary focus on active region dynamics.
 
 The system combines **multi-modal observational data** from SDO, **first-principles physics** via the Surface Flux Transport (SFT) equation, and **deep learning components** for unresolved processes into a single, end-to-end differentiable forecasting framework.
