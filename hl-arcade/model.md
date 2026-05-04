@@ -1,71 +1,155 @@
 # 1. Model Description
 
-<!-- Add a brief description of the model and the challenge it addresses -->
+# 1 Model Description
 
-There are three levels of description available for this model:
-- A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description (see the [Technical Memorandum](<https://drive.google.com/file/d/1fTI2N0cOcLgbzVkk7QRWpNYnPsgFvwb4/view>)).
-- Work on this project is still ongoing; when completed, the full source code used to process the data and create the models will be linked here. 
-<!--- The full source code used to process the data and create the models (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Active-Regions/>)).-->
+The Heliolab 2025 ARCADE system is a physics-informed, hybrid machine learning model designed to forecast the short-term evolution of the solar surface magnetic field, with a primary focus on active region dynamics.
 
-The ARCADE challenge produced a physics-informed, hybrid deep-learning forecasting model for predicting the short-term evolution of the solar surface magnetic field, with a primary focus on active region dynamics. The system combines data-driven learning from multi-modal SDO observations with a differentiable implementation of the Surface Flux Transport (SFT) equation, forming an end-to-end trainable pipeline.
+The system combines **multi-modal observational data** from SDO, **first-principles physics** via the Surface Flux Transport (SFT) equation, and **deep learning components** for unresolved processes into a single, end-to-end differentiable forecasting framework.
 
-Note: Work on this project is still ongoing; when completed, the full source code used to create and run the models will be linked here.
+This enables the model to:
+- learn from data  
+- enforce physically meaningful evolution  
+- produce interpretable and uncertainty-aware forecasts  
+
+In addition the high-level summary of the model presented here, a detailed description may be found in the project ([Technical Memorandum](https://drive.google.com/file/d/1fTI2N0cOcLgbzVkk7QRWpNYnPsgFvwb4/view)). Full source code and trained models will be released upon project completion.
+
+---
 
 ## 1.1 Primary model: Physics-informed SFT forecaster
 
-<!-- Describe the ML models included. For each model, include:
-     - Model architecture
-     - Purpose (nowcasting, forecasting, classification, etc.)
-     - Any caveats on intended use -->
+The core ARCADE model is a **hybrid neural–physical architecture** that embeds a differentiable implementation of the Surface Flux Transport (SFT) equation inside a deep learning pipeline.
 
-<!-- If applicable, link to inference notebooks or usage examples 
-Instructions on how to use the model(s) are given in this [notebook](<LINK_TO_NOTEBOOK>).-->
+### Architecture overview
 
-The central model is a hybrid architecture consisting of:
+The model consists of four tightly coupled components:
 
-- Neural feature extraction (CNN/ResNet-style encoder)
-- Differentiable SFT evolution module (PDE-based)
-- Learned flux emergence (source-term) model
-- Uncertainty quantification head
+---
 
-This structure enables the model to learn solar magnetic field evolution directly from observations while enforcing physically meaningful dynamics.
+### 1. Neural feature extraction
 
-    
-## 1.2 Secondary model (supporting component)
+A convolutional neural network (ResNet-style encoder) processes input magnetograms and multi-modal SDO data to extract spatial features.
 
-A secondary model estimates solar Differential Rotation (DR) and Meridional Flow (MF) parameters using optimization within the SFT equation.
+- Input: full-disk solar images  
+- Output: latent feature maps representing magnetic structure  
 
-This model:
-- fits physically interpretable parameters
-- validates consistency with known solar physics
+In the current implementation:
+- a **SunVelocityResNet** predicts:
+  - surface flow fields (velocity components)  
+  - flux emergence contributions  
+
+---
+
+### 2. Differentiable SFT evolution module (PDE)
+
+The physical evolution of the magnetic field is governed by a differentiable SFT model:
+
+- Implements:
+  - differential rotation  
+  - meridional flow  
+  - turbulent diffusion  
+
+- Numerically integrated using:
+  - **Neural ODE framework (`torchdiffeq`)**  
+  - RK4 time stepping  
+
+This module evolves the magnetic field forward in time:
+
+\[
+B(t + \Delta t) = \text{SFT}(B(t), v, \eta, S)
+\]
+
+where:
+- \(v\) = velocity fields (learned or parameterized)  
+- \(\eta\) = diffusion  
+- \(S\) = flux emergence (learned source term)
+
+---
+
+### 3. Learned flux emergence (source term)
+
+A neural network predicts the **source term** in the SFT equation:
+
+- captures:
+  - unresolved magnetic flux emergence  
+  - active region formation  
+
+This is critical because flux emergence is not fully described by classical SFT physics.
+
+---
+
+### 4. Uncertainty quantification head (optional)
+
+An additional neural component estimates **pixel-wise uncertainty**:
+
+- predicts mean + variance  
+- trained via negative log-likelihood loss  
+
+Supports:
+- confidence-aware forecasting  
+- spatial reliability assessment  
+
+---
+
+### End-to-end behavior
+
+The model operates as:
+
+```text
+Input magnetogram → CNN encoder → flow + source terms → SFT PDE integration → predicted future magnetogram
+
+All components are trained jointly via backpropagation through the PDE solver.
+
+## 1.2 Secondary model: Physical Parameter Estimation
+
+A secondary component estimates physically interpretable parameters of solar surface flows.
+
+Parameters learned:
+- Differential rotation coefficients (a, b, c terms)
+- Meridional flow parameters
+
+These are derived using optimization within the SFT equation during training and used to:
+- validate agreement with known solar physics
+- constrain model behavior
+- improve interpretability
 
 ## 1.3 Model Input
 
-Both the primary and secondary ARCADE mdoels were designed to ingest multi-modal SDO data, including:
+The ARCADE system ingests multi-modal SDO observations:
 - Magnetograms (primary physical variable)
 - Dopplergrams
 - EUV images (171 Å, 304 Å)
-- Continuum intensity
+- Continuum intensity maps
 
-These inputs are temporally stacked, co-registered, and normalized into a unified data representation.
+Inputs are:
+- temporally stacked (multiple prior frames)
+- co-registered across modalities
+- normalized for ML compatibility
 
 ## 1.4 Model Output
 
+The ARCADE model produces multiple outputs, reflecting both physical state prediction and diagnostic information.
+
 1. Forecast magnetograms (primary output)
-     - Predicted full-disk magnetograms at ~6-hour lead time
-     - Represent the future radial magnetic field state
-     - Generated as time-ordered image sequences
+-Full-disk magnetic field predictions
+-Forecast horizon: ~6 hours
+-Represent future radial magnetic field state
 
-These serve as the operational output for active region tracking and downstream flare and CME prediction models.
+These outputs serve as the primary forecasting product as well as input to downstream flare and CME prediction systems.
 
-While the work on this project is ongoing, model files are not yet available for download and testing. However, an [ARCADE interactive user interface[https://arcade.trillium.tech/] is available to geneate and demonstrate forecasts up to 30 hours into the future of a selected date, based on the most recent, highly accurate model.
+The [ARCADE interactive demo](https://arcade.trillium.tech/) generates forecasts up to 30 hours into the future of a selected date, based on the most recent, highly accurate forecasting model.
 
 <p align="center">
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-arcade/arcade_ui.png?raw=true" width="600">
-</p>
+</p> 
   
-2. Residual/error maps (diagnostic outputs), showing differences between prediction and target, and prediction and input, used to quantify model performance and identify spatially structured forecast errors.
+2. Residual and diagnostic maps
+- Difference between:
+- prediction and target
+- prediction and input
+
+Used to:
+- quantify forecast error
+- identify spatial structure in model failures
         
 3. Pixel-wise uncertainty maps
       - Standard deviation estimates per pixel
@@ -73,9 +157,9 @@ While the work on this project is ongoing, model files are not yet available for
 
      These outputs provide:
       - confidence-aware predictions
-      - spatially resolved reliability estimates
+      - spatially reliability assessment
 
-4. Learned physical parameter estimates (supporting outputs)
+4. Learned physical parameter estimates 
       - Differential rotation coefficients
       - Meridional flow parameters
 
@@ -89,8 +173,38 @@ While the work on this project is ongoing, model files are not yet available for
         - unresolved magnetic flux emergence
         - active region formation dynamics
 
-       
-# 2. Access Instructions
+
+## 1.5 Forecasting Framework
+
+The model is trained to predict the evolution of the magnetic field over short time horizons.
+
+Typical configuration:
+- Input: magnetogram at time *t*
+- Target: magnetogram at *t+Δt* (e.g., 6-12 hours)
+- Time integration:
+     - continuous evolution via Neural ODE
+     - discrete supervision via MSE or likelihood loss
+
+Training objective:
+- minimize mean squared error between predicted and observed fields
+- optionally include probabilistic loss (NLL) for uncertainty modeling
+
+1.6 Model Availability
+
+The ARCADE project is currently ongoing.
+- Model weights are not yet publicly released
+- Full training pipelines and inference code will be published upon completion
+
+An interactive demonstration is available:
+https://arcade.spaceml.org/app
+
+This interface allows:
+- selection of input dates
+- generation of forecasts up to 30 hours ahead
+
+
+
+<!-- # 2. Access Instructions
 
 Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
@@ -105,7 +219,7 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 ```
 You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
      
-<!-- # 3. System Requirements
+# 3. System Requirements
 
 There are two sets of system requirements:
 1. Requirements to *create* the model. These can be found in the [GitHub Repository](<LINK_TO_GITHUB_REPO>).
