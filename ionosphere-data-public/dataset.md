@@ -2,13 +2,11 @@
 
 <!-- Add a brief description of the dataset and the challenge it addresses -->
 
-The lonosphere-Thermosphere Twin project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
+The Frontier Development Lab (FDL) Heliolab 2025 lonosphere-Thermosphere Twin research project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
 
-The dataset spans 2010-2024, combining dense global TEC maps, sparse GNSS-derived measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates.
+The dataset spans 2010-2024, combining dense global TEC maps, sparse GNSS-derived measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates. This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionosphere-thermosphere system. 
 
-This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionosphere-thermosphere system. 
-
-In addition to the high-level summary of this dataset presented below, a detailed description may be found in the [Technical Memorandum](https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view); and the full source code used to process the data and create the models in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). 
+In addition to the high-level summary of this dataset presented below, a detailed description may be found in the project [Technical Memorandum](https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view) and [Colab notebook](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb) available for demonstrating how to load and use the ML-ready ionospheric forecasting dataset. Additonally, the full source code used to process the data and create the associated models is available in the project[GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere).
 
 
 ## 1.1 Processed Data
