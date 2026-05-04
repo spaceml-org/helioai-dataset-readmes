@@ -95,8 +95,40 @@ The model operates as:
 
 ```text
 Input magnetogram → CNN encoder → flow + source terms → SFT PDE integration → predicted future magnetogram
-
+```
 All components are trained jointly via backpropagation through the PDE solver.
+
+SDO Observations (HMI + AIA)
+        │
+        ▼
+Multi-modal Data Cube
+(magnetograms, EUV, Doppler)
+        │
+        ▼
+CNN / ResNet Encoder
+→ Extract magnetic structure
+        │
+        ▼
+Flow + Flux Emergence Networks
+→ Predict:
+   - velocity fields (DR, MF)
+   - source term (flux emergence)
+        │
+        ▼
+Differentiable SFT PDE (Neural ODE)
+→ Physical evolution:
+   - differential rotation
+   - meridional flow
+   - diffusion
+        │
+        ▼
+Forecast Magnetogram (t + Δt)
+        │
+        ├───────────────► Residual Maps
+        │
+        ├───────────────► Uncertainty Maps
+        │
+        └───────────────► Physical Parameters (DR/MF)
 
 ## 1.2 Secondary model: Physical Parameter Estimation
 
