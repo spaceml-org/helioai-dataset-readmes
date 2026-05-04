@@ -1,14 +1,17 @@
 # 1. Model Description
 
-<!-- Add a brief description of the model and the challenge it addresses -->
+<!-- Add a brief description of the model and the challenge it addresses 
 
 There are three levels of description available for this model:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
 - A detailed description (see the [Technical Memorandum](<https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view>)).
 - The full source code used to process the data and create the models (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>)).
-- Instructions on how to use the model(s) are given in this [notebook](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb>).
+- Instructions on how to use the model(s) are given in this [notebook](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb>). -->
 
-The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework, centered on two primary model families.
+The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework centered on two primary model families: IonCast and Ionopy. Together, these models form a unified modeling framework that spans both dense global maps and sparse observational data, enabling multi-resolution forecasting of ionospheric dynamics.
+
+A full decription of the models may be found in the project [Technical Memorandum](<https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view>), and the full source code used to create the models and process the input data in the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>).
+
 
 <!-- Describe the ML models included. For each model, include:
      - Model architecture
@@ -105,7 +108,6 @@ This design enables:
 - consistent integration of multi-modal inputs  
 - evaluation across both quiet and disturbed geomagnetic conditions  
 
-
 ## 1.2 Ionopy (Temporal Fusion Transformer model) 
 
 <!-- lonopy is a Temporal Fusion Transformer (TFT) designed for:
@@ -128,8 +130,6 @@ Key modeling innovations
      - multi-resolution data
  - Probabilistic forecasting capability-->
 
-
- ## 1.2 Ionopy (Temporal Fusion Transformer model)
 
 Ionopy is a Temporal Fusion Transformer (TFT)-based forecasting model designed to address a complementary problem to IonCast: predicting ionospheric Total Electron Content (TEC) from **sparse, irregular GNSS observations** rather than dense global maps.
 
