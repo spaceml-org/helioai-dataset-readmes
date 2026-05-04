@@ -18,29 +18,34 @@ The lonosphere-Thermosphere Twin project introduces a modular deep-learning fore
      - Any caveats on intended use -->
 
 IonCast is a multi-architecture deep-learning framework for global TEC prediction, including:
-     - CNN-LSTM encoder-decoder model
-     - Encodes TEC maps into latent representations
-     - Uses LSTM to model temporal evolution
-     - Decodes future TEC maps
-     - Graph Neural Network (GNN) model
-     - Inspired by GraphCast
-     - Operates on spherical meshes
-     - Captures global spatial dependencies
-     - Spherical Fourier Neural Operator (SFNO)
-     - Learns dynamics in frequency space
-     - Efficiently models global-scale behavior
-     - Handles spherical geometry and periodic structure
+
+- CNN-LSTM encoder-decoder model
+  - Encodes TEC maps into latent representations
+  - Uses LSTM to model temporal evolution
+  - Decodes future TEC maps
+
+- Graph Neural Network (GNN) model
+  - Inspired by GraphCast
+  - Operates on spherical meshes
+  - Captures global spatial dependencies
+
+- Spherical Fourier Neural Operator (SFNO)
+  - Learns dynamics in frequency space
+  - Efficiently models global-scale behavior
+  - Handles spherical geometry and periodic structure
 
 These models operate autoregressively, predicting future TEC maps based on past observations and driver variables.
 
 ## 2.2 Ionopy (Temporal Fusion Transformer model) 
 
 lonopy is a Temporal Fusion Transformer (TFT) designed for:
+
      - sparse ionospheric prediction
      - long-range temporal forecasting
      - probabilistic outputs (mean + variance)
 
 It integrates:
+
      - temporal attention mechanisms
      - static + dynamic feature embeddings
      - multi-source driver inputs
