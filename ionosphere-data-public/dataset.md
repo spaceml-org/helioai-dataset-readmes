@@ -133,10 +133,23 @@ Different models may have different train/test/validation sets, this can be expl
 
 | Data Product | AWS Path | Size | Download time (@100 Mbps) |
 |-------------|----------|------|---------------------------|
-| Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/` | | |
-| Raw | `<DATASET_NAME>/raw_data/` | | |
-| Results | `<DATASET_NAME>/results/` | | |
-| Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |
+| Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/`| | |
+| Raw | scripts for downloading and processing raw data: `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/scripts/data_processing/*py` | | |
+<!--| Results | `` | | |
+| Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |-->
+
+/hl-ionosphere/ionosphere-data-public/
+├── README.md
+├── celestrak
+├── google_android
+├── jpld
+├── madrigal
+├── omniweb
+├── quasidipole
+├── scripts
+├── sdocore
+└── set
+
 
 # 3. System Requirements
 
@@ -150,4 +163,4 @@ There are two sets of system requirements:
 | **CPU** | Multi-core CPU required for preprocessing and inference workflows|
 | **RAM** | High memory required due to global grids and multi-source data |
 | **GPU** | Required for training (deep learning models); recommended for large-scale inference|
-| **Storage** | Very high (multi-terabyte datasets, model checkpoints, experiment logs)|
+| **Storage** | 2.8 TB (multi-terabyte datasets, model checkpoints, experiment logs)|
