@@ -60,6 +60,10 @@ These inputs are temporally stacked, co-registered, and normalized into a unifie
 These serve as the operational output for active region tracking and downstream flare and CME prediction models.
 
 While the work on this project is ongoing, model files are not yet available for download and testing. However, an [ARCADE](interactive user interface) is available to geneate and demonstrate forecasts up to 30 hours into the future of a selected date, based on the most recent, highly accurate model.
+
+<p align="center">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-arcade/arcade_ui.png?raw=true" width="600">
+</p>
   
 2. Residual/error maps (diagnostic outputs), showing differences between prediction and target, and prediction and input, used to quantify model performance and identify spatially structured forecast errors.
         
