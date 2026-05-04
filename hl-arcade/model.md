@@ -172,8 +172,8 @@ The ARCADE model produces multiple outputs, reflecting both physical state predi
   - prediction and input
 
   Used to:
-    - quantify forecast error
-    - identify spatial structure in model failures
+  - quantify forecast error
+- identify spatial structure in model failures
         
 3. Pixel-wise uncertainty maps
       - Standard deviation estimates per pixel
@@ -213,7 +213,7 @@ Training objective:
 - minimize mean squared error between predicted and observed fields
 - optionally include probabilistic loss (NLL) for uncertainty modeling
 
-1.6 Model Availability
+## 1.6 Model Availability
 
 The ARCADE project is currently ongoing.
 - Model weights are not yet publicly released
