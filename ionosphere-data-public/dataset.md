@@ -132,8 +132,8 @@ Different models may have different train/test/validation sets, this can be expl
 | Data Product | AWS Path | Size | Download time (@100 Mbps) |
 |-------------|----------|------|---------------------------|
 | Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/`| 2.8 TB | 2.6 days |
-| Raw | scripts for downloading and processing raw data: `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/scripts/data_processing/*py` | | |
-<!--| Results | `` | | |
+<!--| Raw | scripts for downloading and processing raw data: `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/scripts/data_processing/*py` | | |
+| Results | `` | | |
 | Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |-->
 
 ### Data Directory Structure
