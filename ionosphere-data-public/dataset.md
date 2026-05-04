@@ -140,14 +140,12 @@ Different models may have different train/test/validation sets, this can be expl
 
 ```text
 s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/
-├── README.md
 ├── celestrak
 ├── google_android
 ├── jpld
 ├── madrigal
 ├── omniweb
 ├── quasidipole
-├── scripts
 ├── sdocore
 └── set
 ```
