@@ -1,25 +1,4 @@
-# 1 Access Instructions
-
-Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-
-Listing files is done by e.g.:
-```
-aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
-```
-
-Downloading files is done by e.g.
-```
-aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
-```
-You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
-
-<!-- Add/remove rows as necessary for your project
-The ideal case is that within each of these categories, data are uniformly structured.
-For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
-Different models may have different train/test/validation sets, this can be explained -->
-
-
-# 2 Model Description
+# 1. Model Description
 
 <!-- Add a brief description of the model and the challenge it addresses -->
 
@@ -33,7 +12,7 @@ The ARCADE challenge produced a physics-informed, hybrid deep-learning forecasti
 
 Note: Work on this project is still ongoing; when completed, the full source code used to create and run the models will be linked here.
 
-## 2.1 Primary model: Physics-informed SFT forecaster
+## 1.1 Primary model: Physics-informed SFT forecaster
 
 <!-- Describe the ML models included. For each model, include:
      - Model architecture
@@ -53,7 +32,7 @@ The central model is a hybrid architecture consisting of:
 This structure enables the model to learn solar magnetic field evolution directly from observations while enforcing physically meaningful dynamics.
 
     
-## 2.2 Secondary model (supporting component)
+## 1.2 Secondary model (supporting component)
 
 A secondary model estimates solar Differential Rotation (DR) and Meridional Flow (MF) parameters using optimization within the SFT equation.
 
@@ -61,7 +40,7 @@ This model:
 - fits physically interpretable parameters
 - validates consistency with known solar physics
 
-## 2.3 Model Input
+## 1.3 Model Input
 
 Both the primary and secondary ARCADE mdoels were designed to ingest multi-modal SDO data, including:
 - Magnetograms (primary physical variable)
@@ -71,16 +50,16 @@ Both the primary and secondary ARCADE mdoels were designed to ingest multi-modal
 
 These inputs are temporally stacked, co-registered, and normalized into a unified data representation.
 
-## 2.3 Model Output
+## 1.4 Model Output
 
 1. Forecast magnetograms (primary output)
      - Predicted full-disk magnetograms at ~6-hour lead time
      - Represent the future radial magnetic field state
      - Generated as time-ordered image sequences
-       
-      Interactive UI: https://arcade.spaceml.org/app
 
 These serve as the operational output for active region tracking and downstream flare and CME prediction models.
+
+While the work on this project is ongoing, model files are not yet available for download and testing. However, an [ARCADE](interactive user interface) is available to geneate and demonstrate forecasts up to 30 hours into the future of a selected date, based on the most recent, highly accurate model.
   
 2. Residual/error maps (diagnostic outputs), showing differences between prediction and target, and prediction and input, used to quantify model performance and identify spatially structured forecast errors.
         
@@ -105,8 +84,24 @@ These serve as the operational output for active region tracking and downstream 
       - Capture:
         - unresolved magnetic flux emergence
         - active region formation dynamics
+
+       
+# 2. Access Instructions
+
+Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
+```
+
+Downloading files is done by e.g.
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
+```
+You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
      
-# 3. System Requirements
+<!-- # 3. System Requirements
 
 There are two sets of system requirements:
 1. Requirements to *create* the model. These can be found in the [GitHub Repository](<LINK_TO_GITHUB_REPO>).
@@ -118,5 +113,5 @@ There are two sets of system requirements:
 | **CPU** | |
 | **RAM** | |
 | **GPU** | |
-| **Storage** | |
+| **Storage** | | --> 
 
