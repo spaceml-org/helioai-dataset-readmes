@@ -31,6 +31,8 @@ There are three levels of description available for this model:
 
 The ARCADE challenge produced a physics-informed, hybrid deep-learning forecasting model for predicting the short-term evolution of the solar surface magnetic field, with a primary focus on active region dynamics. The system combines data-driven learning from multi-modal SDO observations with a differentiable implementation of the Surface Flux Transport (SFT) equation, forming an end-to-end trainable pipeline.
 
+Note: Work on this project is still ongoing; when completed, the full source code used to create and run the models will be linked here.
+
 ## 2.1 Primary model: Physics-informed SFT forecaster
 
 <!-- Describe the ML models included. For each model, include:
