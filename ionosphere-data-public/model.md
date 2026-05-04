@@ -10,31 +10,101 @@ There are three levels of description available for this model:
 
 The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework, centered on two primary model families.
 
-## 1.1 IonCast (global TEC forecasting suite)
-
 <!-- Describe the ML models included. For each model, include:
      - Model architecture
      - Purpose (nowcasting, forecasting, classification, etc.)
      - Any caveats on intended use -->
 
-IonCast is a multi-architecture deep-learning framework for global TEC prediction, including:
+## 1.1 IonCast (global TEC forecasting suite)
 
-- CNN-LSTM encoder-decoder model
-  - Encodes TEC maps into latent representations
-  - Uses LSTM to model temporal evolution
-  - Decodes future TEC maps
+IonCast is a multi-architecture deep-learning framework for global Total Electron Content (TEC) prediction, combining complementary spatial and temporal modeling approaches within a unified forecasting system.
 
-- Graph Neural Network (GNN) model
-  - Inspired by GraphCast
-  - Operates on spherical meshes
-  - Captures global spatial dependencies
+### CNN–LSTM encoder–decoder model
 
-- Spherical Fourier Neural Operator (SFNO)
-  - Learns dynamics in frequency space
-  - Efficiently models global-scale behavior
-  - Handles spherical geometry and periodic structure
+The IonCast LSTM model uses a convolutional encoder–decoder architecture with an LSTM bottleneck to capture both spatial structure and temporal evolution in global TEC maps.
 
-These models operate autoregressively, predicting future TEC maps based on past observations and driver variables.
+- A convolutional neural network (CNN) encodes each 2D TEC map (180×360) into a compact latent representation  
+- A multi-layer LSTM maintains temporal state across sequential inputs, modeling ionospheric dynamics over time  
+- A CNN decoder reconstructs future TEC maps from the latent sequence  
+
+In practice, the model uses:
+- a six-layer convolutional encoder with circular padding (to respect longitudinal periodicity)  
+- a 128-dimensional latent embedding  
+- bilinear upsampling and transposed convolutions for reconstruction back to full spatial resolution  
+
+Additional geophysical inputs (e.g., solar and geomagnetic drivers) are incorporated as extra image channels.
+
+The model is trained using:
+- batch size: 4  
+- dropout: 0.15  
+- learning rate: 2e-4  
+- weighted loss emphasizing JPLD TEC targets  
+
+---
+
+### Graph Neural Network (GNN) model
+
+The IonCast GNN model is based on the GraphCast paradigm, implemented using the NVIDIA PhysicsNeMo framework, and is designed to capture global spatial dependencies on the sphere.
+
+The architecture follows an encoder–processor–decoder structure:
+
+- **Encoder**: maps latitude–longitude grid data onto a spherical icosahedral mesh via graph message passing  
+- **Processor**: performs multi-layer message passing across the mesh, enabling long-range spatial interactions  
+- **Decoder**: maps predictions back from the mesh to the latitude–longitude grid  
+
+Key modeling features include:
+
+- Representation of the ionosphere on a **multi-resolution spherical mesh**  
+- Message passing across up to **32-hop neighborhoods**, enabling global-scale coupling  
+- Use of **six mesh levels and six processor layers**  
+
+A key distinction in the GNN formulation is the separation between:
+
+- **Forcing variables** (known at all times, e.g., orbital geometry, Sun/Moon position)  
+- **State variables** (TEC maps, solar/geomagnetic drivers, quasi-dipole coordinates)  
+
+During both training and inference:
+- forcing variables are provided as known inputs at all timesteps  
+- non-forcing variables are predicted autoregressively  
+
+The model operates as follows:
+- consumes a context window of past observations (up to time *t*)  
+- predicts future states (*t+1 → t+k*) without access to future ground truth  
+- concatenates forcing features at all forecast steps to maintain physical consistency  
+
+Training configuration:
+- batch size: 1  
+- dropout: 0.15  
+- learning rate: 3e-4  
+- weighted loss emphasizing JPLD TEC targets  
+
+---
+
+### Spherical Fourier Neural Operator (SFNO)
+
+The SFNO model provides a complementary approach by learning ionospheric dynamics in the spectral domain:
+
+- operates in spherical harmonic / Fourier space  
+- efficiently captures global-scale behavior  
+- naturally handles spherical geometry and periodic structure  
+
+This formulation is particularly well-suited for modeling large-scale ionospheric variability and wave-like dynamics.
+
+---
+
+### Autoregressive forecasting framework
+
+All IonCast models operate within a shared autoregressive forecasting paradigm:
+
+- input: context window of 8 timesteps (~3 hours)  
+- output: prediction of the next timestep (15 minutes ahead)  
+- training objective: minimize mean squared error on residual targets  
+
+This design enables:
+- stable multi-step forecasting through iterative rollout  
+- consistent integration of multi-modal inputs  
+- evaluation across both quiet and disturbed geomagnetic conditions  
+
 
 ## 1.2 Ionopy (Temporal Fusion Transformer model) 
 
