@@ -384,12 +384,13 @@ You will need to replace `<AWS PATH>` with the path to the file or directory you
    
 # 3. System Requirements
 
-The requirements for both creating and using the models may be found in the [Github repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere/).
+The requirements for *creating* the models may be found in the [Github repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere/). For *using* the models, the following requirements are estimated based on model architecture and dataset characteristics.
 
-
-<!-- | Component | Minimum |
+| Component | Minimum |
 |-----------|---------|
-| **CPU** | |
-| **RAM** | |
-| **GPU** | |
-| **Storage** | | -->
+| **CPU** | Modern multi-core CPU |
+| **RAM** | 8–16 GB |
+| **GPU** | Not required (recommended for GNN/SFNO batch inference) |
+| **Storage** | 5–20 GB (model checkpoints + input data subsets) |
+
+
