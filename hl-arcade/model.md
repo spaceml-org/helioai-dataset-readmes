@@ -33,9 +33,10 @@ A convolutional neural network (ResNet-style encoder) processes input magnetogra
 - Output: latent feature maps representing magnetic structure  
 
 In the current implementation:
-- a **SunVelocityResNet** predicts:
-  - surface flow fields (velocity components)  
-  - flux emergence contributions  
+
+- a ResNet-style convolutional neural network predicts:
+  - solar surface flow fields (differential rotation and meridional flow components)
+  - flux emergence contributions (source term in the SFT equation)
 
 ---
 
