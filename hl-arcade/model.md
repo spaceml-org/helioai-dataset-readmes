@@ -55,15 +55,13 @@ The physical evolution of the magnetic field is governed by a differentiable SFT
 
 This module evolves the magnetic field forward in time:
 
-\[
-B(t + \Delta t) = \text{SFT}(B(t), v, \eta, S)
-\]
+B(t + Δt) = SFT(B(t), v, η, S)
 
 where:
-- \(v\) = velocity fields (learned or parameterized)  
-- \(\eta\) = diffusion  
-- \(S\) = flux emergence (learned source term)
 
+- v = velocity fields (learned or parameterized)  
+- η = diffusion  
+- S = flux emergence (learned source term)  
 ---
 
 ### 3. Learned flux emergence (source term)
