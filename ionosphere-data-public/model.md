@@ -1,26 +1,4 @@
-# 1 Access Instructions
-
-Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-
-Listing files is done by e.g.:
-```
-aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
-```
-
-Downloading files is done by e.g.
-```
-aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
-```
-You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
-
-<!-- Add/remove rows as necessary for your project
-The ideal case is that within each of these categories, data are uniformly structured.
-For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
-Different models may have different train/test/validation sets, this can be explained -->
-
-
-
-# 2 Model Description
+# 1. Model Description
 
 <!-- Add a brief description of the model and the challenge it addresses -->
 
@@ -30,7 +8,7 @@ There are three levels of description available for this model:
 - The full source code used to process the data and create the models (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>)).
 - Instructions on how to use the model(s) are given in this [notebook](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb>).
 
-The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework, centered on two primary model families:
+The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework, centered on two primary model families.
 
 ## 2.1 IonCast (global TEC forecasting suite)
 
@@ -39,7 +17,7 @@ The lonosphere-Thermosphere Twin project introduces a modular deep-learning fore
      - Purpose (nowcasting, forecasting, classification, etc.)
      - Any caveats on intended use -->
 
-IonCast is a multi-architecture deep learning framework for global TEC prediction, including:
+IonCast is a multi-architecture deep-learning framework for global TEC prediction, including:
      - CNN-LSTM encoder-decoder model
      - Encodes TEC maps into latent representations
      - Uses LSTM to model temporal evolution
@@ -99,6 +77,26 @@ Key modeling innovations
           - quiet (G0)
           - moderate (G2)
           - severe (G4) conditions
+
+# 2. Access Instructions
+
+Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
+```
+
+Downloading files is done by e.g.
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
+```
+You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
+
+<!-- Add/remove rows as necessary for your project
+The ideal case is that within each of these categories, data are uniformly structured.
+For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
+Different models may have different train/test/validation sets, this can be explained -->
    
 # 3. System Requirements
 
