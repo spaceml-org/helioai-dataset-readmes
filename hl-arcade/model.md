@@ -89,13 +89,8 @@ Supports:
 
 ### End-to-end behavior
 
-The model operates as:
-
+The model operates as shown below, with all components trained jointly via backpropagation through the PDE solver.
 ```text
-Input magnetogram → CNN encoder → flow + source terms → SFT PDE integration → predicted future magnetogram
-```
-All components are trained jointly via backpropagation through the PDE solver.
-
 SDO Observations (HMI + AIA)
         │
         ▼
@@ -127,6 +122,7 @@ Forecast Magnetogram (t + Δt)
         ├───────────────► Uncertainty Maps
         │
         └───────────────► Physical Parameters (DR/MF)
+```
 
 ## 1.2 Secondary model: Physical Parameter Estimation
 
