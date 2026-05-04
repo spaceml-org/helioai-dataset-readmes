@@ -2,14 +2,14 @@
 
 Using high-resolution observations from the Helioseismic and Magnetic Imager (HMI, Scherrer et. al 2012) and Atmospheric Imaging Assembly (AIA, Lemen et al. 2012) instruments onboard the Solar Dynamics Observatory (SDO), the Frontier Development Lab (FDL) Heliolab 2025 ARCADE system combines physics-based Surface Flux Transport modeling with deep learning to characterize the magnetic evolution of solar active regions that can give rise to flares and coronal mass ejections. The hybrid approach extracts key parameters describing magnetic field structure and integrates uncertainty quantification to produce interpretable forecasts. Results demonstrate accurate short-term predictions of active region emergence up to six hours in advance, providing an important first step for downstream space weather models.
 
-While the ARCADE forecasting model was trained on SDO magnetograms, it was designed to work with all of the following SDO/HMI and SDO/AIA data modes: dopplergrams, extreme-ultraviolet images at 171 Å and 304 Å, and continuum-intensity maps. The SDO/HMI exposes continual, full-disk images of the Sun, while the SDO/AIA images the solar atmosphere at 10 different wavelengths, every 10 seconds. 
+While the ARCADE forecasting model was trained on SDO magnetograms, it was designed to work with following additional SDO/HMI and SDO/AIA data modes: dopplergrams, extreme-ultraviolet images at 171 Å and 304 Å, and continuum-intensity maps. The SDO/HMI exposes continual, full-disk images of the Sun, while the SDO/AIA images the solar atmosphere at 10 different wavelengths, every 10 seconds. 
 
 In addition to the high-level summary of the dataset provided here, a detailed description may be found in the project [Technical Memorandum](<https://drive.google.com/file/d/1fTI2N0cOcLgbzVkk7QRWpNYnPsgFvwb4/view>).
 <!-- (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Active-Regions/>)).-->
 
 ## 1.1 Processed Data
 
-### 2.2.1 Observed Data
+### Observed Data
 
 To process and prepare SDO archive data for input to the ARCADE machine-learning models, the following steps were taken:
 
@@ -23,9 +23,9 @@ To process and prepare SDO archive data for input to the ARCADE machine-learning
 
  - Removal of geometric effects: Removal of large-scale patterns caused by the Sun’s spherical shape, limb darkening, and other geometric distortions unrelated to physical evolution.
 
- - Re-structuring: SDO data in the form of individual FITS files, corresponding to each of the five independent data types, were combined into a single Zarr-formatted file, resulting in a data cube with a t_obs axis containing the timestamps of each data set; a channel axis containing the 5 data modes; and x and y axes of length 4096 each to match the pixel dimensions of the data images.
+ - Re-structuring: SDO data in the form of individual FITS files, corresponding to each of the five independent data types, were combined into a single Zarr-formatted file, resulting in a data cube with a *t_obs* axis containing the timestamps of each data set; a channel axis containing the 5 data modes; and *x* and *y* axes of length 4096 each to match the pixel dimensions of the data images.
      
-### 2.2.1 Simulated Validation Data
+### Simulated Validation Data
 
 The ARCADE forecasting system also incorporates physics-based simulated data from the Advective Flux Transport (AFT) model as a complementary dataset to the observational SDO inputs. AFT produces time-evolving, full-Sun maps of the radial magnetic field using a Surface Flux Transport (SFT) framework that models key physical processes including differential rotation, meridional flow, turbulent diffusion, and flux emergence.
 
@@ -36,7 +36,6 @@ The simulated AFT baseline data contain:
 - Radial magnetic field estimates over the entire solar surface
 
 ## 1.2 Raw Data
-
 
 The raw data (i.e., before being processed specifically for input to a machine learning model), includes cleaned and calibrated, science-ready SDO HMI and AIA FITS image data products downloadable from the primary SDO data archive hosted by the [Joint Science Operations Center (JSOC)](http://jsoc.stanford.edu/) at Stanford University; as well as the [Virtual Solar Observatory (VSO)](https://sdac.virtualsolar.org/cgi/search) search interface that accesses multiple solar data archives. 
 
