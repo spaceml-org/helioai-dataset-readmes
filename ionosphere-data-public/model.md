@@ -39,16 +39,14 @@ These models operate autoregressively, predicting future TEC maps based on past 
 ## 2.2 Ionopy (Temporal Fusion Transformer model) 
 
 lonopy is a Temporal Fusion Transformer (TFT) designed for:
-
-     - sparse ionospheric prediction
-     - long-range temporal forecasting
-     - probabilistic outputs (mean + variance)
+- sparse ionospheric prediction
+- long-range temporal forecasting
+- probabilistic outputs (mean + variance)
 
 It integrates:
-
-     - temporal attention mechanisms
-     - static + dynamic feature embeddings
-     - multi-source driver inputs
+- temporal attention mechanisms
+- static + dynamic feature embeddings
+- multi-source driver inputs
 
 Key modeling innovations
  - Global-scale ML forecasting on a unified multi-modal dataset
