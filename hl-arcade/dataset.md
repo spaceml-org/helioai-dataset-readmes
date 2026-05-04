@@ -9,35 +9,93 @@ In addition to the high-level summary of the dataset provided here, a detailed d
 
 ## 1.1 Processed Data
 
-### Observed Data
+The raw SDO archive is transformed into a structured, ML-ready dataset through a multi-stage pipeline.
 
-To process and prepare SDO archive data for input to the ARCADE machine-learning models, the following steps were taken:
+### 1.2.1 Observational Data Processing
 
- - Data cleaning and correction: Removal of bad frames, corrupted files, artifacts, images with spacecraft anomalies (eclipses, safe modes) and saturated pixels (e.g., during large flares in AIA); and subtraction of spacecraft/observer motion from Dopplergram velocities using available metadata or velocity correction maps.
+#### Data cleaning and correction
+- Removal of:
+  - corrupted or incomplete frames  
+  - spacecraft anomalies (eclipses, safe modes)  
+  - saturated pixels (e.g., during large flares)  
+- Correction of Doppler velocities using spacecraft motion metadata  
 
- - Image co-registration: Aligning images so that the same solar features fall on the same pixels over time and across instruments/wavelengths.
+#### Image co-registration
+- Spatial alignment across:
+  - time  
+  - instruments  
+  - wavelengths  
 
- - Adjusting for projection effects: Correction for the fact that features away from the solar disk center are foreshortened and that HMI line-of-sight measurements are not equal to radial values except at the disk center.
+Ensures consistent pixel correspondence for evolving features.  
 
- - Normalization: Scale intensities/values to a consistent range suitable for ML training.
+#### Projection correction
+- Correction for:
+  - foreshortening near solar limb  
+  - line-of-sight vs radial magnetic field differences  
 
- - Removal of geometric effects: Removal of large-scale patterns caused by the Sun’s spherical shape, limb darkening, and other geometric distortions unrelated to physical evolution.
+#### Normalization
+- Scaling of values to consistent ranges for ML training  
 
- - Re-structuring: SDO data in the form of individual FITS files, corresponding to each of the five independent data types, were combined into a single Zarr-formatted file, resulting in a data cube with a *t_obs* axis containing the timestamps of each data set; a channel axis containing the 5 data modes; and *x* and *y* axes of length 4096 each to match the pixel dimensions of the data images.
+#### Removal of geometric effects
+- Mitigation of:
+  - limb darkening  
+  - spherical projection artifacts  
+  - large-scale non-physical gradients  
+
+#### Data restructuring
+- Conversion from individual FITS files to **Zarr format**
+- Final dataset structure:
+
+| Dimension | Description |
+|----------|-------------|
+| `t_obs` | Observation timestamps |
+| `channel` | Data modality (5 channels) |
+| `x, y` | Spatial dimensions (4096 × 4096 pixels) |
+
+This produces a **multi-channel, time-resolved data cube** suitable for deep learning workflows.
+
      
-### Simulated Validation Data
+### 1.2.2 Simulated Validation Data (AFT)
 
-The ARCADE forecasting system also incorporates physics-based simulated data from the Advective Flux Transport (AFT) model as a complementary dataset to the observational SDO inputs. AFT produces time-evolving, full-Sun maps of the radial magnetic field using a Surface Flux Transport (SFT) framework that models key physical processes including differential rotation, meridional flow, turbulent diffusion, and flux emergence.
+To complement observational data, ARCADE incorporates physics-based simulations from the **Advective Flux Transport (AFT)** model.
 
-Unlike observational magnetograms, which are limited to line-of-sight measurements, AFT provides a physically consistent estimate of the global radial magnetic field across the entire solar surface, making it a critical resource for evaluating large-scale magnetic evolution.
+The AFT model implements a **Surface Flux Transport (SFT)** framework, modeling:
 
-The simulated AFT baseline data contain:
-- Full-disk, time-evolving magnetogram maps generated via SFT physics
-- Radial magnetic field estimates over the entire solar surface
+- Differential rotation  
+- Meridional flow  
+- Turbulent diffusion  
+- Magnetic flux emergence  
 
-## 1.2 Raw Data
+#### Key characteristics:
+- Full-disk, time-evolving magnetograms  
+- Global radial magnetic field estimates  
+- Physically consistent evolution across the entire solar surface  
 
-The raw data (i.e., before being processed specifically for input to a machine learning model), includes cleaned and calibrated, science-ready SDO HMI and AIA FITS image data products downloadable from the primary SDO data archive hosted by the [Joint Science Operations Center (JSOC)](http://jsoc.stanford.edu/) at Stanford University; as well as the [Virtual Solar Observatory (VSO)](https://sdac.virtualsolar.org/cgi/search) search interface that accesses multiple solar data archives. 
+Unlike SDO magnetograms:
+- AFT provides **complete radial field coverage**, not limited to line-of-sight measurements  
+
+This makes AFT critical for:
+- evaluating large-scale magnetic evolution  
+- validating model generalization beyond observational constraints  
+
+---
+
+## 1.3 Raw Data
+
+Raw data products are publicly available from solar data archives:
+
+- **SDO HMI and AIA FITS data**  
+  - [Joint Science Operations Center (JSOC)](http://jsoc.stanford.edu/)  
+  - [Virtual Solar Observatory (VSO)](https://sdac.virtualsolar.org/cgi/search)
+
+These datasets are:
+- calibrated  
+- science-ready  
+- not directly optimized for ML workflows  
+
+The ARCADE pipeline performs the necessary transformations to convert them into analysis-ready formats.
+
+---
 
 # 2. Access Instructions
 
@@ -55,11 +113,25 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
 
 
+## 2.1 Data Products
+
 | Data Product | AWS Path | Size | Download time (@100 Mbps) |
 |-------------|----------|------|---------------------------|
-| Processed - Training | [SDOMLv2](https://registry.opendata.aws/sdoml-fdl/) Magnetograms (single channel of multi-channel Zarr files) | | |
-| Processed - Validation | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-landing/aft/lisa/AFT_Baseline/{YYYY}/{NN}/AFTmap*.h5`, obtained from [here](https://data.boulder.swri.edu/lisa/AFT_Baseline/) and provided by [Lisa Upton](https://coffies.stanford.edu/people/lisa_upton) | | |
-| Results |  [Interactive UI](https://arcade.spaceml.org/app) | | |
+| Processed – Training | 4096×4096 pixel SDO magnetograms stored in a multi-channel Zarr dataset (see [SDOMLv2](https://registry.opendata.aws/sdoml-fdl/) for lower-resolution examples) | TBD | TBD |
+| Processed – Validation | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-landing/aft/lisa/AFT_Baseline/{YYYY}/{NN}/AFTmap*.h5` | TBD | TBD |
+| Results | [Interactive UI](https://arcade.spaceml.org/app) | N/A | N/A |
+
+---
+
+## Data Availability Note
+
+The ARCADE project is currently ongoing. As a result:
+
+- Full processed datasets are not yet finalized for public release  
+- Model-ready training subsets may be updated  
+- Final dataset sizes and access patterns are subject to change  
+
+This page will be updated as artifacts become available.
 
 <!-- | Raw | `SDO archive FITS images` | | |
 | Results | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-features/data/sunpde_output/prod/val_test_*/preds/*png` | | |
