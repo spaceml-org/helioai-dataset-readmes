@@ -132,7 +132,7 @@ Parameters learned:
 - Differential rotation coefficients (a, b, c terms)
 - Meridional flow parameters
 
-These are derived using optimization within the SFT equation during training and used to:
+These parameters are learned via gradient-based optimization through the differentiable SFT model during training and are used to:
 - validate agreement with known solar physics
 - constrain model behavior
 - improve interpretability
@@ -155,26 +155,25 @@ Inputs are:
 The ARCADE model produces multiple outputs, reflecting both physical state prediction and diagnostic information.
 
 1. Forecast magnetograms (primary output)
--Full-disk magnetic field predictions
--Forecast horizon: ~6 hours
--Represent future radial magnetic field state
+  -Full-disk magnetic field predictions
+  -Forecast horizon: ~6 hours
+  -Represent future radial magnetic field state
 
-These outputs serve as the primary forecasting product as well as input to downstream flare and CME prediction systems.
+  These outputs serve as the primary forecasting product as well as input to downstream flare and CME prediction systems.
 
-The [ARCADE interactive demo](https://arcade.trillium.tech/) generates forecasts up to 30 hours into the future of a selected date, based on the most recent, highly accurate forecasting model.
+  The [ARCADE interactive demo](https://arcade.trillium.tech/) generates forecasts up to 30 hours into the future of a selected date, based on   the most recent, highly accurate forecasting model.
 
-<p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-arcade/arcade_ui.png?raw=true" width="600">
-</p> 
+  <p align="center">
+    <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-arcade/arcade_ui.png?raw=true" width="600">
+  </p> 
   
-2. Residual and diagnostic maps
-- Difference between:
-- prediction and target
-- prediction and input
+2. Residual and diagnostic maps showing the difference between:
+  - prediction and target
+  - prediction and input
 
-Used to:
-- quantify forecast error
-- identify spatial structure in model failures
+  Used to:
+    - quantify forecast error
+    - identify spatial structure in model failures
         
 3. Pixel-wise uncertainty maps
       - Standard deviation estimates per pixel
