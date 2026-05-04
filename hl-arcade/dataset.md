@@ -119,7 +119,7 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 |-------------|----------|------|---------------------------|
 | Processed – Training | 4096×4096 pixel SDO magnetograms stored in a multi-channel Zarr dataset (see [SDOMLv2](https://registry.opendata.aws/sdoml-fdl/) for lower-resolution examples) | TBD | TBD |
 | Processed – Validation | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-landing/aft/lisa/AFT_Baseline/{YYYY}/{NN}/AFTmap*.h5` | TBD | TBD |
-| Results | [Interactive UI](https://arcade.spaceml.org/app) | N/A | N/A |
+| Results | [Interactive UI](https://arcade.trillium.tech/) | N/A | N/A |
 
 ---
 
