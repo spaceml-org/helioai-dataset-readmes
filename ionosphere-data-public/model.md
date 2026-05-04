@@ -108,7 +108,7 @@ This design enables:
 
 ## 1.2 Ionopy (Temporal Fusion Transformer model) 
 
-lonopy is a Temporal Fusion Transformer (TFT) designed for:
+<!-- lonopy is a Temporal Fusion Transformer (TFT) designed for:
 - sparse ionospheric prediction
 - long-range temporal forecasting
 - probabilistic outputs (mean + variance)
@@ -126,7 +126,110 @@ Key modeling innovations
  - Explicit handling of:
      - sparse vs dense observations
      - multi-resolution data
- - Probabilistic forecasting capability
+ - Probabilistic forecasting capability-->
+
+
+ ## 1.2 Ionopy (Temporal Fusion Transformer model)
+
+Ionopy is a Temporal Fusion Transformer (TFT)-based forecasting model designed to address a complementary problem to IonCast: predicting ionospheric Total Electron Content (TEC) from **sparse, irregular GNSS observations** rather than dense global maps.
+
+Where IonCast focuses on spatially complete global representations, Ionopy is optimized for **data-limited, operational scenarios**, where observations are incomplete, unevenly distributed, and influenced by heterogeneous drivers.
+
+---
+
+### Temporal Fusion Transformer (TFT) architecture
+
+Ionopy builds on the Temporal Fusion Transformer architecture, which combines recurrent sequence modeling with attention mechanisms to enable interpretable, multi-horizon forecasting.
+
+Key architectural components include:
+
+- **Sequence encoding with gated recurrent units (GRUs)**  
+  - captures local temporal dependencies in TEC and driver time series  
+
+- **Static and dynamic feature embeddings**  
+  - integrates heterogeneous inputs, including:
+    - GNSS-derived TEC observations  
+    - solar irradiance (e.g., EUV)  
+    - geomagnetic indices  
+    - auxiliary geophysical drivers  
+
+- **Temporal attention mechanism**  
+  - identifies which past timesteps and features are most relevant for prediction  
+  - provides interpretability through attention weights  
+
+- **Multi-horizon forecasting head**  
+  - produces predictions across future time windows in a single forward pass  
+
+This architecture enables Ionopy to model the **nonlinear coupling between solar forcing, geomagnetic activity, and ionospheric response**, which is a key challenge in TEC forecasting.
+
+---
+
+### Sparse-data forecasting paradigm
+
+A defining feature of Ionopy is its ability to operate on **sparse and irregular observational data**, in contrast to grid-based models.
+
+- Inputs consist of **point-based TEC measurements** from GNSS receivers  
+- Data are temporally aligned and fused with global driver signals  
+- The model learns to infer large-scale ionospheric behavior from partial observations  
+
+This design reflects real operational constraints, where global coverage is incomplete and measurement density varies significantly across regions and time.
+
+---
+
+### Probabilistic forecasting capability
+
+Ionopy extends beyond deterministic prediction by producing **probabilistic outputs**:
+
+- mean TEC forecast  
+- predictive uncertainty (variance)
+
+This enables:
+- uncertainty-aware decision making  
+- robustness under data gaps and noisy inputs  
+- improved interpretability of model confidence  
+
+---
+
+### Performance and interpretability
+
+Experiments across multi-year datasets (2010–2025) demonstrate:
+
+- accurate TEC forecasting up to **24-hour horizons**  
+- RMSE values as low as ~3.3 TECU under certain conditions :contentReference[oaicite:1]{index=1}  
+- strong dependence on solar EUV irradiance as a predictive driver  
+
+Importantly, the TFT architecture provides **built-in interpretability**:
+
+- attention weights reveal which drivers (e.g., solar vs geomagnetic) dominate predictions  
+- temporal attribution highlights critical lead times  
+
+This supports both:
+- operational forecasting  
+- scientific insight into ionospheric dynamics  
+
+---
+
+### Role within the Ionosphere–Thermosphere Twin system
+
+Ionopy complements IonCast by addressing a different observational regime:
+
+- **IonCast** → dense, global TEC forecasting (map-based)  
+- **Ionopy** → sparse, point-based forecasting (time-series)  
+
+Together, they form a **multi-resolution modeling framework** capable of:
+
+- integrating heterogeneous data sources  
+- bridging local observations and global structure  
+- supporting both research and operational use cases  
+
+---
+
+### Summary
+
+- TFT → best for **temporal reasoning + sparse data**  
+- Ionopy → best for **operational forecasting from real-world observations**  
+- Adds **probabilistic + interpretable predictions** to the overall system  
+   
 
 ## 1.3 Model Output
 1. Global TEC forecasts
