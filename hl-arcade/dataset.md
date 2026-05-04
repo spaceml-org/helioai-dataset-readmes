@@ -59,7 +59,7 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 |-------------|----------|------|---------------------------|
 | Processed - Training | [SDOMLv2](https://registry.opendata.aws/sdoml-fdl/) Magnetograms (single channel of multi-channel Zarr files) | | |
 | Processed - Validation | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-landing/aft/lisa/AFT_Baseline/{YYYY}/{NN}/AFTmap*.h5`, obtained from [here](https://data.boulder.swri.edu/lisa/AFT_Baseline/) and provided by [Lisa Upton](https://coffies.stanford.edu/people/lisa_upton) | | |
-| Results |  | | |
+| Results |  [Interactive UI](https://arcade.spaceml.org/app) | | |
 
 <!-- | Raw | `SDO archive FITS images` | | |
 | Results | `s3://nasa-radiant-data/helioai-datasets/hl-arcade/2025-hl-arcade-development-features/data/sunpde_output/prod/val_test_*/preds/*png` | | |
