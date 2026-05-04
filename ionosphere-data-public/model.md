@@ -232,34 +232,77 @@ Together, they form a **multi-resolution modeling framework** capable of:
    
 
 ## 1.3 Model Output
-1. Global TEC forecasts
-     - Predicted TEC maps on a global grid
-     - Forecast horizons: minutes to hours
-     - Captures:
-          - equatorial ionization structure
-          - storm-time disturbances
-            
-2. Probabilistic outputs
-     - Mean + variance predictions (lonopy, SFNO variants)
-     - Enable uncertainty-aware forecasting
-       
-3. Time-series forecast sequences
-     - Autoregressive predictions across multiple timesteps
-     - Capture temporal evolution of ionospheric dynamics
-       
-4. Evaluation metrics
-     - RMSE and MAE vs ground truth (JPL GIM)
-     - Performance across:
-          - quiet (G0)
-          - moderate (G2)
-          - severe (G4) conditions
+
+The Ionosphere–Thermosphere Twin framework produces multiple complementary output types, corresponding to different observational regimes and modeling approaches.
+
+---
+
+### 1. Global TEC forecasts (IonCast)
+
+- Predicted TEC maps on a global latitude–longitude grid  
+- Forecast horizons: minutes to hours  
+- Captures:
+  - equatorial ionization structure  
+  - mid-latitude gradients  
+  - storm-time disturbances  
+
+These outputs provide a **physically consistent, global view of ionospheric state evolution**, suitable for large-scale analysis and visualization.
+
+---
+
+### 2. Sparse TEC predictions (Ionopy)
+
+- Point-based TEC predictions at GNSS receiver locations  
+- Operates on irregular spatial sampling  
+- Enables:
+  - localized forecasting  
+  - validation against real-world measurements  
+  - operational deployment where full maps are unavailable  
+
+---
+
+### 3. Probabilistic forecasts
+
+- Mean + variance predictions (Ionopy, SFNO variants)  
+- Quantifies uncertainty in model outputs  
+
+Supports:
+- uncertainty-aware decision making  
+- identification of low-confidence predictions  
+- improved robustness under data gaps and noisy inputs  
+
+---
+
+### 4. Time-series forecast sequences
+
+- Autoregressive predictions across multiple timesteps  
+- Captures temporal evolution of ionospheric dynamics  
+- Enables:
+  - short-term forecasting (minutes–hours)  
+  - extension to longer horizons via rollout  
+
+---
+
+### 5. Evaluation metrics
+
+Model performance is assessed against JPL Global Ionospheric Maps (GIM) and GNSS-derived TEC observations using:
+
+- RMSE and MAE (primary metrics)  
+- Performance stratified by geomagnetic conditions:
+  - quiet (G0)  
+  - moderate (G2)  
+  - severe (G4+)  
+
+This regime-based evaluation ensures that models are tested not only on average performance, but also under **rare and operationally critical space weather conditions**.
 
 ## 1.4 Model Training and Validation
 
-### Processed Data Splitting Strategy
+### Physics-aware data splitting strategy
 The processed and aligned data product that is input to these models is structured and queried by time. To ensure proper model validation and mitigate data leakage (where portions of the same geomagnetic storm event are scattered across training and validation sets), a novel physics-based classification algorithm was used to divide the entire time interval into sub-intervals associated with a specific storm flag. The classification criteria uses a simple threshold on the Kp time series to identify periods of enhanced geomagnetic activity. 
 
 This criteria is formalized into the Mestici scale (Table 1), which takes into account not only the intensity of Kp (using the NOAA G-levels) but also the duration of the event period. This event catalog is used to identify and exclude the full duration of geomagnetic storm events from the training set, dedicating these critical periods entirely to model validation and testing of out-of-sample performance.
+
+### Mestici scale for event classification
 
 | Mestici Scale | NOAA G-Level (Kp) | Duration (hours) |
 |---------------|-------------------|------------------|
@@ -272,9 +315,53 @@ This criteria is formalized into the Mestici scale (Table 1), which takes into a
 
 **Table 1**: Mestici scale of geomagnetic storms. The scale combines NOAA G-levels (defined by Kp) with storm duration ℓ in hours. For example, G2H6 indicates an event that reached the G2 level lasting at least 6 hours.
 
-To train in a computationally efficient manner, the IonCast LSTM and GNN models train on every 256th sequence of 2 hours (sequences skip 2.66 days between start and end dates).  Test and validation data are removed from the training set for specified dates that span various levels of geomagnetic storms, as defined by the NOAA geomagnetic storm scale (G0, G1, G2, G3, G4, and G5), for a total of 10% of storms at each scale removed from the training set.
+This classification ensures that validation datasets include entire, physically coherent storm events, enabling realistic evaluation of model generalization.
 
-Both models are trained to minimize the mean squared error between predictions and ground truth values, for all targets except forcing features. Both the IonCast LSTM and IonCast GNN models are trained with context windows of 8 (3 hours) to predict 1 timestep (15 minutes) ahead, and predict residual targets.
+---
+
+### Training regime
+
+To maintain computational efficiency while preserving temporal diversity:
+
+- Models are trained on sampled sequences (e.g., every 256th 2-hour segment)  
+- Training data spans quiet and moderately disturbed conditions  
+- Approximately 10% of storm events at each geomagnetic level are withheld for validation/testing  
+
+---
+
+### Forecasting setup
+
+All IonCast models are trained under a consistent autoregressive framework:
+
+- Context window: 8 timesteps (~3 hours)  
+- Prediction horizon: 1 timestep (15 minutes ahead)  
+- Targets: residual TEC values  
+
+The models minimize mean squared error between predictions and ground truth, excluding forcing variables.
+
+---
+
+### Evaluation philosophy
+
+This training and validation strategy is designed to test:
+
+- **temporal generalization** (forecasting unseen future states)  
+- **event generalization** (performance on unseen storm events)  
+- **robustness across regimes** (quiet vs disturbed conditions)  
+
+By explicitly separating storm events from training data, the framework ensures that model performance reflects **true predictive capability**, rather than memorization of historical patterns.
+
+---
+
+### System Summary
+
+- IonCast → global, map-based forecasting (spatial models)  
+- Ionopy → sparse, time-series forecasting (temporal models)  
+- Combined → multi-resolution, multi-modal ionospheric forecasting system  
+
+This architecture enables both:
+- scientific understanding of ionospheric dynamics  
+- operational forecasting under real-world data constraints  
 
 # 2. Access Instructions
 
