@@ -1,6 +1,6 @@
 # 1. Model Description
 
-`hl-dosi` delivers LSTM-based recurrent models that forecast the deep-space radiation environment during Solar Proton Events (SPEs). Given a multi-hour context window of solar drivers — GOES-16 soft X-ray flux, BioSentinel BPD dose rate, and (optionally) SDO/AIA + HMI imagery — the model autoregressively predicts the BPD dose-rate trajectory over the following hours, with per-step uncertainty estimated via Monte Carlo dropout.
+This project delivers LSTM-based recurrent models that forecast the deep-space radiation environment during Solar Proton Events (SPEs). Given a multi-hour context window of solar drivers — GOES-16 soft X-ray flux, BioSentinel BPD dose rate, and (optionally) SDO/AIA + HMI imagery — the model autoregressively predicts the BPD dose-rate trajectory over the following hours, with per-step uncertainty estimated via Monte Carlo dropout.
 
 The published checkpoint corresponds to the `RadRecurrentWithSDO` architecture, which combines:
 
