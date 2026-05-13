@@ -33,15 +33,20 @@ In addition to the high-level summary provided below, the full source code used 
 
 Open directly in Colab: [demo.ipynb on Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-hl-radiation-ml/blob/main/public/demo.ipynb).
 
-## 1.4 Reference test-event plots
-Pre-rendered side-by-side animations and PDF storyboards of the flagship model's predictions on six SPE test events are bundled with the training run for inspection:
+## 1.4 Reference test-event plots (~33 MB)
+- **AWS PATH**: `s3://nasa-radiant-data/helioai-datasets/hl-dosi/models/event_plots/`
+- Pre-rendered side-by-side animations and PDF storyboards of the flagship model's predictions on six SPE test events, produced by `scripts/event_plot.py`:
 
-- `epoch-002-test-event-biosentinel01-58pfu-202302250615-202302280140.{mp4,pdf}` — unseen event
-- `epoch-002-test-event-biosentinel07-620pfu-202307171515-202307191215.{mp4,pdf}` — flagship demo event
-- `epoch-002-test-event-biosentinel19-116pfu-202405101215-202405130310.{mp4,pdf}` — unseen event
-- `epoch-002-test-seen-event-biosentinel04-38pfu-...{mp4,pdf}`, `biosentinel15-187pfu-...`, `biosentinel18-208pfu-...` — events observed during training, for sanity checking
+| File | Event | Peak >10 MeV | Seen during training? |
+|------|-------|--------------|------------------------|
+| `epoch-002-test-event-biosentinel01-58pfu-202302250615-202302280140.{mp4,pdf}` | biosentinel01 | 58 pfu | No |
+| `epoch-002-test-event-biosentinel07-620pfu-202307171515-202307191215.{mp4,pdf}` | biosentinel07 (demo event) | 620 pfu | No |
+| `epoch-002-test-event-biosentinel19-116pfu-202405101215-202405130310.{mp4,pdf}` | biosentinel19 | 116 pfu | No |
+| `epoch-002-test-seen-event-biosentinel04-38pfu-202305071030-202305120850.{mp4,pdf}` | biosentinel04 | 38 pfu | Yes |
+| `epoch-002-test-seen-event-biosentinel15-187pfu-202402082245-202402120225.{mp4,pdf}` | biosentinel15 | 187 pfu | Yes |
+| `epoch-002-test-seen-event-biosentinel18-208pfu-202405100515-202405111845.{mp4,pdf}` | biosentinel18 | 208 pfu | Yes |
 
-These are produced by `scripts/event_plot.py` and are kept alongside the checkpoint on the upload-staging volume; if you need them published to S3, request promotion into `s3://nasa-radiant-data/helioai-datasets/hl-dosi/models/`.
+Direct HTTPS browsing also works, e.g. `https://nasa-radiant-data.s3.amazonaws.com/helioai-datasets/hl-dosi/models/event_plots/epoch-002-test-event-biosentinel07-620pfu-202307171515-202307191215.mp4`.
 
 # 2. Access Instructions
 
