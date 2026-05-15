@@ -9,7 +9,7 @@ There are three levels of description available:
 - A detailed description in the [SuNeRF paper](https://doi.org/10.3847/1538-4357/ad38c9).
 - The full source code (see the [GitLab Repository](https://gitlab.com/frontierdevelopmentlab/2022-us-4pieuvirradiance/4piuvsun)).
 
-Instructions on how to use the models are given in this [Colab notebook](<COLAB_LINK_PLACEHOLDER>).
+Instructions on how to use the models are given in this [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/helioai-notebooks/blob/main/us-4pieuvirradiance/sunerf_tutorial.ipynb).
 
 ---
 
@@ -120,7 +120,7 @@ height_map     = outputs['height_map']      # (H, W) atmosphere height
 absorption_map = outputs['absorption_map']  # (H, W) absorption
 ```
 
-A working end-to-end example is in the [Colab notebook](<COLAB_LINK_PLACEHOLDER>).
+A working end-to-end example is in the [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/helioai-notebooks/blob/main/us-4pieuvirradiance/sunerf_tutorial.ipynb).
 
 ---
 
@@ -170,7 +170,7 @@ There are two sets of system requirements:
 | **GPU** | Not required (CPU inference works) | NVIDIA, ≥8 GB VRAM (much faster) |
 | **Storage** | ~60 MB per `.snf` checkpoint | 1.2 GB for the full bundle |
 
-Inference can also be run for free on [Google Colab](<COLAB_LINK_PLACEHOLDER>) with the free-tier GPU.
+Inference can also be run for free on [Google Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/helioai-notebooks/blob/main/us-4pieuvirradiance/sunerf_tutorial.ipynb) with the free-tier GPU.
 
 ---
 

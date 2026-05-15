@@ -106,7 +106,7 @@ s_map.peek()
 
 ## 1.4 Companion Models
 
-The models trained on this dataset (SuNeRF base, eruption, ensembles, transfer-learned variants) are published alongside under `s3://nasa-radiant-data/helioai-datasets/us-4pieuvirradiance/models/`. See the companion [model.md](./model.md).
+The models trained on this dataset (SuNeRF base, eruption, ensembles, transfer-learned variants) are published alongside under `s3://nasa-radiant-data/helioai-datasets/us-4pieuvirradiance/models/`. See the companion [model.md](./model.md), and the end-to-end [Colab notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/helioai-notebooks/blob/main/us-4pieuvirradiance/sunerf_tutorial.ipynb) for a runnable inference example.
 
 ---
 
