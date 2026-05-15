@@ -1,10 +1,10 @@
 # 1. Data Description
 
-The **STEREO 2012-08 ITI-converted** dataset is a 14-day multi-viewpoint Extreme Ultraviolet (EUV) imaging set of the Sun, captured by the twin **STEREO Ahead (A)** and **Behind (B)** spacecraft and calibrated to match SDO/AIA's response via **Instrument-to-Instrument (ITI) translation**. The dataset was assembled for the Frontier Development Lab 2022 US 4π EUV Irradiance challenge as the primary training corpus for **SuNeRF** — a Neural Radiance Field (NeRF) model that reconstructs the 3D solar atmosphere from sparse 2D viewpoints.
+This dataset is a 14-day multi-viewpoint Extreme Ultraviolet (EUV) imaging set of the Sun, captured by the twin **STEREO Ahead (A)** and **Behind (B)** spacecraft and calibrated to match SDO/AIA's response via **Instrument-to-Instrument (ITI) translation**. The dataset was assembled for the Frontier Development Lab 2022 US 4π EUV Irradiance challenge as the primary training corpus for **SuNeRF** — a Neural Radiance Field (NeRF) model that reconstructs the 3D solar atmosphere from sparse 2D viewpoints.
 
 There are three levels of description available for this dataset:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
-- A detailed description in the project [Technical Memorandum](<LINK_TO_TECHNICAL_MEMORANDUM>).
+- A detailed description in the project [Technical Memorandum](https://helioai.org/dev/artifact/e78110db-de49-4301-86be-fb8188a90d39/details).
 - The full source code used to process the data (see the [GitLab Repository](https://gitlab.com/frontierdevelopmentlab/2022-us-4pieuvirradiance/4piuvsun)).
 
 ---
@@ -66,7 +66,7 @@ The pipeline code is in `s4pi/data/convert_stereo_to_sdo.py` and `s4pi/data/conv
 
 ### Paired SDO/AIA data
 
-SuNeRF training also uses SDO/AIA frames at the matching timestamps as the third viewpoint (L1 perspective). The SDO/AIA data are *not* redistributed here — they are publicly available via [SDOML v2](https://sdoml.org) or directly from [JSOC](http://jsoc.stanford.edu/).
+SuNeRF training also uses SDO/AIA frames at the matching timestamps as the third viewpoint (L1 perspective). The SDO/AIA data are *not* redistributed here — they are publicly available via SDOML v2 or directly from [JSOC](http://jsoc.stanford.edu/).
 
 ---
 
@@ -102,11 +102,7 @@ s_map = Map('2012-08-24T00:00:00_A.fits')
 s_map.peek()
 ```
 
----
 
-## 1.4 Companion Models
-
-The models trained on this dataset (SuNeRF base, eruption, ensembles, transfer-learned variants) are published alongside under `s3://nasa-radiant-data/helioai-datasets/us-4pieuvirradiance/models/`. See the companion [model.md](./model.md).
 
 ---
 
@@ -152,7 +148,7 @@ There are two sets of system requirements:
 
 If you use this dataset in your research, please cite the SuNeRF paper:
 
-> R. Jarolim, B. Tremblay, A. Muñoz-Jaramillo, K. Battams, A. Jungbluth, M. C. M. Cheung, A. Pal, M. Indaco, K. Bingham, S. Pelletier, K. Albanitis, C. Tylor, D. Coronel, T. Y. Chen, R. Galvez, P. J. Wright, S. Kim. *SuNeRF: 3D Reconstruction of the Solar EUV Corona Using Neural Radiance Fields*. The Astrophysical Journal, 2024. https://doi.org/10.3847/1538-4357/ad38c9
+> R. Jarolim, B. Tremblay, A. Muñoz-Jaramillo, K. Battams, A. Jungbluth, M. C. M. Cheung, A. Pal, M. Indaco, K. Bingham, S. Pelletier, K. Albanitis, C. Tylor, D. Coronel, T. Y. Chen, R. Galvez, P. J. Wright, S. Kim. *SuNeRF: 3D Reconstruction of the Solar EUV Corona Using Neural Radiance Fields*. The Astrophysical Journal, 2024. https://doi.org/10.3847/2041-8213/ad12d2
 
 Please also cite the underlying STEREO/SECCHI EUVI instrument paper and the ITI translation method:
 
