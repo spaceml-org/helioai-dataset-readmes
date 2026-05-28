@@ -150,7 +150,7 @@ There are two sets of system requirements:
 | **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)|
 
 
-<-- BACKUP
+<!-- BACKUP
 # 1. Dataset Description
 
 <!-- Add a brief description of the dataset and the challenge it addresses -->
