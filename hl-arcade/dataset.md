@@ -201,7 +201,7 @@ Using high-resolution observations from the Helioseismic and Magnetic Imager (HM
 While the ARCADE forecasting model was trained on SDO magnetograms, it was designed to work with following additional SDO/HMI and SDO/AIA data modes: dopplergrams, extreme-ultraviolet images at 171 Å and 304 Å, and continuum-intensity maps. The SDO/HMI exposes continual, full-disk images of the Sun, while the SDO/AIA images the solar atmosphere at 10 different wavelengths, every 10 seconds. 
 
 In addition to the high-level summary of the dataset provided here, a detailed description may be found in the project [Technical Memorandum](<https://drive.google.com/file/d/1fTI2N0cOcLgbzVkk7QRWpNYnPsgFvwb4/view>).
-<!-- (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Active-Regions/>)).-->
+
 
 ## 1.1 Processed Data
 
