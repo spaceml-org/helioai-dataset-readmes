@@ -1,5 +1,158 @@
 # 1. Dataset Description
 
+The Frontier Development Lab (FDL) Heliolab 2025 lonosphere-Thermosphere Twin research project introduces a large-scale, machine-learning-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather machine learning (ML): the lack of standardized, unified data products.
+
+The dataset spans 2010-2024, combining dense global TEC maps, sparse Global Navigation Satellite System (GNSS) measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates. This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionosphere-thermosphere system. 
+
+**The following resources are available for in-depth dataset descriptions and usage instructions:**
+
+* [Technical Memorandum](https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view)  - the dataset placed in the context of the FDL Heliolab challenge that produced it
+* [Colab notebook](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb) - notebook demonstrating how the ML-ready ionospheric forecasting dataset is prepared for model input
+* [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere) - full source code used to process the data and create the associated models
+
+<p align="center">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Dataset_Workflow.png?raw=true" width="800">
+</p>
+
+## 1.1 Raw Data
+
+The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
+
+**Ionospheric targets**:
+- JPL Global Ionospheric Maps (dense TEC, 15-min cadence, netCDF)
+- Madrigal GNSS TEC measurements (sparse, 5-min cadence)
+
+**Solar and heliospheric drivers**:
+- OMNI solar wind and IMF data (1-min cadence)
+- Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
+- SDO-FM EUV embeddings (15-second cadence)
+
+**Geomagnetic indices**:
+- Kp, Ap (global)
+- AE, AU, AL (auroral)
+- SYM-H, ASY-D (mid/low latitude)
+
+**Auxiliary features**:
+- Orbital geometry (Sun/Moon position, zenith angles)
+- Quasi-dipole magnetic coordinates
+
+These datasets are originally distributed across multiple archives (e.g., OMNIWeb, JPL, Madrigal) and require substantial preprocessing before use.
+
+### Ionospheric Target Data
+
+The primary target variable for the novel TEC forecasting model introduced in this project is the global vTEC as represented in Global Ionospheric Maps (GIMs). The following resources were utilized: 
+
+**JPLD GIMs**:The JPLD product provides dense global maps of vTEC with a high temporal cadence of 15 minutes and a spatial resolution of 1°x1°. These maps are generated using an adaptable Kalman filter and a multi-shell model approach based on daily operational GIM processing for the Deep Space Network (DSN) (Mannucci et al. (1999). This multi-shell method distinguishes JPLD from other JPL GIMs and has benefited from a growing network of ground-based GNSS receivers (increasing from 98 to over 300). The GIM processing has also adapted to the evolving GNSS landscape, initially using GPS and GLONASS constellations and later incorporating Galileo. The data are provided in netCDF4 format and include a quality flag for quality assurance.
+
+**Madrigal Sparse GIMs**: Also included are the sparse vTEC measurements collected from the Madrigal database. These observations offer a high-cadence reference at 5-minute cadence, derived directly from GNSS receivers hosted by MIT Haystack Observatory, albeit with sparse spatial coverage.
+
+### Geophysical Data Driver
+The input features incorporate a rich selection of drivers that shape the complex ionosphere-magnetosphere coupling:
+
+**Solar Irradiance proxies**: These indices are foundational for ionospheric modeling, serving as a proxy for the EUV radiation, the primary source of ionization. They include various solar flux proxies (F10.7, S10.7, M10.7, Y10.7) [ref] and, uniquely EUV irradiance embeddings from the SDO-FM, which reduce full solar disk images into low-dimensional representations for ML applications. Also included is the JB08 dSt/dt derived parameter, which specifies the thermospheric heating rate. The temporal cadence of the solar flux proxies is daily while the one of the SDO-FM embeddings is of 15 seconds. 
+
+**Solar magnetic drivers**: These parameters describe the properties of solar wind (Vxyz) plasma and the interplanetary magnetic field (IMF) strength/orientation (Bxyz). These indices are downloaded as a high resolution product from the OmniWeb dataset with a temporal resolution of 1 minute.
+
+**Geomagnetic indices**: These indices capture the impact of the solar wind on the Earth’s magnetosphere and are thus a proxy of how the Earth’s magnetic field is disturbed. They are divided in global, high-latitudes and mid-low latitudes indices. The global indices are the Kp and Ap, which describe the general response of the Earth’s geomagnetic field to external drivers, and are characterized by a 3 hour time resolution. The auroral indices AE, AU and AL instead focus on the geomagnetic field response at high latitudes, while SYM-D, SYM-H, ASY-D capture mid and low latitude effects. 
+
+### Auxiliary Spatial Features
+
+To provide direct physical information on the geometric and magnetic context of the Sun-Earth system, the following auxiliary spatial features are included:
+
+**Orbital Mechanics**: Features derived from solar and lunar ephemerides (e.g., subsolar/sublunar points, zenith angles, and Earth–Sun/Moon distances) [ref], computed with the same temporal resolution as the input features.
+
+**Quasi-Dipole Coordinates**: Yearly maps of latitude and longitude in the quasi-dipole magnetic reference frame [ref], which better represent the physical control of the magnetic field on plasma dynamics than simple geographic coordinates.
+
+## 1.2 Processed Data
+
+The processed dataset is a fully aligned, ML-ready data cube indexed by time, where all input features and targets are:
+- temporally synchronized (common cadence ~15 minutes),
+- spatially aligned on a global latitude-longitude grid,
+- cleaned, normalized, and gap-filled,
+- structured for efficient querying and model ingestion.
+
+Key preprocessing steps include:
+- Standardizing missing values (NaNs across all sources)
+- Temporal resampling and forward-filling with gap thresholds
+- Removal of highly sparse or unreliable features
+- Feature normalization and transformation (e.g., log-scaling for TEC)
+- Alignment of heterogeneous cadences into a unified timeline
+
+The alignment, processing, and feature generation are handled in a publicly released codebase, provided in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). The key data sources, their features, and temporal resolutions are summarized in Table 1. The aligned data product may also be visualized in Figure 1.
+
+| Source | Features | Cadence | Date Range | Description |
+|--------|----------|---------|------------|-------------|
+| NASA/GSFC OMNI2 via OMNI-Web | AU, AL, AE (nT); SYM-D, SYM-H, ASY-D (nT); Bx, By, Bz (nT); Solar wind speed, vx, vy, vz (km/s) | 1 min | 2010-05-13 – 2024-08-01 | Geomagnetic indices related to magnetospheric/ionospheric currents and solar wind/IMF measurements in GSE reference frame. |
+| NOAA SWPC/GFZ via Celestrak | Ap (nT); Kp (no unit) | 3 hours | 1997-01-01 – 2025-10-12 | Geomagnetic indices describing the state of magnetospheric and ionospheric currents. |
+| JPLD | Dense TEC GIM (1°×1° grid, TECU) | 15 min | 2010-05-13 – 2024-07-31 | TEC maps generated by JPL based on daily operational GIM processing for the Deep Space Network (DSN). |
+| Madrigal | Sparse TEC GIM (1°×1° grid, TECU) | 5 min | 2010-01-01 – 2024-08-01 | TEC maps derived from GNSS receivers, hosted by MIT Haystack Observatory. |
+| SDO-FM | EUV irradiance embeddings (unitless) | 15 s | 2010-05-13 – 2024-08-01 | Full solar disk irradiance observations, reduced with NVAE embeddings for ML applications. |
+| Space Environment Technologies | F10.7, S10.7, M10.7, Y10.7 (sfu); JB08 dSt/dt (K) | Daily | 1997-01-01 – 2025-10-12 | Solar flux indices across multiple wavelengths; includes JB08 thermospheric heating rate. |
+| Orbital Mechanics | Solar and lunar zenith angle (°); Subsolar and sublunar point (lat, lon); Solar and lunar antipode point (lat, lon); Earth–Sun (AU) and Earth–Moon (LD) distance | Variable | Variable | Geometrical features derived from solar and lunar positions relative to Earth. Computed with the same temporal resolution as input features. |
+| Quasi Dipole | Latitude and longitude in quasi dipole reference frame | Yearly | 2010-01-01 – 2024-12-31 | Yearly quasidipole maps: projection of Earth’s magnetic field lines into a geographic reference frame. |
+
+**Table 1**: Summary of data sources, their channels, cadence, date ranges available in the data product and descriptions. The date ranges for the OMNI, JPLD and Madrigal datasets were selected to match the date range of SDO.
+
+<p align="center">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
+</p>
+
+**Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
+
+
+# 2. Access Instructions
+
+Data is stored on Amazon Web Services (AWS); access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+
+Listing files is done by, e.g.:
+```
+aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
+```
+
+Downloading files is done by e.g.
+```
+aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
+```
+You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
+
+<!-- Add/remove rows as necessary for your project
+The ideal case is that within each of these categories, data are uniformly structured.
+For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
+Different models may have different train/test/validation sets, this can be explained -->
+
+| Data Product | AWS Path | Size | Download time (@100 Mbps) |
+|-------------|----------|------|---------------------------|
+| Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/`| 2.8 TB | 2.6 days |
+
+```text
+s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/
+├── celestrak
+├── google_android
+├── jpld
+├── madrigal
+├── omniweb
+├── quasidipole
+├── sdocore
+└── set
+```
+# 3. System Requirements
+
+There are two sets of system requirements:
+1. Requirements to *create* the data products. These can be found in the [GitHub Repository](<LINK_TO_GITHUB_REPO>).
+2. Requirements for *using* the data products
+
+
+| Component | Minimum |
+|-----------|---------|
+| **CPU** | Multi-core CPU required for preprocessing and inference workflows|
+| **RAM** | High memory required due to global grids and multi-source data |
+| **GPU** | Required for training (deep learning models); recommended for large-scale inference|
+| **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)|
+
+
+<-- BACKUP
+# 1. Dataset Description
+
 <!-- Add a brief description of the dataset and the challenge it addresses -->
 
 The Frontier Development Lab (FDL) Heliolab 2025 lonosphere-Thermosphere Twin research project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
@@ -161,4 +314,4 @@ There are two sets of system requirements:
 | **CPU** | Multi-core CPU required for preprocessing and inference workflows|
 | **RAM** | High memory required due to global grids and multi-source data |
 | **GPU** | Required for training (deep learning models); recommended for large-scale inference|
-| **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)|
+| **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)| -->
