@@ -418,9 +418,9 @@ The requirements for *creating* the models may be found in the [Github repositor
 | **Storage** | 5–20 GB (model checkpoints + input data subsets) |
 
 <!-- BACKUP
+
 # 1. Model Description
 
-<!-- Add a brief description of the model and the challenge it addresses 
 
 There are three levels of description available for this model:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
@@ -432,11 +432,6 @@ The lonosphere-Thermosphere Twin project introduces a modular deep-learning fore
 
 A full decription of the models may be found in the project [Technical Memorandum](<https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view>), and the full source code used to create the models and process the input data in the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>).
 
-
-<!-- Describe the ML models included. For each model, include:
-     - Model architecture
-     - Purpose (nowcasting, forecasting, classification, etc.)
-     - Any caveats on intended use -->
 
 ## 1.1 IonCast (global TEC forecasting suite)
 
@@ -786,19 +781,6 @@ This architecture enables both:
 # 2. Access Instructions
 
 The model files and usage instructions may be accessed from the project [Github repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere/).
-
-<!-- Models are is stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-
-Listing files is done by e.g.:
-```
-aws s3 ls --no-sign-request s3://nasa-radiant-data/helioai-datasets/<DATASET_NAME>/
-```
-
-Downloading files is done by e.g.
-```
-aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <LOCAL PATH> --recursive
-```
-You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data. -->
 
 
    
