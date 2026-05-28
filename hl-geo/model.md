@@ -9,7 +9,7 @@ The Geo-CLoak pipeline combines:
 
 Together, these models provide an operational “Sun-to-ground” workflow:
 
-**SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps**
+<!-- **SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps** -->
 
 <p align="center">
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-geo/geocloak_workflow.png?raw=true" width="500">
