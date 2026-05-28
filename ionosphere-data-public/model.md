@@ -426,7 +426,7 @@ There are three levels of description available for this model:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
 - A detailed description (see the [Technical Memorandum](<https://drive.google.com/file/d/1ccJgu6uuz_8vGgOAzNdFmL7TmIXQVfBl/view>)).
 - The full source code used to process the data and create the models (see the [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>)).
-- Instructions on how to use the model(s) are given in this [notebook](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb>). -->
+- Instructions on how to use the model(s) are given in this [notebook](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere-dataset/blob/main/dataset_example_colab.ipynb>). 
 
 The lonosphere-Thermosphere Twin project introduces a modular deep-learning forecasting framework centered on two primary model families: IonCast and Ionopy. Together, these models form a unified modeling framework that spans both dense global maps and sparse observational data, enabling multi-resolution forecasting of ionospheric dynamics.
 
@@ -811,7 +811,6 @@ The requirements for *creating* the models may be found in the [Github repositor
 | **CPU** | Modern multi-core CPU |
 | **RAM** | 8–16 GB |
 | **GPU** | Not required (recommended for GNN/SFNO batch inference) |
-| **Storage** | 5–20 GB (model checkpoints + input data subsets) | 
--->
+| **Storage** | 5–20 GB (model checkpoints + input data subsets) |  -->
 
 
