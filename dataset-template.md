@@ -7,17 +7,19 @@ There are three levels of description available for this dataset:
 - A detailed description (see the [Technical Memorandum](<LINK_TO_TECHNICAL_MEMORANDUM>)).
 - The full source code used to process the data and create the models (see the [GitHub Repository](<LINK_TO_GITHUB_REPO>)).
 
-## 1.1 Processed Data
+## 1.1 Raw Data
+
+<!-- Appropriate description of raw data source, including what missions/instruments used, and any other relevant metadata such as date observations were taken, what is the time cadence, spatial sampling/resolution, etc.
+ -->
+
+## 1.2 Processed Data
 
 <!-- Briefly Describe the processing pipeline applied to the raw data. Include:
      - What transformations are applied (cleaning, filtering, standardization, etc.)
      - What the final training examples look like (input/output pairs)
      - How the different raw sources are combined 
-     - If approproate, this section will point to the train/test/validation sets -->
+     - If appropriate, this section will point to the train/test/validation sets -->
 
-## 1.2 Raw Data
-
-<!-- Appropriate description -->
 
 # 2. Access Instructions
 
