@@ -150,8 +150,6 @@ There are two sets of system requirements:
 <!-- BACKUP
 # 1. Dataset Description
 
-<!-- Add a brief description of the dataset and the challenge it addresses -->
-
 The Frontier Development Lab (FDL) Heliolab 2025 lonosphere-Thermosphere Twin research project introduces a large-scale, ML-ready dataset integrating heterogeneous observations across the Sun-Earth system, designed to enable global forecasting of ionospheric Total Electron Content (TEC). The dataset aligns solar, geomagnetic, and ionospheric measurements into a time-synchronized, spatially consistent format, overcoming a key bottleneck in space weather ML: the lack of standardized, unified data products.
 
 The dataset spans 2010-2024, combining dense global TEC maps, sparse GNSS-derived measurements, solar irradiance proxies, solar wind parameters, geomagnetic indices, and auxiliary spatial features such as orbital geometry and quasi-dipole coordinates. This unified structure enables models to learn the nonlinear coupling between solar forcing, magnetospheric response, and ionospheric variability, forming the foundation for a digital twin of the ionosphere-thermosphere system. 
@@ -160,12 +158,6 @@ In addition to the high-level summary of this dataset presented below, a detaile
 
 
 ## 1.1 Processed Data
-
-<!-- Briefly Describe the processing pipeline applied to the raw data. Include:
-     - What transformations are applied (cleaning, filtering, standardization, etc.)
-     - What the final training examples look like (input/output pairs)
-     - How the different raw sources are combined 
-     - If approproate, this section will point to the train/test/validation sets -->
 
 
 The processed dataset is a fully aligned, ML-ready data cube indexed by time, where all input features and targets are:
@@ -209,7 +201,7 @@ To deal with the remaining, shorter data holes and to align all features to a un
 
 ## 1.2 Raw Data
 
-<!-- Appropriate description -->
+
 
 The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
 
@@ -274,18 +266,6 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 ```
 You will need to replace `<AWS PATH>` with the path to the data sample you want to download (see table) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
 
-<!-- Add/remove rows as necessary for your project
-The ideal case is that within each of these categories, data are uniformly structured.
-For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
-Different models may have different train/test/validation sets, this can be explained -->
-
-| Data Product | AWS Path | Size | Download time (@100 Mbps) |
-|-------------|----------|------|---------------------------|
-| Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/`| 2.8 TB | 2.6 days |
-<!--| Raw | scripts for downloading and processing raw data: `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/scripts/data_processing/*py` | | |
-| Results | `` | | |
-| Miscellaneous | `<DATASET_NAME>/miscellaneous/` | | |-->
-
 ### Data Directory Structure
 
 ```text
@@ -311,4 +291,6 @@ There are two sets of system requirements:
 | **CPU** | Multi-core CPU required for preprocessing and inference workflows|
 | **RAM** | High memory required due to global grids and multi-source data |
 | **GPU** | Required for training (deep learning models); recommended for large-scale inference|
-| **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)| -->
+| **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)| 
+
+-->
