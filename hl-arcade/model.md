@@ -217,7 +217,8 @@ The ARCADE model produces multiple outputs, reflecting both physical state predi
         - active region formation dynamics
 
 
-## 1.5 Forecasting, Training, and Validation Framework
+
+## 1.5 Forecasting, Training, and Evaluation Framework
 
 The ARCADE system is trained as an end-to-end differentiable forecasting framework that combines deep learning with a physics-based Surface Flux Transport (SFT) model.
 
@@ -243,21 +244,20 @@ Typical forecasting configuration:
   * continuous Neural ODE integration
   * RK4 numerical solver via `torchdiffeq`
 
-### Validation methodology
+### Evaluation methodology
 
-Model performance is evaluated using held-out observations that were not used during training.
+Model performance is evaluated using future observations that were not used during training, together with assessment of the physical consistency of the resulting forecasts.
 
-Validation is designed to assess:
+Evaluation is designed to assess:
 
 * temporal generalization (forecasting unseen future states)
-* active region evolution forecasting
+* active region evolution prediction
 * magnetic flux emergence prediction
 * robustness across diverse solar conditions
 
 Predicted magnetic field maps are compared directly against observed magnetograms, while residual maps, uncertainty estimates, and learned physical parameters provide additional diagnostic insight into model behavior.
 
-A key objective of ARCADE is to ensure that predictive performance remains physically meaningful. Validation therefore includes evaluation of learned differential rotation, meridional flow, and flux emergence behavior, as well as comparison against established Surface Flux Transport expectations and, where available, Advective Flux Transport (AFT) simulations.
-
+A key objective of ARCADE is to ensure that predictive performance remains physically meaningful. Evaluation therefore includes assessment of learned differential rotation, meridional flow, and flux emergence behavior, as well as comparison against established Surface Flux Transport expectations and, where available, Advective Flux Transport (AFT) simulations.
 
 ## 1.6 Model Availability
 
