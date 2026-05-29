@@ -170,7 +170,7 @@ To read more about .zarr file and how to use them, see the [Zarr user guide](htt
 
 ---
 
-## 1.4 How the Processed Data Feed the Models
+## 1.4 Dataset-to-Model Workflow
 
 | Stage | Input | Output | Used by |
 |---------|---------|---------|---------|
