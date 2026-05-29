@@ -22,7 +22,7 @@ The resulting workflow enables, for the first time, estimation of solar spectral
 
 * [Technical Memorandum](https://helioai.org/artifact/f467e243-a299-43b9-871e-8c5c519663a5/details) - full description and results of the FDL Heliolab challenge that produced the model
 * [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/) - source code repository with data download scripts  and model files
-* [Colab Notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-SPI3S/blob/main/public/inference_demo.ipynb) - runs inference on both Earth-view and Mars-view AIA stacks, and plots the predicted EUV spectra (see section 1.8 for more details)
+* [Colab Notebook](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-SPI3S/blob/main/public/inference_demo.ipynb) -  a self-contained Google Colab notebook that installs dependencies, clones the `megsai` package, downloads the flagship MEGS-B checkpoint and the demo subset from S3, runs inference on both Earth-view and Mars-view AIA stacks, and plots the predicted EUV spectra. 
 
 
 ## 1.1 MEGS-AI — KANDEM-Spectrum (MEGS-B, 50 MB)
@@ -66,13 +66,15 @@ The resulting workflow enables, for the first time, estimation of solar spectral
     - `eve_14line_normalization.npy`, `eve_14line_wl_names.npy`: normalization parameters and line names.
     - `README.md`: detailed description of each file.
 
+<!--
 ## 1.8 Inference Notebook
 - Source: [`public/inference_demo.ipynb`](https://github.com/FrontierDevelopmentLab/2024-HL-SPI3S/blob/main/public/inference_demo.ipynb) in the main GitHub repository.
 - A self-contained Google Colab notebook that installs dependencies, clones the `megsai` package, downloads the flagship MEGS-B checkpoint and the demo subset from S3, runs inference on both Earth-view and Mars-view AIA stacks, and plots the predicted EUV spectra.
 
 Open directly in Colab: [inference_demo.ipynb on Colab](https://colab.research.google.com/github/FrontierDevelopmentLab/2024-HL-SPI3S/blob/main/public/inference_demo.ipynb).
+-->
 
-## 1.9 Model Training and Evaluation
+## 1.8 Model Training and Evaluation
 
 SPI3S combines two complementary machine-learning models operating within a single end-to-end workflow. SuNeRF-DT reconstructs a four-dimensional (3D + time) representation of the solar corona from multi-viewpoint observations, while MEGS-AI estimates solar spectral irradiance from solar EUV imagery. Together, these models enable estimation of solar spectral irradiance from arbitrary heliospheric viewpoints, including Mars.
 
