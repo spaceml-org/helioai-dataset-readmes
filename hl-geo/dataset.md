@@ -9,6 +9,10 @@ The dataset behind Geo-CLoak is a coordinated collection of solar, solar-wind, a
 * [Technical Memorandum](https://helioai.org/artifact/89d1911b-7803-44e7-b792-076edb2dc5ed/details) - full description and results of the FDL Heliolab challenge that produced the dataset
 * [GitHub Repository](https://github.com/FrontierDevelopmentLab/2024-HL-GeoCL/) - source code for processing the data and using with the associated models
 
+<p align="center">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-geo/geocloak_data_processing.png?raw=true" width="900">
+</p>
+
 ## 1.1 Raw Data
 
 The raw data for Geo-CLoak fall into two main branches corresponding to the two major model components. For the DAGGER-CL branch, the input data are solar-wind and geospace drivers suitable for forecasting ground geomagnetic perturbations from near-real-time conditions at or near L1. For the SHEATH branch, the raw data are remote solar measurements that support longer lead-time forecasting of solar-wind conditions before those disturbances reach L1. In both cases, the physical objective is to encode the coupled chain from the Sun, through the solar wind, to Earth's ground magnetic response.
