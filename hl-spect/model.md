@@ -217,8 +217,6 @@ Different models may have different train/test/validation sets, this can be expl
 
 # 2 Model Description
 
-<!-- Add a brief description of the model and the challenge it addresses -->
-
 There are three levels of description available for this model:
 - A high-level summary (this document) for users to quickly become familiar with the dataset.
 - A detailed description (see the [Technical Memorandum](<https://drive.google.com/file/d/1hsxBvVRLFBoHWV8CKWkSo8HYE1TNG6re/view>)).
@@ -232,13 +230,6 @@ The SPI3S challenge produced a coupled, physics-informed + deep-learning modelin
 These are integrated into an end-to-end pipeline capable of mapping multi-viewpoint solar observations → 3D solar structure → spectral irradiance at arbitrary locations.
 
 ## 2.1 SuNeRF (Solar Neural Radiance Field)
-
-<!-- Describe the ML models included. For each model, include:
-     - Model architecture
-     - Purpose (nowcasting, forecasting, classification, etc.)
-     - Any caveats on intended use -->
-
-<!-- If applicable, link to inference notebooks or usage examples -->
 
 SuNeRF is a Neural Radiance Field (NeRF)-based model adapted to solar physics, designed to reconstruct the 3D structure of the solar corona and atmosphere from multi-viewpoint observations.
 
