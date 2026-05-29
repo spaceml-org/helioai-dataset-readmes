@@ -15,7 +15,6 @@ In addition the high-level summary of the model presented here, a detailed descr
   <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-arcade/ARCADE_model_infographic.png?raw=true" width="900">
 </p>
 
-### Model Snapshot
 
 | Category | Description |
 |---|---|
@@ -218,20 +217,47 @@ The ARCADE model produces multiple outputs, reflecting both physical state predi
         - active region formation dynamics
 
 
-## 1.5 Forecasting Framework
+## 1.5 Forecasting, Training, and Validation Framework
 
-The model is trained to predict the evolution of the magnetic field over short time horizons.
+The ARCADE system is trained as an end-to-end differentiable forecasting framework that combines deep learning with a physics-based Surface Flux Transport (SFT) model.
 
-Typical configuration:
-- Input: magnetogram at time *t*
-- Target: magnetogram at *t+Δt* (e.g., 6-12 hours)
-- Time integration:
-     - continuous evolution via Neural ODE
-     - discrete supervision via MSE or likelihood loss
+Training proceeds by:
 
-Training objective:
-- minimize mean squared error between predicted and observed fields
-- optionally include probabilistic loss (NLL) for uncertainty modeling
+* ingesting temporally aligned multi-modal SDO observations,
+* predicting solar surface flow fields and magnetic flux emergence terms,
+* evolving the magnetic field forward in time through the differentiable SFT equation,
+* comparing the predicted future magnetic field with observed magnetograms.
+
+Because the SFT solver is implemented within a Neural ODE framework, gradients propagate through both the neural networks and the physical evolution model, enabling joint optimization of all model components.
+
+### Forecasting configuration
+
+Typical forecasting configuration:
+
+* Input: magnetogram and associated SDO observations at time *t*
+* Target: future magnetogram at *t + Δt*
+* Forecast horizon: typically 6–12 hours
+* Interactive demo forecasts: up to ~30 hours
+* Time evolution:
+
+  * continuous Neural ODE integration
+  * RK4 numerical solver via `torchdiffeq`
+
+### Validation methodology
+
+Model performance is evaluated using held-out observations that were not used during training.
+
+Validation is designed to assess:
+
+* temporal generalization (forecasting unseen future states)
+* active region evolution forecasting
+* magnetic flux emergence prediction
+* robustness across diverse solar conditions
+
+Predicted magnetic field maps are compared directly against observed magnetograms, while residual maps, uncertainty estimates, and learned physical parameters provide additional diagnostic insight into model behavior.
+
+A key objective of ARCADE is to ensure that predictive performance remains physically meaningful. Validation therefore includes evaluation of learned differential rotation, meridional flow, and flux emergence behavior, as well as comparison against established Surface Flux Transport expectations and, where available, Advective Flux Transport (AFT) simulations.
+
 
 ## 1.6 Model Availability
 
@@ -276,10 +302,6 @@ There are two sets of system requirements:
 | **RAM** | |
 | **GPU** | |
 | **Storage** | | -->
-
-
-
-
 
 
 
