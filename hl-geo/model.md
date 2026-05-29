@@ -9,10 +9,10 @@ The Geo-CLoak pipeline combines:
 
 Together, these models provide an operational “Sun-to-ground” workflow:
 
-<!-- **SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps** -->
+<!--**SDO imagery → SHEATH → L1 solar-wind forecast → DAGGER-CL + real-time L1 inputs → station perturbations → global maps**-->
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-geo/geocloak_workflow.png?raw=true" width="500">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-geo/geocloak_model_infographic.png?raw=true" width="900">
 </p>
 
 
@@ -99,6 +99,73 @@ Notes
 | DAGGER-CL | Real-time or forecast L1 solar wind + indices | Station perturbations | Yes |
 | GP interpolation | Station perturbations + station geometry | Global geomagnetic field estimate | Final product |
 
+## 1.3 Model Training and Evaluation
+
+Geo-CLoak combines two forecasting models operating at different temporal scales. SHEATH provides multi-day forecasts of solar-wind conditions at L1 from remote solar observations, while DAGGER-CL produces short-horizon forecasts of ground magnetic perturbations using in-situ solar-wind measurements and geomagnetic context.
+
+### Training strategy
+
+**SHEATH** is trained as a supervised regression model using paired solar observations and downstream solar-wind measurements. The model learns to map SDO-derived solar features and embeddings to future solar-wind conditions at L1.
+
+Training inputs include:
+
+- coronal-hole and active-region morphology metrics
+- multi-channel EUV emission features
+- latent solar embeddings
+
+Training targets include:
+
+- IMF components (Bx, By, Bz)
+- solar-wind speed
+- proton density
+- proton temperature
+
+**DAGGER-CL** is trained on historical solar-wind and geomagnetic observations using sequential time-series windows. The model learns the relationship between upstream solar-wind conditions and subsequent ground magnetic perturbations measured by the SuperMAG network.
+
+Training inputs include:
+
+- IMF components
+- solar-wind plasma parameters
+- geomagnetic activity indices
+- 90-minute historical context windows
+
+Training targets include:
+
+- station-level dBe
+- station-level dBn
+- station-level dBz
+
+The continual-learning framework incorporates replay-based training and Elastic Weight Consolidation (EWC) to improve adaptation while reducing catastrophic forgetting.
+
+### Forecasting configuration
+
+| Model | Forecast target | Typical lead time |
+|---------|---------|---------|
+| SHEATH | Solar-wind conditions at L1 | Multiple days |
+| DAGGER-CL | Ground magnetic perturbations | Tens of minutes |
+
+During operational deployment, SHEATH forecasts may be used as upstream inputs to DAGGER-CL when future L1 observations are unavailable, enabling an end-to-end Sun-to-ground forecasting workflow.
+
+### Evaluation methodology
+
+Evaluation is designed to assess:
+
+- temporal generalization to unseen future periods
+- robustness across geomagnetic conditions
+- uncertainty estimation quality
+- operational forecasting performance at multiple lead times
+
+SHEATH predictions are evaluated against observed L1 solar-wind measurements, while DAGGER-CL forecasts are evaluated against SuperMAG ground magnetometer observations.
+
+Performance assessment includes:
+
+- forecast error metrics
+- storm-time case studies
+- uncertainty calibration
+- lead-time dependent forecast skill
+
+A key objective of Geo-CLoak is operational adaptability. Evaluation therefore extends beyond static benchmark performance to include continual-learning behavior, model stability, and robustness to evolving solar and geomagnetic conditions.
+
 # 2 Access Instructions 
 
 Models are stored on Amazon Web Services (AWS). Access is given through the AWS Command Line Interface (CLI). Instructions on how to install and use are given in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
@@ -145,6 +212,7 @@ The full operational GEO-CLOAK framework includes:
 - global interpolation of station predictions
 
 These operational components are part of the broader project framework and are more complex than simple local checkpoint inference.
+
 
 
 <!-- BACKUP
