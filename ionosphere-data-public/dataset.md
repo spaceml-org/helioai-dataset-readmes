@@ -16,25 +16,20 @@ The dataset spans 2010-2024, combining dense global TEC maps, sparse Global Navi
 
 ## 1.1 Raw Data
 
-The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
+The raw data consist of heterogeneous observational datasets spanning solar, heliospheric, geomagnetic, and ionospheric domains. These datasets are sourced from multiple international archives and are combined to support global forecasting of ionospheric Total Electron Content (TEC).
 
-**Ionospheric targets**:
-- JPL Global Ionospheric Maps (dense TEC, 15-min cadence, netCDF)
-- Madrigal GNSS TEC measurements (sparse, 5-min cadence)
+### Raw Data Summary
 
-**Solar and heliospheric drivers**:
-- OMNI solar wind and IMF data (1-min cadence)
-- Solar flux proxies (F10.7, S10.7, M10.7, Y10.7)
-- SDO-FM EUV embeddings (15-second cadence)
-
-**Geomagnetic indices**:
-- Kp, Ap (global)
-- AE, AU, AL (auroral)
-- SYM-H, ASY-D (mid/low latitude)
-
-**Auxiliary features**:
-- Orbital geometry (Sun/Moon position, zenith angles)
-- Quasi-dipole magnetic coordinates
+| Category | Data Source | Primary Features | Cadence | Format |
+|---|---|---|---|---|
+| Ionospheric targets | JPLD GIMs | Dense global TEC maps | 15 min | netCDF |
+| Ionospheric targets | Madrigal GNSS TEC | Sparse TEC observations | 5 min | HDF5 / tabular |
+| Solar & heliospheric drivers | OMNIWeb | Solar wind plasma + IMF | 1 min | CDF / tabular |
+| Solar irradiance proxies | SET | F10.7, S10.7, M10.7, Y10.7, JB08 dSt/dt | Daily | tabular |
+| Solar irradiance embeddings | SDO-FM | EUV irradiance embeddings | 15 sec | embeddings |
+| Geomagnetic indices | NOAA SWPC / GFZ | Kp, Ap, AE, AU, AL, SYM-H, ASY-D | 1 min – 3 hr | tabular |
+| Auxiliary spatial features | Orbital mechanics | Solar/lunar geometry | Variable | computed |
+| Auxiliary spatial features | Quasi-dipole coordinates | Magnetic reference coordinates | Yearly | gridded maps |
 
 These datasets are originally distributed across multiple archives (e.g., OMNIWeb, JPL, Madrigal) and require substantial preprocessing before use.
 
@@ -71,6 +66,7 @@ The processed dataset is a fully aligned, ML-ready data cube indexed by time, wh
 - cleaned, normalized, and gap-filled,
 - structured for efficient querying and model ingestion.
 
+### 1.2. Processing Steps
 Key preprocessing steps include:
 - Standardizing missing values (NaNs across all sources)
 - Temporal resampling and forward-filling with gap thresholds
@@ -78,6 +74,7 @@ Key preprocessing steps include:
 - Feature normalization and transformation (e.g., log-scaling for TEC)
 - Alignment of heterogeneous cadences into a unified timeline
 
+### 1.3 Processed Data Summary
 The alignment, processing, and feature generation are handled in a publicly released codebase, provided in the project [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere). The key data sources, their features, and temporal resolutions are summarized in Table 1. The aligned data product may also be visualized in Figure 1.
 
 | Source | Features | Cadence | Date Range | Description |
