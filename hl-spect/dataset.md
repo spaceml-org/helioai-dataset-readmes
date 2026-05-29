@@ -16,6 +16,8 @@ Together, these components enable the generation of synthetic solar observations
 
 ## 1.1 Processed Data
 
+The processed data products support two distinct stages of the SPI3S workflow. The first stage provides multi-viewpoint solar observations and associated geometry information required to train SuNeRF-DT, which reconstructs a four-dimensional representation of the solar corona. The second stage provides paired solar-image and spectral-irradiance datasets required to train MEGS-AI, which estimates EUV irradiance directly from solar imagery. Additional Mars-view products and validation datasets enable evaluation of the complete end-to-end pipeline.
+
 The raw data undergoes processing to create structured, ML-ready datasets. The processing pipeline includes:
 
 - **AIA image stacking:** Nine SDO/AIA channels (EUV: 94, 131, 171, 193, 211, 304, 335 Å; UV: 1600, 1700 Å) are co-registered per timestamp and written as single-file NumPy stacks at 256×256 resolution.
@@ -35,6 +37,9 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
 
 
 ### MEGS-AI training bundle (~14 GB)
+
+This bundle contains the primary image-to-spectrum training dataset used by MEGS-AI. It links multi-channel AIA image stacks with temporally matched EVE spectral irradiance measurements and includes all normalization metadata required for model training and inference.
+
 - AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/processed_data/megs_ai_training/`
 - Contents: self-contained image→spectrum training set.
     - `aia_stacks/matches_eve_aia.csv` (3.7 MB): 5,488-row join table mapping AIA stack filenames to EVE indices and dates. Columns: `eve_dates`, `eve_indices`, `time_delta`, `median_dates`, `AIA94`, `AIA131`, `AIA171`, `AIA193`, `AIA211`, `AIA304`, `AIA335`, `AIA1600`, `AIA1700`.
@@ -46,6 +51,9 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
 - Train/val/test split (per config): val_months `[2, 3]`, test_months `[11, 12]`, holdout_months `[1, 10]`, train = the rest.
 
 ### Mars-view pre-renders (~100 MB)
+
+These products represent one of the key outputs of the SuNeRF-DT stage. After reconstructing the 4D solar corona, the model is queried from the perspective of Mars to generate synthetic EUV observations that would be seen by a spacecraft orbiting the planet.
+
 - AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/processed_data/mars_views/`
 - Contents: SuNeRF-DT rendered Sun-as-seen-from-Mars AIA observations.
     - `mars_<date>_<wavelength>.fits`: per-date, per-wavelength FITS images for 7 EUV channels (94, 131, 171, 193, 211, 304, 335 Å). Multiple dates across 2023.
@@ -53,6 +61,9 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
     - `mars_<date>.jpg`, `mars_<date>_bar.jpg`: quick-look visualizations.
 
 ### Validation: MAVEN/EUVM (~60 MB)
+
+These observations provide the primary independent validation dataset for SPI3S. Because MAVEN observes the Sun from Mars orbit, EUVM measurements offer a unique opportunity to assess whether the coupled SuNeRF-DT + MEGS-AI pipeline can accurately predict irradiance beyond Earth-based viewpoints.
+
 - AWS PATH: `s3://nasa-radiant-data/helioai-datasets/hl-spect/processed_data/validation/maven_euvm/`
 - Contents: 34 daily CDF files (`mvn_euv_l3_daily_*.cdf`) from the MAVEN Extreme Ultraviolet Monitor, used as the primary validation target for Mars-side irradiance predictions.
 
@@ -64,7 +75,9 @@ The raw data undergoes processing to create structured, ML-ready datasets. The p
 
 ## 1.2 Raw Data
 
-Raw data is not included in this release as it is publicly available from NASA archives:
+The SPI3S workflow combines observational and simulation datasets spanning both solar imaging and irradiance measurement domains. Multi-viewpoint EUV imagery provides the information needed to reconstruct the Sun's evolving three-dimensional structure, while irradiance measurements supply the targets and validation data required to evaluate spectral predictions. Physics-based MHD simulations provide additional ground truth for assessing the fidelity of the reconstructed coronal representation.
+
+The raw datais publicly available from NASA archives:
 
 - **SDO/AIA:** Atmospheric Imaging Assembly full-disk EUV images across 9 wavelength channels. Available from [JSOC](http://jsoc.stanford.edu/). ML-ready versions are available via the [SDOML dataset](https://sdoml.github.io/).
 - **SDO/EVE:** Extreme UltraViolet Variability Experiment Level-2/3 spectral irradiance. Available from [LASP](https://lasp.colorado.edu/eve/data_access/).
@@ -105,7 +118,6 @@ There are two sets of system requirements:
 | **RAM** | 16 GB (for loading the full 14 GB training bundle into memory); 4 GB is sufficient if streamed |
 | **GPU** | Not required for data access; recommended for model training |
 | **Storage** | 15 GB for the full processed dataset |
-
 
 <!-- BACKUP
 
