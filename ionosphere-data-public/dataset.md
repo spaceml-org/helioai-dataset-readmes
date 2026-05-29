@@ -194,14 +194,9 @@ The alignment, processing, and feature generation are handled in a publicly rele
 
 **Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
 
-<!-- ### Data pre-processing
-A key technical challenge in constructing the dataset lies in the presence of missing values and the inconsistent temporal cadences across the underlying data streams, which complicates temporal alignment. Different sources also adopt non-standard conventions for encoding missing values; for example, the OMNI dataset marks data gaps with unique sentinel values that vary across different channels, making detection non-uniform. To standardize the entire corpus, all missing values are globlly represented as standard Not-a-Number (NaN) values. Furthermore, any feature columns containing multi-year gaps or demonstrating excessive sparsity were removed entirely from the product. This is the case for the AE index, where the entire 2020 year is missing.
 
-To deal with the remaining, shorter data holes and to align all features to a unified cadence, a straightforward forward-filling approach was employed. The last available sample is used to fill NaN values only when the gap is shorter than a specified maximum rewind time unique to each data stream. If the gap exceeds this threshold, the timestamp associated with the hole is skipped entirely to prevent inaccurate, long-term persistence of stale data. This same forward-filling logic is also utilized as a simple interpolation strategy to resample all features to a required temporal cadence. Ultimately, all data streams are aligned by indexing the combined dataset strictly by timestamp, ensuring temporal coherence despite the presence of gaps.-->
 
 ## 1.2 Raw Data
-
-
 
 The raw data consist of multi-source observational datasets spanning solar, heliospheric, and ionospheric domains:
 
@@ -292,5 +287,4 @@ There are two sets of system requirements:
 | **RAM** | High memory required due to global grids and multi-source data |
 | **GPU** | Required for training (deep learning models); recommended for large-scale inference|
 | **Storage** | 2.8+ TB (multi-terabyte datasets, model checkpoints, experiment logs)| 
-
 -->
