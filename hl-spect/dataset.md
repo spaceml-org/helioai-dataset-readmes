@@ -1,7 +1,5 @@
 # 1. Dataset Description
 
-# Dataset Description
-
 This dataset corresponds to the **Spectral Irradiance of the 3D Sun (SPI3S) on Mars** challenge from Heliolab 2024. The challenge was designed to estimate solar spectral irradiance from arbitrary viewpoints in the solar system — including Mars — by combining 3D reconstruction of the solar corona with a learned mapping from solar images to irradiance.
 
 The scientific motivation is that solar irradiance is strongly shaped by the Sun's three-dimensional and time-evolving atmosphere, yet direct irradiance measurements are only available from a limited number of spacecraft and viewing geometries. Existing approaches can estimate irradiance at Earth or reconstruct coronal structure from a small number of observations, but they do not independently provide a complete end-to-end system for estimating the Sun's spectral output from other planetary perspectives. The SPI3S workflow was developed to address this challenge.
