@@ -209,10 +209,6 @@ aws s3 cp --no-sign-request s3://nasa-radiant-data/helioai-datasets/<AWS PATH> <
 ```
 You will need to replace `<AWS PATH>` with the path to the file or directory you want to download (see below) and `<LOCAL PATH>` with the path on your local machine where you want to save the data.
 
-<!-- Add/remove rows as necessary for your project
-The ideal case is that within each of these categories, data are uniformly structured.
-For example, "processed" may correspond to train/test/validation data, in which we expect a tabular format (consistent column names, different rows) for each training example. 
-Different models may have different train/test/validation sets, this can be explained -->
 
 
 # 2 Model Description
