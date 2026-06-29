@@ -9,7 +9,7 @@ The following resources are available for in-depth model descriptions and usage 
 * [GitHub Repository](<https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere>) - full source code used to create the models and process the input data 
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Model_Workflow.png?raw=true" width="800">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-ionosphere/Ionosphere_Thermosphere_Twin_Model_Workflow.png?raw=true" width="800">
 </p>
 
 ## 1.1 IonCast (global TEC forecasting suite)

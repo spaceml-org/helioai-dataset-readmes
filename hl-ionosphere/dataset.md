@@ -11,7 +11,7 @@ The dataset spans 2010-2024, combining dense global TEC maps, sparse Global Navi
 * [GitHub Repository](https://github.com/FrontierDevelopmentLab/2025-HL-Ionosphere) - full source code used to process the data and create the associated models
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Dataset_Workflow.png?raw=true" width="800">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-ionosphere/Ionosphere_Thermosphere_Twin_Dataset_Workflow.png?raw=true" width="800">
 </p>
 
 ## 1.1 Raw Data
@@ -91,7 +91,7 @@ The alignment, processing, and feature generation are handled in a publicly rele
 **Table 1**: Summary of data sources, their channels, cadence, date ranges available in the data product and descriptions. The date ranges for the OMNI, JPLD and Madrigal datasets were selected to match the date range of SDO.
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-ionosphere/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
 </p>
 
 **Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
@@ -119,10 +119,10 @@ Different models may have different train/test/validation sets, this can be expl
 
 | Data Product | AWS Path | Size | Download time (@100 Mbps) |
 |-------------|----------|------|---------------------------|
-| Processed | `s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/`| 2.8 TB | 2.6 days |
+| Processed | `s3://nasa-radiant-data/helioai-datasets/hl-ionosphere/`| 2.8 TB | 2.6 days |
 
 ```text
-s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/
+s3://nasa-radiant-data/helioai-datasets/hl-ionosphere/
 ├── celestrak
 ├── google_android
 ├── jpld
@@ -189,7 +189,7 @@ The alignment, processing, and feature generation are handled in a publicly rele
 **Table 1**: Summary of data sources, their channels, cadence, date ranges available in the data product and descriptions. The date ranges for the OMNI, JPLD and Madrigal datasets were selected to match the date range of SDO.
 
 <p align="center">
-  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/ionosphere-data-public/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
+  <img src="https://github.com/spaceml-org/helioai-dataset-readmes/blob/main/hl-ionosphere/Ionosphere_Thermosphere_Twin_Data.png?raw=true" width="600">
 </p>
 
 **Figure 1.** Visualization of dataset inputs and alignment in time and dimension. The output dataset incorporates solar and geomagnetic driver data, sparse and dense TEC maps, and orbital mechanics and quasi-dipole data calculated over a latitude-longitude grid.
@@ -264,7 +264,7 @@ You will need to replace `<AWS PATH>` with the path to the data sample you want 
 ### Data Directory Structure
 
 ```text
-s3://nasa-radiant-data/helioai-datasets/ionosphere-data-public/
+s3://nasa-radiant-data/helioai-datasets/hl-ionosphere/
 ├── celestrak
 ├── google_android
 ├── jpld
